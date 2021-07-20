@@ -20,23 +20,17 @@ class QuestionTest {
             question.setQuestionType(QuestionTyp.MultipleChoiceQuestion);
             question.setQuestionMessage("");
         });
-        assertDoesNotThrow(() ->{
-            question.setQuestionMessage(new String[]{"",""});
-        });
+        assertDoesNotThrow(() -> question.setQuestionMessage(new String[]{"",""}));
         assertThrows(IllegalQuestionMessageTypeException.class, () ->{
             question.setQuestionType(QuestionTyp.WordsQuestion);
             question.setQuestionMessage(1);
         });
-        assertDoesNotThrow(() ->{
-            question.setQuestionMessage("");
-        });
+        assertDoesNotThrow(() -> question.setQuestionMessage(""));
         assertThrows(IllegalQuestionMessageTypeException.class, () ->{
             question.setQuestionType(QuestionTyp.DirectQuestion);
             question.setQuestionMessage(1);
         });
-        assertDoesNotThrow(() ->{
-            question.setQuestionMessage("");
-        });
+        assertDoesNotThrow(() -> question.setQuestionMessage(""));
     }
 
     @Test
@@ -48,26 +42,19 @@ class QuestionTest {
             question.setQuestionType(QuestionTyp.MultipleChoiceQuestion);
             question.setAnswer(1);
         });
-        assertDoesNotThrow(() ->{
-            question.setAnswer(new int[]{1,2});
-        });
+        assertDoesNotThrow(() -> question.setAnswer(new int[]{1,2}));
         assertThrows(IllegalAnswerTypeException.class, () ->{
             question.setQuestionType(QuestionTyp.WordsQuestion);
             question.setAnswer(1);
         });
-        assertDoesNotThrow(() ->{
-            question.setAnswer("");
-        });
+        assertDoesNotThrow(() -> question.setAnswer(""));
         assertThrows(IllegalAnswerTypeException.class, () ->{
             question.setQuestionType(QuestionTyp.DirectQuestion);
             question.setAnswer(1);
         });
-        assertDoesNotThrow(() ->{
-            question.setAnswer("");
-        });
+        assertDoesNotThrow(() -> question.setAnswer(""));
     }
 
-    //TODO
     @Test
     @DisplayName("extraParameter")
     void setExtraParameter() {
