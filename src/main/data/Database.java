@@ -102,9 +102,11 @@ public class Database {
 
     /**
      * <p>Execute the insert query which was handled beforehand (not in this method).</p>
+     * @return the generated ID
      */
-    public void executeInsertQuery(){
+    public int executeInsertQuery() throws SQLException {
         executePreparedStatement();
+        return preparedStatement.getGeneratedKeys().getInt(1);
     }
 
     /**
@@ -247,7 +249,7 @@ public class Database {
 //    /**
 //     * @return
 //     */
-//    public boolean alterTable() { TODO later
+//    public boolean alterTable() { TODO for patch
 //        return false;
 //    }
 
