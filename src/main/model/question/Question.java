@@ -60,8 +60,7 @@ public class Question {
     /**
      * Set's the questionMessage for the Question, accordingly to the {@link QuestionTyp}.
      * @param questionMessage {@link QuestionTyp}
-     * @throws IllegalQuestionMessageTypeException
-     * @throws QuestionException
+     * @throws IllegalQuestionMessageTypeException if the questionMessage has the wrong typ
      */
     public void setQuestionMessage(Object questionMessage) throws IllegalQuestionMessageTypeException {
         if (questionMessage.getClass().getSimpleName().equals("String") &&
@@ -83,8 +82,7 @@ public class Question {
     /**
      * Set's the Answer for the Question, accordingly to the {@link QuestionTyp}.
      * @param answer {@link QuestionTyp}
-     * @throws IllegalAnswerTypeException
-     * @throws QuestionException
+     * @throws IllegalAnswerTypeException if the answer has the wrong typ
      */
     public void setAnswer(Object answer) throws IllegalAnswerTypeException {
         if (answer.getClass().getSimpleName().equals("String") &&
@@ -110,8 +108,7 @@ public class Question {
      *     <br/>percentage accuracy ({@code double})
      *     <br/>default: 90%</i></li>
      * </ul>
-     * @throws IllegalExtraParameterException
-     * @throws QuestionException
+     * @throws IllegalExtraParameterException if the extraParameter has the wrong typ
      */
     public void setExtraParameter(Object extraParameter) throws IllegalExtraParameterException {
         if (extraParameter.getClass().getSimpleName().equals("Double") &&
@@ -145,18 +142,22 @@ public class Question {
         return this.extraParameter;
     }
 
-    private void resetQuestion(){
-        this.questionTyp = null;
-        this.answer = null;
-        this.questionMessage = null;
-        this.extraParameter = null;
-    }
-
     public int getID() {
         return ID;
     }
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public QuestionTyp getQuestionTyp() {
+        return this.questionTyp;
+    }
+
+    private void resetQuestion(){
+        this.questionTyp = null;
+        this.answer = null;
+        this.questionMessage = null;
+        this.extraParameter = null;
     }
 }
