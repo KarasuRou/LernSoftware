@@ -6,7 +6,11 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-//TODO JAVADOC
+/**
+ * <p>The Output class will output the given text into the console and writes it to a log file.</p>
+ * <p>Can be used to replace {@code System.out.println()} and {@code Exception.printStackTrace()}.</p>
+ * <p>Just use on of these methods: {@linkplain #write} / {@linkplain #errorWrite} / {@linkplain #exceptionWrite} .</p>
+ */
 public class Output {
 
     private static final String PATH = Launcher.APPLICATION_PATH + Launcher.FILE_SEPARATOR + "logs";
@@ -24,38 +28,68 @@ public class Output {
         }
     }
 
-    //TODO JAVADOC
+    private Output(){}
+
+    /**
+     * <p>This method will output the {@code output} text + the class called name as source.</p>
+     * @param output output text
+     */
     public static void write(String output){
         int maxLength = Thread.currentThread().getStackTrace()[2].getClassName().split("\\.").length-1;
         String source = Thread.currentThread().getStackTrace()[2].getClassName().split("\\.")[maxLength];
         write(output,source);
     }
-    //TODO JAVADOC
+    /**
+     * <p>This method will output the {@code output} text + the replaced class name as {@code source}.</p>
+     * @param output output text
+     * @param source replaces the class name with another source name
+     */
     public static void write(String output, String source){
         write(output,source,System.out);
     }
 
-    //TODO JAVADOC
+    /**
+     * <p>This method will {@code output} an error text, with the class called name as source.</p>
+     * @param output output text
+     */
     public static void errorWrite(String output){
         int maxLength = Thread.currentThread().getStackTrace()[2].getClassName().split("\\.").length-1;
         String source = Thread.currentThread().getStackTrace()[2].getClassName().split("\\.")[maxLength];
         errorWrite(output, source);
     }
-    //TODO JAVADOC
+    /**
+     * <p>This method will {@code output} an error text, with the replaced class name as {@code source}.</p>
+     * @param output output text
+     * @param source replaces the class name with another source name
+     */
     public static void errorWrite(String output, String source){
+        output = "ERROR: " + output;
         write(output, source, System.err);
     }
 
-    //TODO JAVADOC
+    /**
+     * <p>Replaces the {@code Exception.printStackTrace()}.</p>
+     * <p>This method will output the exception in the Console and Logfile.</p>
+     * @param exception the given exception
+     */
     public static void exceptionWrite(Exception exception){
         privateExceptionWrite(exception,"");
     }
-    //TODO JAVADOC
+    /**
+     * <p>Replaces the {@code Exception.printStackTrace()}.</p>
+     * <p>This method will output the exception in the Console and Logfile.</p>
+     * <p>Also outputs a cause in addition to the given exception.</p>
+     * @param exception the given exception
+     * @param cause additional cause
+     */
     public static void exceptionWrite(Exception exception, String cause) {
         privateExceptionWrite(exception,cause);
     }
 
-    //TODO JAVADOC
+
+    /**
+     * Closes the Output class, cleaner Shutdown
+     */
     public static void close() {
         try {
             writer.close();
