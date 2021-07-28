@@ -3,7 +3,6 @@ package data;
 import logic.miscellaneous.Output;
 import model.Subject;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -36,55 +35,51 @@ public class SubjectData {
     /**
      * <p>This method will update and store the Subject-name.</p>
      * @param name new {@link Subject} name
-     * @param id Subject ID
+     * @param ID Subject ID
      * @return a boolean if the update was successful.
+     * @throws SQLException if the ID was wrong.
      */
-    public boolean updateSubjectName(String name, int id) {
-        try {
-            Output.write("UPDATE Subject SET Name = '" + name + "' WHERE ID =  +" + id + "+");
-            PreparedStatement preparedStatement = database.startUpdateQuery("UPDATE Subject SET Name = ? WHERE ID = ?");
-            preparedStatement.setString(1, name);
-            preparedStatement.setInt(2, id);
-            preparedStatement.addBatch();
-            return database.executeUpdateQuery() == 1;
-        } catch (SQLException e) {
-            Output.exceptionWrite(e);
-        }
-        return false;
+    public boolean updateSubjectName(String name, int ID) throws SQLException{
+        String sql = "UPDATE Subject SET Name = " + name + " WHERE ID = " + ID;
+        database.startUpdateQuery(sql).addBatch();
+        Output.write(sql);
+        return database.executeUpdateQuery() == 1;
     }
 
     /**
      * <p>This method will update and store the Subject-picturePath.</p>
-     * @param picturePath new picturePath
-     * @param id Subject ID
+     * @param picturePath new picturePath for the {@link Subject}
+     * @param ID Subject ID
      * @return a boolean if the update was successful.
+     * @throws SQLException if the ID was wrong.
      */
-    public boolean updateSubjectPicturePath(String picturePath, int id) {
-        try {
-            Output.write("UPDATE Subject SET PicturePath = '" + picturePath + "' WHERE ID =  +" + id + "+");
-            PreparedStatement preparedStatement = database.startUpdateQuery("UPDATE Subject SET PicturePath = ? WHERE ID = ?");
-            preparedStatement.setString(1, picturePath);
-            preparedStatement.setInt(2, id);
-            preparedStatement.addBatch();
-            return database.executeUpdateQuery() == 1;
-        } catch (SQLException e) {
-            Output.exceptionWrite(e);
-        }
-        return false;
+    public boolean updateSubjectPicturePath(String picturePath, int ID) throws SQLException {
+        String sql = "UPDATE Subject SET PicturePath = " + picturePath + " WHERE ID = " + ID;
+        database.startUpdateQuery(sql).addBatch();
+        Output.write(sql);
+        return database.executeUpdateQuery() == 1;
     }
 
     /**
      * <p>Returns a ResultSet that contains an array of {@link Subject}s</p>
      * @return a ResultSet that contains a {@link Subject}[].
+     * @throws SQLException if anything gone wrong with the Subject data.
      */
-    public ResultSet getAllSubjects(){
-        ResultSet resultSet = null;
-        try {
-            resultSet = database.executeSelectQuery("SELECT * FROM Subject;");
-        } catch (SQLException e) {
-            Output.exceptionWrite(e);
-        }
-        return resultSet;
+    public ResultSet getAllSubjects() throws SQLException {
+        String sql = "SELECT * FROM Subject;";
+        Output.write(sql);
+        return database.executeSelectQuery(sql);
+    }
+
+    /**
+     * <p>This will return the {@link Subject} count.</p>
+     * @return the {@link Subject} count.
+     * @throws SQLException if anything gone wrong with the Subject data
+     */
+    public int getSubjectCount() throws SQLException{
+        String sql = "SELECT count(*) FROM Subject";
+        Output.write(sql);
+        return database.executeSelectQuery(sql).getInt(1);
     }
 
     /**
@@ -93,18 +88,13 @@ public class SubjectData {
      * @param name the Subject name
      * @param picturePath the background-picture path
      * @return the generated ID
+     * @throws SQLException if the Database had an error.
      */
-    public int createSubject(String name, String picturePath){
-        try {
-            PreparedStatement preparedStatement = database.startInsertQuery("INSERT INTO Subject (Name, PicturePath) VALUES (?,?)");
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, picturePath);
-            preparedStatement.addBatch();
-            return database.executeInsertQuery();
-        } catch (SQLException e) {
-            Output.exceptionWrite(e);
-        }
-        return -1;
+    public int createSubject(String name, String picturePath) throws SQLException{
+        String sql = "INSERT INTO Subject (Name, PicturePath) VALUES (" + name + "," + picturePath + ")";
+        database.startInsertQuery(sql).addBatch();
+        Output.write(sql);
+        return database.executeInsertQuery();
     }
 
     /**
@@ -113,34 +103,26 @@ public class SubjectData {
      * <p>Also returns the created ID.</p>
      * @param name the Subject name
      * @return the generated ID
+     * @throws SQLException if the Database had an error.
      */
-    public int createSubject(String name){
-        try {
-            PreparedStatement preparedStatement = database.startInsertQuery("INSERT INTO Subject (Name) VALUES (?)");
-            preparedStatement.setString(1, name);
-            preparedStatement.addBatch();
-            return database.executeInsertQuery();
-        } catch (SQLException e) {
-            Output.exceptionWrite(e);
-        }
-        return -1;
+    public int createSubject(String name) throws SQLException{
+        String sql = "INSERT INTO Subject (Name) VALUES (" + name + ")";
+        database.startInsertQuery(sql).addBatch();
+        Output.write(sql);
+        return database.executeInsertQuery();
     }
 
     /**
      * <p>This method will delete a Subject.</p>
      * @param ID the Subject ID
      * @return a boolean if the deletion as successful.
+     * @throws SQLException if the ID was wrong
      */
-    public boolean deleteSubject(int ID){
-        try {
-            PreparedStatement preparedStatement = database.startDeleteQuery("DELETE FROM Subject WHERE ID = ?");
-            preparedStatement.setInt(1, ID);
-            preparedStatement.addBatch();
-            return database.executeDeleteQuery() == 1;
-        } catch (SQLException e) {
-            Output.exceptionWrite(e);
-        }
-        return false;
+    public boolean deleteSubject(int ID) throws SQLException{
+        String sql = "DELETE FROM Subject WHERE ID = " + ID;
+        database.startDeleteQuery(sql).addBatch();
+        Output.write(sql);
+        return database.executeDeleteQuery() == 1;
     }
 
     private void createTableIfNotExists() throws SQLException {
