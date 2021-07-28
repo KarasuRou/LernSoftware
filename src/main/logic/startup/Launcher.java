@@ -30,6 +30,13 @@ public class Launcher extends Application {
         System.exit(1);
     }
 
+    @Override
+    public void start(Stage primaryStage){
+        MainUI mainUI = MainUI.getInstance();
+        mainUI.init(primaryStage);
+        mainUI.start();
+    }
+
     private static void createShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
@@ -40,11 +47,5 @@ public class Launcher extends Application {
                 Output.exceptionWrite(exception);
             }
         }));
-    }
-
-    @Override
-    public void start(Stage primaryStage){
-        MainUI mainUI = new MainUI(primaryStage);
-        mainUI.start();
     }
 }
