@@ -1,13 +1,19 @@
 package ui.components;
 
 import javafx.scene.Node;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.FlowPane;
 
 public class QuestionView {
 
     private final static QuestionView questionView = new QuestionView();
-    private final FlowPane root = new FlowPane();
+    private final TabPane root = new TabPane();
 
+    static {
+        questionView.root.getTabs().addAll(new Tab("Deutsch"), new Tab("Englisch"));
+        questionView.root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+    }
     private QuestionView() {}
 
     /**
