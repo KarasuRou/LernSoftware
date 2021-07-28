@@ -42,9 +42,23 @@ public class QuestionData {
      * @throws SQLException if the {@code ID} was wrong.
      */
     public ResultSet getQuestionsWithFolderID(int ID) throws SQLException{
-        return database.executeSelectQuery("SELECT Q.ID as ID, Qp.type AS type, Qp.value FROM Question_Params AS Qp " +
+        String sql = "SELECT Q.ID as ID, Qp.type AS type, Qp.value FROM Question_Params AS Qp " +
                 "INNER JOIN Question Q on Q.ID = Qp.f_ID " +
-                "INNER JOIN Folder F on F.ID = Q.f_ID WHERE F.ID = " + ID);
+                "INNER JOIN Folder F on F.ID = Q.f_ID WHERE F.ID = " + ID;
+        Output.write(sql);
+        return database.executeSelectQuery(sql);
+    }
+
+    /**
+     * <p>Return the amount of the {@link Question}(s) that are in the {@link Folder}.</p>
+     * @param ID is the {@link Folder} ID
+     * @return the {@link Question} amount.
+     * @throws SQLException if the ID was wrong.
+     */
+    public int getQuestionsCountWithFolderID(int ID) throws SQLException{
+        String sql = "SELECT count(*) FROM Question WHERE f_ID = " + ID;
+        Output.write(sql);
+        return database.executeSelectQuery(sql).getInt(1);
     }
 
     /**
