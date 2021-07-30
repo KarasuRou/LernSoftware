@@ -9,9 +9,6 @@ import javafx.stage.Stage;
 import logic.miscellaneous.Output;
 import ui.MainUI;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class Launcher extends Application {
 
     public static final String APPLICATION_PATH = System.getProperty("user.dir");
@@ -22,30 +19,22 @@ public class Launcher extends Application {
         createShutdownHook();
         try {
             Database.getInstance().initDBConnection();
+            SubjectData.getInstance().init();
+            FolderData.getInstance().init();
+            QuestionData.getInstance().init();
         } catch (Exception e) {
             Output.exceptionWrite(e);
         }
 
-        SubjectData subjectData = SubjectData.getInstance();
-        ResultSet resultSet = subjectData.getAllSubjectNames();
-
-        try {
-            while (resultSet.next()) {
-                String name = "Subject.Name:" + resultSet.getString(1);
-
-                Output.write(name, "DEBUG");
-
-            }
-        } catch (SQLException e) {
-            Output.exceptionWrite(e);
-        }
-
-        FolderData folderData = FolderData.getInstance();
-        QuestionData questionData = QuestionData.getInstance();
-
-
-//        launch();
+        launch();
         System.exit(1);
+    }
+
+    @Override
+    public void start(Stage primaryStage){
+        MainUI mainUI = MainUI.getInstance();
+        mainUI.init(primaryStage);
+        mainUI.start();
     }
 
     private static void createShutdownHook() {
@@ -58,11 +47,5 @@ public class Launcher extends Application {
                 Output.exceptionWrite(exception);
             }
         }));
-    }
-
-    @Override
-    public void start(Stage primaryStage){
-        MainUI mainUI = new MainUI(primaryStage);
-        mainUI.start();
     }
 }
