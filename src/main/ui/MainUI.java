@@ -1,5 +1,6 @@
 package ui;
 
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -11,6 +12,9 @@ import ui.components.TopMenu;
 
 public class MainUI{
 
+//    public final static double MAX_HEIGHT = Screen.getPrimary().getBounds().getHeight();
+//    public final static double MAX_WIDTH = Screen.getPrimary().getBounds().getHeight();
+
     private final static MainUI mainUI = new MainUI();
     private Stage primaryStage;
     private final VBox root = new VBox();
@@ -19,6 +23,10 @@ public class MainUI{
     private final SubjectView subjectView = SubjectView.getInstance();
     private final FolderView folderView = FolderView.getInstance();
     private final QuestionView questionView = QuestionView.getInstance();
+
+    private final static ReadOnlyDoubleProperty CURRENT_HEIGHT = mainUI.scene.heightProperty();
+    private final static ReadOnlyDoubleProperty CURRENT_WIDTH = mainUI.scene.widthProperty();
+
 
     private MainUI(){}
 
@@ -41,6 +49,9 @@ public class MainUI{
         this.primaryStage = primaryStage;
         this.primaryStage.setScene(this.scene);
         debug(false);
+        topMenu.transferSizeProperty(CURRENT_WIDTH, CURRENT_HEIGHT);
+        folderView.transferSizeProperty(CURRENT_WIDTH, CURRENT_HEIGHT);
+        subjectView.transferSizeProperty(CURRENT_WIDTH, CURRENT_HEIGHT);
         setUpGUI();
 
     }
@@ -56,11 +67,10 @@ public class MainUI{
         HBox hBox = new HBox();
         hBox.getChildren().addAll(
                 folderView.getFolderView(),
-                questionView.getQuestionView()
+                subjectView.getSubjectView()
         );
         root.getChildren().addAll(
                 topMenu.getTopMenu(),
-                subjectView.getSubjectView(),
                 hBox
         );
     }

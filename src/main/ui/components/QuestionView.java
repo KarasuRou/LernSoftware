@@ -1,19 +1,24 @@
 package ui.components;
 
 import javafx.scene.Node;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 
 public class QuestionView {
 
     private final static QuestionView questionView = new QuestionView();
-    private final TabPane root = new TabPane();
+    private final FlowPane root = new FlowPane();
 
     static {
-        questionView.root.getTabs().addAll(new Tab("Deutsch"), new Tab("Englisch"));
-        questionView.root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        questionView.root.getChildren().addAll(
+                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
+                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
+                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
+                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
+                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
+                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"));
     }
+
     private QuestionView() {}
 
     /**
@@ -24,7 +29,6 @@ public class QuestionView {
     public static QuestionView getInstance() {
         return questionView;
     }
-
 
     /**
      * <p>This will return view of the QuestionView class.</p>

@@ -1,5 +1,8 @@
 package ui.components;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -9,6 +12,8 @@ public class TopMenu {
 
     private final static TopMenu topMenu = new TopMenu();
     private final MenuBar root = new MenuBar();
+    private final Property<Number> width = new SimpleDoubleProperty();
+    private final Property<Number> height = new SimpleDoubleProperty();
 
     static {
         Menu menu = new Menu("Test Menu");
@@ -24,6 +29,26 @@ public class TopMenu {
      */
     public static TopMenu getInstance() {
         return topMenu;
+    }
+
+    /**
+     * <p>This method will bind the scene width/height into this class.</p>
+     * @param width current scene widthProperty
+     * @param height current scene heightProperty
+     */
+    public void transferSizeProperty(ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
+        if (this.width.isBound()) {
+            this.width.unbind();
+        }
+        this.width.bind(width);
+        if (this.height.isBound()) {
+            this.height.unbind();
+        }
+        this.height.bind(height);
+
+        this.width.addListener((observable, oldValue, newValue) -> this.root.setPrefWidth((Double) newValue));
+
+        this.root.setMinHeight(36);
     }
 
     /**
