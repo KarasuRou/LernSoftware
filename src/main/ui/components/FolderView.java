@@ -49,9 +49,11 @@ public class FolderView{
         this.height.bind(height);
 
         this.root.setMinWidth(80);
+        this.root.setPrefWidth(this.width.getValue().doubleValue() * 0.2);
         this.root.setMaxWidth(200);
         this.width.addListener((observable, oldValue, newValue) -> this.root.setPrefWidth((Double) newValue * 0.2));
 
+        this.root.setPrefHeight(this.height.getValue().doubleValue());
         this.height.addListener((observable, oldValue, newValue) -> this.root.setPrefHeight((Double) newValue));
 
         this.root.setStyle("-fx-border-color: gray;" +

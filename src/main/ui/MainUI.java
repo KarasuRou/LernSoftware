@@ -14,11 +14,13 @@ public class MainUI{
 
 //    public final static double MAX_HEIGHT = Screen.getPrimary().getBounds().getHeight();
 //    public final static double MAX_WIDTH = Screen.getPrimary().getBounds().getHeight();
+    private final static int START_HEIGHT = 400;
+    private final static int START_WIDTH = 850;
 
     private final static MainUI mainUI = new MainUI();
     private Stage primaryStage;
     private final VBox root = new VBox();
-    private final Scene scene = new Scene(root);
+    private final Scene scene = new Scene(root, START_WIDTH, START_HEIGHT);
     private final TopMenu topMenu = TopMenu.getInstance();
     private final SubjectView subjectView = SubjectView.getInstance();
     private final FolderView folderView = FolderView.getInstance();
@@ -26,7 +28,6 @@ public class MainUI{
 
     private final static ReadOnlyDoubleProperty CURRENT_HEIGHT = mainUI.scene.heightProperty();
     private final static ReadOnlyDoubleProperty CURRENT_WIDTH = mainUI.scene.widthProperty();
-
 
     private MainUI(){}
 

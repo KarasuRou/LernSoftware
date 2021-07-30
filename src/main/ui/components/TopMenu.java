@@ -3,10 +3,13 @@ package ui.components;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 
 public class TopMenu {
 
@@ -17,7 +20,7 @@ public class TopMenu {
 
     static {
         Menu menu = new Menu("Test Menu");
-        menu.getItems().add(new MenuItem("Test Item"));
+        menu.getItems().addAll(new MenuItem("Test Item"), new MenuItem("More Test Item's"));
         topMenu.root.getMenus().addAll(menu);
     }
     private TopMenu(){}
@@ -46,11 +49,24 @@ public class TopMenu {
         }
         this.height.bind(height);
 
+        this.root.setPrefWidth(this.width.getValue().doubleValue());
         this.width.addListener((observable, oldValue, newValue) -> this.root.setPrefWidth((Double) newValue));
 
         this.root.setMinHeight(36);
+        setMenuAction();
     }
 
+
+    private void setMenuAction() {
+        root.getMenus().get(0).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.print("Menu Pressed: \"" + root.getMenus().get(0).getText());
+                MenuItem menuItem = (MenuItem) event.getTarget();
+                System.out.println("\"  Item Pressed: \"" + menuItem.getText() + "\"");
+            }
+        });
+    }
     /**
      * <p>This will return view of the TopMenu class.</p>
      * @return the {@link TopMenu} {@link Node}.
