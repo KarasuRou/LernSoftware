@@ -3,24 +3,25 @@ package ui.components;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 public class FolderView{
 
-//    public final static ImageView IMAGE_VIEW = new ImageView(new Image("folder.jpg"));
     private final static FolderView folderView = new FolderView();
     private final VBox root = new VBox();
     private final Property<Number> width = new SimpleDoubleProperty();
     private final Property<Number> height = new SimpleDoubleProperty();
 
 
-//    static {
-//        IMAGE_VIEW.setMouseTransparent(true);
-//        Border border = new Border(new BorderStroke(Paint.valueOf("red"), BorderStrokeStyle.SOLID,new CornerRadii(2),new BorderWidths(2)));
-//        root.setBorder(border);
-//    }
+    static {
+        folderView.root.setPadding(new Insets(4, 0, 0, 0));
+        folderView.root.setSpacing(8);
+    }
     private FolderView(){}
 
     /**
@@ -57,10 +58,10 @@ public class FolderView{
                 "-fx-border-style: solid;" +
                 "-fx-border-width: 0.2px 0.2px 0 0;");
 
-        root.getChildren().addAll(new Label("BILD  Deutsch"),
-                new Label("BILD  Englisch"),
-                new Label("BILD  Mathematik"),
-                new Label("BILD  Naturwissenschaften"));
+        root.getChildren().addAll(new Label("Deutsch", getFolderImage()),
+                new Label("Englisch", getFolderImage()),
+                new Label("Mathematik", getFolderImage()),
+                new Label("Naturwissenschaften", getFolderImage()));
     }
 
     /**
@@ -69,5 +70,14 @@ public class FolderView{
      */
     public Node getFolderView(){
         return this.root;
+    }
+
+    private static ImageView getFolderImage() {
+        ImageView imageView = new ImageView(new Image("folder.jpg"));
+        imageView.setMouseTransparent(true);
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
+        return imageView;
+
     }
 }
