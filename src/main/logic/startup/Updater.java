@@ -120,7 +120,7 @@ public class Updater {
     }
 
     private void loadPatchNotes() throws UpdaterException, IOException{
-        Output.write("Loading patchnotes.");
+        Output.write("Loading patchnotes...");
         File oldPatchNotesFile = new File("patchnotes.txt");
         BufferedReader input = new BufferedReader(
                 new InputStreamReader(
