@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/LernSoftware</output-path>
     <properties id="javafx-properties">
       <options>
-        <option name="appClass" value="logic.Launcher" />
+        <option name="appClass" value="logic.startup.Launcher" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
         <option name="title" value="Lern Software" />

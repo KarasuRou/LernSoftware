@@ -3,13 +3,10 @@ package ui.components;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent;
 
 public class TopMenu {
 
@@ -58,13 +55,10 @@ public class TopMenu {
 
 
     private void setMenuAction() {
-        root.getMenus().get(0).setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.print("Menu Pressed: \"" + root.getMenus().get(0).getText());
-                MenuItem menuItem = (MenuItem) event.getTarget();
-                System.out.println("\"  Item Pressed: \"" + menuItem.getText() + "\"");
-            }
+        root.getMenus().get(0).setOnAction(event -> {
+            System.out.print("Menu Pressed: \"" + root.getMenus().get(0).getText());
+            MenuItem menuItem = (MenuItem) event.getTarget();
+            System.out.println("\"  Item Pressed: \"" + menuItem.getText() + "\"");
         });
     }
     /**
