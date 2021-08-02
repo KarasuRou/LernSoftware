@@ -73,7 +73,7 @@ public class Updater {
         return newVersion;
     }
 
-    public double getOldVersion() {
+    public double getCurrentVersion() {
         return oldVersion;
     }
 
@@ -189,7 +189,7 @@ public class Updater {
     private void debugOutput(){
         Output.write("Neues Update verfügbar? -> " + isAvailable());
         Output.write("Neue Version: " + getNewVersion());
-        Output.write("Alte Version: " + getOldVersion());
+        Output.write("Momentane Version: " + getCurrentVersion());
         Output.write("Neue Patchnotes: \r\n" + getNewPatchNotes() + "\r\n");
         Output.write("Momentane Patchnotes: \r\n" + getCurrentPatchNotes() + "\r\n");
     }

@@ -1,12 +1,12 @@
-package ui.components;
+package ui.components.TopMenu;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Node;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import logic.miscellaneous.Output;
 
 public class TopMenu {
 
@@ -16,9 +16,8 @@ public class TopMenu {
     private final Property<Number> height = new SimpleDoubleProperty();
 
     static {
-        Menu menu = new Menu("Test Menu");
-        menu.getItems().addAll(new MenuItem("Test Item"), new MenuItem("More Test Item's"));
-        topMenu.root.getMenus().addAll(menu);
+        topMenu.root.getMenus().addAll(
+                Help.getInstance().getUber());
     }
     private TopMenu(){}
 
@@ -55,11 +54,15 @@ public class TopMenu {
 
 
     private void setMenuAction() {
-        root.getMenus().get(0).setOnAction(event -> {
-            System.out.print("Menu Pressed: \"" + root.getMenus().get(0).getText());
-            MenuItem menuItem = (MenuItem) event.getTarget();
-            System.out.println("\"  Item Pressed: \"" + menuItem.getText() + "\"");
-        });
+        for (int i = 0; i < root.getMenus().size(); i++) {
+            int finalI = i;
+            root.getMenus().get(i).setOnAction(event -> {
+                MenuItem menuItem = (MenuItem) event.getTarget();
+                String output = "Item: \"" + menuItem.getText() + "\" (Index: " + finalI + ")" +
+                        "  pressed in Menu: \"" + root.getMenus().get(finalI).getText() + "\" (Index: " + finalI + ")";
+                Output.write(output);
+            });
+        }
     }
     /**
      * <p>This will return view of the TopMenu class.</p>

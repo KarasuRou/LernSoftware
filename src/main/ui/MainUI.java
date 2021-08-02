@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import ui.components.FolderView;
 import ui.components.QuestionView;
 import ui.components.SubjectView;
-import ui.components.TopMenu;
+import ui.components.TopMenu.TopMenu;
 
 public class MainUI{
 
@@ -58,12 +58,19 @@ public class MainUI{
     }
 
     /**
+     * Set's the owner of the given Stage.
+     * @param stage given Stage
+     */
+    public void setInitOwner(Stage stage) {
+        stage.initOwner(this.primaryStage);
+    }
+
+    /**
      * <p>This method will simply start/show the {@link MainUI}.</p>
      */
     public void start() {
         primaryStage.show();
     }
-
     private void setUpGUI(){
         HBox hBox = new HBox();
         hBox.getChildren().addAll(
@@ -75,6 +82,7 @@ public class MainUI{
                 hBox
         );
     }
+
     private void debug(boolean status) {
         if (status) {
             this.primaryStage.widthProperty().addListener((observable, oldValue, newValue) ->
