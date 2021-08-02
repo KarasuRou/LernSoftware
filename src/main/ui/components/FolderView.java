@@ -39,9 +39,10 @@ public class FolderView{
         folder.setID(0);
         folder.setName("Deutsch");
         folderView.addFolder(folder);
-        folder.setID(1);
-        folder.setName("Mathe");
-        folderView.addFolder(folder);
+        Folder folder2 = new Folder();
+        folder2.setID(1);
+        folder2.setName("Mathe");
+        folderView.addFolder(folder2);
     }
     private FolderView(){}
 
