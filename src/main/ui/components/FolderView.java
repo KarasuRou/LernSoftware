@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import logic.miscellaneous.Output;
 import model.Folder;
 
 public class FolderView{
@@ -35,7 +36,10 @@ public class FolderView{
         folderView.root.setSpacing(8);
         Folder folder = new Folder();
         folder.setID(0);
-        folder.setName("Test Ordner");
+        folder.setName("Deutsch");
+        folderView.addFolder(folder);
+        folder.setID(1);
+        folder.setName("Mathe");
         folderView.addFolder(folder);
     }
     private FolderView(){}
@@ -76,10 +80,10 @@ public class FolderView{
                 "-fx-border-style: solid;" +
                 "-fx-border-width: 0.2px 0.2px 0 0;");
 
-        root.getChildren().addAll(new Label("Deutsch", getFolderImage()),
-                new Label("Englisch", getFolderImage()),
-                new Label("Mathematik", getFolderImage()),
-                new Label("Naturwissenschaften", getFolderImage()));
+//        root.getChildren().addAll(new Label("Deutsch", getFolderImage()),
+//                new Label("Englisch", getFolderImage()),
+//                new Label("Mathematik", getFolderImage()),
+//                new Label("Naturwissenschaften", getFolderImage()));
     }
 
     /**
@@ -96,8 +100,15 @@ public class FolderView{
      * @param folder requires a {@link Folder}
      */
     public void addFolder(Folder folder){
+        addFolder(folder, true);
+    }
+
+    public void addFolder(Folder folder, boolean outputWrite) {
         Label label = new Label(folder.getName().getValue(), getFolderImage());
         label.setId(String.valueOf(folder.getID()));
+        if (outputWrite) {
+            Output.write("Add Folder: " + folder.getName().getValue() + " (ID: " + folder.getID() + ")");
+        }
         label.setContextMenu(getContextMenu(folder));
         label.setOnMouseClicked(getEventHandler(label));
         this.root.getChildren().add(label);
@@ -110,6 +121,7 @@ public class FolderView{
     public void renameFolder(Folder folder){
         for (Node temp : root.getChildren() ) {
             if (temp.getId().equals(String.valueOf(folder.getID()))) {
+                Output.write("Renaming Folder to: " + folder.getName().getValue() + " (ID: " + folder.getID() + ")");
                 ((Label) temp).setText(folder.getName().getValue());
                 return;
             }
@@ -123,6 +135,7 @@ public class FolderView{
     public void deleteFolder(Folder folder){
         for (Node temp : root.getChildren() ) {
             if (temp.getId().equals(String.valueOf(folder.getID()))) {
+                Output.write("Deleting Folder: " + folder.getName().getValue() + " (ID: " + folder.getID() + ")");
                 root.getChildren().remove(temp);
                 return;
             }
