@@ -29,6 +29,7 @@ public class FolderView{
     private final VBox root = new VBox();
     private final Property<Number> width = new SimpleDoubleProperty();
     private final Property<Number> height = new SimpleDoubleProperty();
+    private final Property<Number> boundSubject = new SimpleIntegerProperty();
 
 
     static {
@@ -59,6 +60,8 @@ public class FolderView{
      * @param height current scene heightProperty
      */
     public void transferSizeProperty(ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
+        SubjectView.getInstance().bindExternProperty(boundSubject);
+
         if (this.width.isBound()) {
             this.width.unbind();
         }
@@ -140,6 +143,14 @@ public class FolderView{
                 return;
             }
         }
+    }
+
+    /**
+     * <p>The given {@code property} will be bound to selectedFolder property.</p>
+     * @param property extern Property
+     */
+    public void bindExternProperty(Property<Number> property) {
+        property.bind(selectedFolder);
     }
 
     private EventHandler<MouseEvent> getEventHandler(Label label) {

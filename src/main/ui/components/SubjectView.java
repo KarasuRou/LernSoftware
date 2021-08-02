@@ -10,10 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.*;
 import model.Subject;
 
 public class SubjectView {
@@ -45,6 +42,8 @@ public class SubjectView {
                     "to: " +subjectView.root.getTabs().get(newValue.intValue()).getText() + " (" + newValue + ")");
         });
         subjectView.root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        subjectView.root.heightProperty().addListener((observable, oldValue, newValue) -> {
+        });
     }
 
     private SubjectView(){}
@@ -143,6 +142,14 @@ public class SubjectView {
      */
     public void deleteSubjectTab(Subject subject){
         this.root.getTabs().removeIf(tab -> tab.getId().equals(String.valueOf(subject.getID())));
+    }
+
+    /**
+     * <p>The given {@code property} will be bound to selectedSubject property.</p>
+     * @param property extern Property
+     */
+    public void bindExternProperty(Property<Number> property) {
+        property.bind(selectedSubject);
     }
 
     /**
