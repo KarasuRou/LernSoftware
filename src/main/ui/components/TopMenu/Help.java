@@ -32,7 +32,7 @@ public class Help {
 
 
     static {
-        HELP.root.setText("Help");
+        HELP.root.setText("Hilfe");
         HELP.setMenu();
     }
 
@@ -174,7 +174,7 @@ public class Help {
         return HELP;
     }
 
-    public Menu getUber() {
+    public Menu getHelp() {
         return root;
     }
 }

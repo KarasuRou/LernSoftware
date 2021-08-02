@@ -17,7 +17,8 @@ public class TopMenu {
 
     static {
         topMenu.root.getMenus().addAll(
-                Help.getInstance().getUber());
+                Help.getInstance().getHelp());
+//        topMenu.debug();
     }
     private TopMenu(){}
 
@@ -49,16 +50,15 @@ public class TopMenu {
         this.width.addListener((observable, oldValue, newValue) -> this.root.setPrefWidth((Double) newValue));
 
         this.root.setMinHeight(36);
-        setMenuAction();
     }
 
 
-    private void setMenuAction() {
+    private void debug() {
         for (int i = 0; i < root.getMenus().size(); i++) {
             int finalI = i;
             root.getMenus().get(i).setOnAction(event -> {
                 MenuItem menuItem = (MenuItem) event.getTarget();
-                String output = "Item: \"" + menuItem.getText() + "\" (Index: " + finalI + ")" +
+                String output = "Item: \"" + menuItem.getText() + "\" (Index: " + menuItem.getParentMenu().getItems().indexOf(menuItem) + ")" +
                         "  pressed in Menu: \"" + root.getMenus().get(finalI).getText() + "\" (Index: " + finalI + ")";
                 Output.write(output);
             });
