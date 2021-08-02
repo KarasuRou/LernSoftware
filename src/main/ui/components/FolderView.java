@@ -6,16 +6,18 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import logic.QuestionController;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.Folder;
 
 public class FolderView{
@@ -96,7 +98,7 @@ public class FolderView{
     public void addFolder(Folder folder){
         Label label = new Label(folder.getName().getValue(), getFolderImage());
         label.setId(String.valueOf(folder.getID()));
-        label.setContextMenu(getContextMenu());
+        label.setContextMenu(getContextMenu(folder));
         label.setOnMouseClicked(getEventHandler(label));
         this.root.getChildren().add(label);
     }
@@ -109,6 +111,7 @@ public class FolderView{
         for (Node temp : root.getChildren() ) {
             if (temp.getId().equals(String.valueOf(folder.getID()))) {
                 ((Label) temp).setText(folder.getName().getValue());
+                return;
             }
         }
     }
@@ -118,7 +121,12 @@ public class FolderView{
      * @param folder requires a {@link Folder}
      */
     public void deleteFolder(Folder folder){
-        root.getChildren().removeIf(label -> label.getId().equals(String.valueOf(folder.getID())));
+        for (Node temp : root.getChildren() ) {
+            if (temp.getId().equals(String.valueOf(folder.getID()))) {
+                root.getChildren().remove(temp);
+                return;
+            }
+        }
     }
 
     private EventHandler<MouseEvent> getEventHandler(Label label) {
@@ -130,20 +138,85 @@ public class FolderView{
         };
     }
 
-    private ContextMenu getContextMenu() {
+    private ContextMenu getContextMenu(Folder folder) {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem rename = new MenuItem("Umbenennen");
-        rename.setOnAction(event -> {
-            System.out.println("rename");
-        });
+        rename.setOnAction(event -> getRenamePopUp(folder));
         MenuItem delete = new MenuItem("Löschen");
-        delete.setOnAction(event -> {
-            System.out.println("delete");
-        });
+        delete.setOnAction(event -> getDeletePopUp(folder));
 
         contextMenu.getItems().addAll(rename, delete);
         return contextMenu;
+    }
+
+    private void getRenamePopUp(Folder folder) {
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        VBox vBox = new VBox();
+        vBox.setSpacing(10);
+        vBox.setPrefWidth(300);
+        vBox.setPadding(new Insets(20));
+        Scene scene = new Scene(vBox);
+        stage.setScene(scene);
+        stage.setTitle("Ordner Umbenennen");
+
+        Label label = new Label("Wie soll der Ordner heißen?");
+        TextField textField = new TextField();
+
+        HBox hBox = new HBox();
+        hBox.setSpacing(10);
+        Button renameButton = new Button("Umbenennen");
+        Button cancelButton = new Button("Abbrechen");
+        hBox.getChildren().addAll(renameButton, cancelButton);
+
+        renameButton.setOnAction(event -> {
+                folder.setName(textField.getText());
+                renameFolder(folder); // TODO later over Controller
+                stage.close();
+        });
+        textField.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                folder.setName(textField.getText());
+                renameFolder(folder); // TODO later over Controller
+                stage.close();
+            }
+        });
+        cancelButton.setOnAction(event -> stage.close());
+
+        vBox.getChildren().addAll(label, textField, hBox);
+        stage.show();
+    }
+
+    private void getDeletePopUp(Folder folder) {
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        VBox vBox = new VBox();
+        vBox.setSpacing(10);
+        vBox.setPrefWidth(300);
+        vBox.setPadding(new Insets(20));
+        vBox.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(vBox);
+        stage.setScene(scene);
+        stage.setTitle("Ordner Löschen");
+
+        Label label = new Label("Ordner wirklich löschen?");
+        HBox hBox = new HBox();
+        hBox.setSpacing(10);
+        hBox.setAlignment(Pos.CENTER);
+        Button deleteButton = new Button("Löschen");
+        deleteButton.setOnAction(event -> {
+            deleteFolder(folder);
+            stage.close();
+        });
+        Button cancelButton = new Button("Abbrechen");
+        cancelButton.setOnAction(event -> stage.close());
+        hBox.getChildren().addAll(deleteButton, cancelButton);
+
+        vBox.getChildren().addAll(label, hBox);
+        stage.show();
     }
 
     private static ImageView getFolderImage() {
@@ -152,6 +225,5 @@ public class FolderView{
         imageView.setFitHeight(20);
         imageView.setFitWidth(20);
         return imageView;
-
     }
 }
