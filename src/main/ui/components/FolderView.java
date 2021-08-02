@@ -3,14 +3,24 @@ package ui.components;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import logic.QuestionController;
+import model.Folder;
 
 public class FolderView{
+
+    public final Property<Number> selectedFolder = new SimpleIntegerProperty();
 
     private final static FolderView folderView = new FolderView();
     private final VBox root = new VBox();
@@ -21,6 +31,10 @@ public class FolderView{
     static {
         folderView.root.setPadding(new Insets(4, 0, 0, 0));
         folderView.root.setSpacing(8);
+        Folder folder = new Folder();
+        folder.setID(0);
+        folder.setName("Test Ordner");
+        folderView.addFolder(folder);
     }
     private FolderView(){}
 
@@ -72,6 +86,64 @@ public class FolderView{
      */
     public Node getFolderView(){
         return this.root;
+    }
+
+    /**
+     * <p>Adds a new Folder to the GUI.</p>
+     * <p>Adds automatically the ContextMenu and the EventHandler.</p>
+     * @param folder requires a {@link Folder}
+     */
+    public void addFolder(Folder folder){
+        Label label = new Label(folder.getName().getValue(), getFolderImage());
+        label.setId(String.valueOf(folder.getID()));
+        label.setContextMenu(getContextMenu());
+        label.setOnMouseClicked(getEventHandler(label));
+        this.root.getChildren().add(label);
+    }
+
+    /**
+     * <p>Renames the Folder in the GUI.</p>
+     * @param folder requires the already updated {@link Folder}
+     */
+    public void renameFolder(Folder folder){
+        for (Node temp : root.getChildren() ) {
+            if (temp.getId().equals(String.valueOf(folder.getID()))) {
+                ((Label) temp).setText(folder.getName().getValue());
+            }
+        }
+    }
+
+    /**
+     * <p>Deletes the Folder in the GUI.</p>
+     * @param folder requires a {@link Folder}
+     */
+    public void deleteFolder(Folder folder){
+        root.getChildren().removeIf(label -> label.getId().equals(String.valueOf(folder.getID())));
+    }
+
+    private EventHandler<MouseEvent> getEventHandler(Label label) {
+        return event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                selectedFolder.setValue(Integer.parseInt(label.getId()));
+//                QuestionController.getInstance().updateCurrentContext();
+            }
+        };
+    }
+
+    private ContextMenu getContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem rename = new MenuItem("Umbenennen");
+        rename.setOnAction(event -> {
+            System.out.println("rename");
+        });
+        MenuItem delete = new MenuItem("Löschen");
+        delete.setOnAction(event -> {
+            System.out.println("delete");
+        });
+
+        contextMenu.getItems().addAll(rename, delete);
+        return contextMenu;
     }
 
     private static ImageView getFolderImage() {
