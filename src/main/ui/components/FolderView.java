@@ -146,6 +146,7 @@ public class FolderView{
         return event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 selectedFolder.setValue(Integer.parseInt(label.getId()));
+                highlightSelectedFolder();
 //                QuestionController.getInstance().updateCurrentContext();
             }
         };
@@ -230,6 +231,16 @@ public class FolderView{
 
         vBox.getChildren().addAll(label, hBox);
         stage.show();
+    }
+
+    private void highlightSelectedFolder() {
+        for (Node label : root.getChildren()) {
+            if (label.getId().equals(String.valueOf(selectedFolder.getValue().intValue()))) {
+                label.setStyle("-fx-background-color: rgba(173,216,230,0.8)");
+            } else {
+                label.setStyle(null);
+            }
+        }
     }
 
     private static ImageView getFolderImage() {
