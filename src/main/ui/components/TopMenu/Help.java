@@ -128,6 +128,7 @@ public class Help {
         Scene scene = new Scene(vBox);
         stage.setScene(scene);
         stage.setTitle("Über LernSoftware");
+        MainUI.getInstance().setInitOwner(stage);
 
         Label headerLabel = new Label("LernSoftware");
         headerLabel.setFont(Font.font(headerLabel.getFont().getSize()+2));
@@ -166,9 +167,9 @@ public class Help {
 
 
     /**
-     * <p>This Method is the "Constructor" for the MainUI class.</p>
-     * <p>This is the only way to access the MainUI.</p>
-     * @return a {@link MainUI} instance
+     * <p>This Method is the "Constructor" for the Help class.</p>
+     * <p>This is the only way to access the Help.</p>
+     * @return a {@link Help} instance
      */
     public static Help getInstance(){
         return HELP;
