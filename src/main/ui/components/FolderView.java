@@ -228,7 +228,7 @@ public class FolderView{
         stage.setScene(scene);
         stage.setTitle("Ordner Löschen");
 
-        Label label = new Label("Ordner wirklich löschen?");
+        Label label = new Label("Ordner \"" + folder.getName().getValue() + "\" wirklich löschen?");
         HBox hBox = new HBox();
         hBox.setSpacing(10);
         hBox.setAlignment(Pos.CENTER);
