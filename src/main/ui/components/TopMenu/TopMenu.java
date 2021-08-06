@@ -17,6 +17,7 @@ public class TopMenu {
 
     static {
         topMenu.root.getMenus().addAll(
+                Add.getInstance().getAdd(),
                 Help.getInstance().getHelp());
 //        topMenu.debug();
     }
