@@ -73,6 +73,12 @@ public class Add {
             Button button = new Button("Bild\r\nhinzufügen?");
             button.setTextAlignment(TextAlignment.CENTER);
             FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Alle Bilder", "*.jpg; *.jpeg; *.png"),
+                    new FileChooser.ExtensionFilter("JPG", "*.jpg; *.jpeg"),
+                    new FileChooser.ExtensionFilter("PNG", "*.png")
+            );
+
             final File[] file2 = new File[1];
 
             button.setOnAction(event1 -> {
@@ -82,7 +88,6 @@ public class Add {
                     button.setDisable(true);
                     button.setText("Bild wurde\r\nhinzugefügt");
                     file2[0] = file;
-                    System.out.println(file.getAbsolutePath());
                 }
             });
             subjectInfoBox.getChildren().addAll(nameTextField, button);
@@ -104,7 +109,7 @@ public class Add {
                     subject.setName(nameTextField.getText());
                     subject.setID(0); //TODO
                     if (file2[0] != null) {
-                        subject.setBackgroundPicturePath(file2[0].getAbsolutePath());
+                        subject.setBackgroundPicturePath(file2[0].getPath());
                     }
                     SubjectView.getInstance().addSubjectTab(subject);
                     stage.close();
