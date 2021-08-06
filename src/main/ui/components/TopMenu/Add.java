@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -21,6 +22,7 @@ import ui.components.SubjectView;
 
 import java.io.File;
 
+// TODO Sort Private/Public
 public class Add {
 
     private final static Add add = new Add();
@@ -214,5 +216,15 @@ public class Add {
 
     public Menu getAdd() {
         return root;
+    }
+
+    private Stage getPopUpStage(Parent root) { //TODO use in other PopUp's
+        Stage stage = new Stage();
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setResizable(false);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        MainUI.getInstance().setInitOwner(stage);
+        return stage;
     }
 }

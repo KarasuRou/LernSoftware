@@ -2,6 +2,7 @@ package ui.components.TopMenu;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -24,6 +25,7 @@ import ui.MainUI;
 import java.awt.*;
 import java.net.URI;
 
+// TODO Sort Private/Public
 public class Help {
 
     private final static Help HELP = new Help();
@@ -177,5 +179,15 @@ public class Help {
 
     public Menu getHelp() {
         return root;
+    }
+
+    private Stage getPopUpStage(Parent root) { //TODO use in other PopUp's
+        Stage stage = new Stage();
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setResizable(false);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        MainUI.getInstance().setInitOwner(stage);
+        return stage;
     }
 }

@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -20,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.miscellaneous.Output;
 import model.Folder;
+import ui.MainUI;
 
 public class FolderView{
 
@@ -261,5 +263,15 @@ public class FolderView{
         imageView.setFitHeight(20);
         imageView.setFitWidth(20);
         return imageView;
+    }
+
+    private Stage getPopUpStage(Parent root) { //TODO use in other PopUp's
+        Stage stage = new Stage();
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setResizable(false);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        MainUI.getInstance().setInitOwner(stage);
+        return stage;
     }
 }
