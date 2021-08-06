@@ -11,6 +11,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import logic.miscellaneous.Output;
 import model.Subject;
 
 public class SubjectView {
@@ -25,10 +26,20 @@ public class SubjectView {
     static {
         subjectView.selectedSubject.bind(subjectView.root.getSelectionModel().selectedIndexProperty());
 
-        subjectView.root.getTabs().addAll(new Tab("Deutsch"),
-                new Tab("Englisch"),
-                new Tab("Mathematik")
-        );
+        Subject subject = new Subject();
+        subject.setName("Deutsch");
+        subject.setID(0);
+        Subject subject1 = new Subject();
+        subject1.setName("Englisch");
+        subject1.setID(1);
+        Subject subject2 = new Subject();
+        subject2.setName("Mathematik");
+        subject2.setID(2);
+        subjectView.addSubjectTab(subject);
+        subjectView.addSubjectTab(subject1);
+        subjectView.addSubjectTab(subject2);
+
+
         subjectView.root.getTabs().get(0).setContent(subjectView.questionView.getQuestionView());
         subjectView.root.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             subjectView.root.getTabs().get(oldValue.intValue()).setContent(null);
@@ -99,11 +110,13 @@ public class SubjectView {
      * @param subject required {@link Subject}
      */
     public void addSubjectTab(Subject subject){
+        Output.write("Add Subject: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
         Tab tab = new Tab(subject.getName().getValue());
         tab.setId(String.valueOf(subject.getID()));
-        if (subject.getBackgroundPicturePath() != null && !subject.getBackgroundPicturePath().equals("")) {
-            changeBackground(subject.getBackgroundPicturePath());
-        }
+        tab.setUserData(subject.getBackgroundPicturePath());
+//        if (subject.getBackgroundPicturePath() != null && !subject.getBackgroundPicturePath().equals("")) {
+//            changeBackground(subject.getBackgroundPicturePath()); // TODO setSubject()
+//        }
         this.root.getTabs().add(tab);
     }
 
@@ -130,6 +143,7 @@ public class SubjectView {
     public void renameSubjectTab(Subject subject){
         for (Tab tab : this.root.getTabs()) {
             if (tab.getId().equals(String.valueOf(subject.getID()))) {
+                Output.write("Renaming Subject to: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
                 tab.setText(subject.getName().getValue());
                 return;
             }
