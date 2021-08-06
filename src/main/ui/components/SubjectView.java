@@ -5,14 +5,15 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import logic.miscellaneous.Output;
 import model.Subject;
+
+import java.io.File;
 
 public class SubjectView {
 
@@ -49,6 +50,7 @@ public class SubjectView {
                         "Der vorherige Text war aus: " + subjectView.root.getTabs().get(oldValue.intValue()).getText() + "\n\n";
             }
             subjectView.root.getTabs().get(newValue.intValue()).setContent(new Label(content_));
+            subjectView.changeBackground((String) subjectView.root.getTabs().get(newValue.intValue()).getUserData());
             System.out.println("From: " +subjectView.root.getTabs().get(oldValue.intValue()).getText() + " (" + oldValue + ") " +
                     "to: " +subjectView.root.getTabs().get(newValue.intValue()).getText() + " (" + newValue + ")");
         });
@@ -128,9 +130,9 @@ public class SubjectView {
         if (path == null) {
             this.root.setBackground(null);
         } else {
-            Image image = new Image(path);
-            BackgroundPosition backgroundPosition = new BackgroundPosition(null, 100.0, true, null, 100.0, true);
-            BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
+            Image image = new Image(new File(path).toURI().toString());
+            BackgroundPosition backgroundPosition = new BackgroundPosition(Side.LEFT, 100.0, true, Side.TOP, 100.0, true);
+            BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true);
             Background background = new Background(new BackgroundImage(image, null, null, backgroundPosition, backgroundSize));
             this.root.setBackground(background);
         }
