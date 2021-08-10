@@ -14,16 +14,16 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import logic.FolderController;
 import logic.SubjectController;
-import model.Folder;
 import ui.MainUI;
-import ui.components.FolderView;
 
 import java.io.File;
 
 public class Add {
 
     private final SubjectController subjectController = SubjectController.getInstance();
+    private final FolderController folderController = FolderController.getInstance();
     private final static Add add = new Add();
     private final Menu root = new Menu();
 
@@ -167,10 +167,7 @@ public class Add {
                 textField.setTooltip(tooltip);
                 tooltip.show(stage);
             } else {
-                Folder folder = new Folder();
-                folder.setName(textField.getText());
-                folder.setID(0); //TODO
-                FolderView.getInstance().addFolder(folder);
+                folderController.addFolder(textField.getText());
                 stage.close();
             }
             });

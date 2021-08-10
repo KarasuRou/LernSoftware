@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import logic.FolderController;
 import logic.miscellaneous.Output;
 import model.Folder;
 import ui.MainUI;
@@ -32,6 +33,7 @@ public class FolderView{
     private final Property<Number> width = new SimpleDoubleProperty();
     private final Property<Number> height = new SimpleDoubleProperty();
     private final Property<Number> boundSubject = new SimpleIntegerProperty();
+    private FolderController folderController;
 
 
     private FolderView(){}
@@ -96,15 +98,8 @@ public class FolderView{
      * @param folder requires a {@link Folder}
      */
     public void addFolder(Folder folder){
-        addFolder(folder, true);
-    }
-
-    public void addFolder(Folder folder, boolean outputWrite) {
         Label label = new Label(folder.getName().getValue(), getFolderImage());
         label.setId(String.valueOf(folder.getID()));
-        if (outputWrite) {
-            Output.write("Add Folder: " + folder.getName().getValue() + " (ID: " + folder.getID() + ")");
-        }
         label.setContextMenu(getContextMenu(folder));
         label.setOnMouseClicked(getEventHandler(label));
         this.root.getChildren().add(label);
@@ -114,11 +109,10 @@ public class FolderView{
      * <p>Renames the Folder in the GUI.</p>
      * @param folder requires the already updated {@link Folder}
      */
-    public void renameFolder(Folder folder){
+    public void renameFolder(Folder folder, String newName){
         for (Node temp : root.getChildren() ) {
             if (temp.getId().equals(String.valueOf(folder.getID()))) {
-                Output.write("Renaming Folder to: " + folder.getName().getValue() + " (ID: " + folder.getID() + ")");
-                ((Label) temp).setText(folder.getName().getValue());
+                ((Label) temp).setText(newName);
                 return;
             }
         }
@@ -131,7 +125,6 @@ public class FolderView{
     public void deleteFolder(Folder folder){
         for (Node temp : root.getChildren() ) {
             if (temp.getId().equals(String.valueOf(folder.getID()))) {
-                Output.write("Deleting Folder: " + folder.getName().getValue() + " (ID: " + folder.getID() + ")");
                 root.getChildren().remove(temp);
                 return;
             }
@@ -145,6 +138,8 @@ public class FolderView{
     public void bindExternProperty(Property<Number> property) {
         property.bind(selectedFolder);
     }
+
+    public void init() {folderController = FolderController.getInstance();}
 
     private EventHandler<MouseEvent> getEventHandler(Label label) {
         return event -> {
@@ -177,7 +172,7 @@ public class FolderView{
         stage.setTitle("Ordner Umbenennen");
 
         Label label = new Label("Wie soll der Ordner heißen?");
-        TextField textField = new TextField();
+        TextField textField = new TextField(folder.getName().getValue());
 
         HBox hBox = new HBox();
         hBox.setSpacing(10);
@@ -186,15 +181,14 @@ public class FolderView{
         hBox.getChildren().addAll(renameButton, cancelButton);
 
         renameButton.setOnAction(event -> {
-                folder.setName(textField.getText());
-                renameFolder(folder); // TODO later over Controller
-                stage.close();
+            System.out.println();
+            folderController.renameFolder(folder, textField.getText());
+            stage.close();
         });
+
         textField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                folder.setName(textField.getText());
-                renameFolder(folder); // TODO later over Controller
-                stage.close();
+                renameButton.fire();
             }
         });
         cancelButton.setOnAction(event -> stage.close());
@@ -218,7 +212,7 @@ public class FolderView{
         hBox.setAlignment(Pos.CENTER);
         Button deleteButton = new Button("Löschen");
         deleteButton.setOnAction(event -> {
-            deleteFolder(folder);
+            folderController.deleteFolder(folder);
             stage.close();
         });
         Button cancelButton = new Button("Abbrechen");
