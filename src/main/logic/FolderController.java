@@ -96,7 +96,7 @@ public class FolderController {
             return;
         } else {
             try {
-                removeFolders(oldID);
+                folderView.clearFolders();
                 addFolders(newID);
             } catch (SQLException e) {
                 Output.exceptionWrite(e);
@@ -113,18 +113,6 @@ public class FolderController {
             folder.setID(resultSet.getInt(1));
             folder.setName(resultSet.getString(3));
             folderView.addFolder(folder);
-        }
-    }
-
-    private void removeFolders(int id) throws SQLException{
-        Folder[] folders = new Folder[folderData.getFolderCountWithSubjectID(id)];
-        ResultSet resultSet = folderData.getFoldersWithSubjectID(id);
-        for (Folder folder : folders) {
-            resultSet.next();
-            folder = new Folder();
-            folder.setID(resultSet.getInt(1));
-            folder.setName(resultSet.getString(3));
-            folderView.deleteFolder(folder);
         }
     }
 }

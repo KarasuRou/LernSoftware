@@ -132,6 +132,13 @@ public class FolderView{
     }
 
     /**
+     * <p>Clears the folders in the FolderView.</p>
+     */
+    public void clearFolders() {
+        root.getChildren().removeAll(root.getChildren());
+    }
+
+    /**
      * <p>The given {@code property} will be bound to selectedFolder property.</p>
      * @param property extern Property
      */
@@ -181,7 +188,6 @@ public class FolderView{
         hBox.getChildren().addAll(renameButton, cancelButton);
 
         renameButton.setOnAction(event -> {
-            System.out.println();
             folderController.renameFolder(folder, textField.getText());
             stage.close();
         });
