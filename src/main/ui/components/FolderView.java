@@ -34,18 +34,6 @@ public class FolderView{
     private final Property<Number> boundSubject = new SimpleIntegerProperty();
 
 
-    static {
-        folderView.root.setPadding(new Insets(4, 0, 0, 0));
-        folderView.root.setSpacing(8);
-        Folder folder = new Folder();
-        folder.setID(0);
-        folder.setName("Deutsch");
-        folderView.addFolder(folder);
-        Folder folder2 = new Folder();
-        folder2.setID(1);
-        folder2.setName("Mathe");
-        folderView.addFolder(folder2);
-    }
     private FolderView(){}
 
     /**
@@ -84,7 +72,9 @@ public class FolderView{
 
         this.root.setStyle("-fx-border-color: gray;" +
                 "-fx-border-style: solid;" +
-                "-fx-border-width: 0.2px 0.2px 0 0;");
+                "-fx-border-width: 0.2px 0.2px 0 0;" +
+                "-fx-padding: 4,0,0,0;" +
+                "-fx-spacing: 8;");
 
 //        root.getChildren().addAll(new Label("Deutsch", getFolderImage()),
 //                new Label("Englisch", getFolderImage()),
@@ -179,15 +169,11 @@ public class FolderView{
     }
 
     private void getRenamePopUp(Folder folder) {
-        Stage stage = new Stage();
-        stage.setResizable(false);
-        stage.initModality(Modality.WINDOW_MODAL);
         VBox vBox = new VBox();
         vBox.setSpacing(10);
         vBox.setPrefWidth(300);
         vBox.setPadding(new Insets(20));
-        Scene scene = new Scene(vBox);
-        stage.setScene(scene);
+        Stage stage = getPopUpStage(vBox);
         stage.setTitle("Ordner Umbenennen");
 
         Label label = new Label("Wie soll der Ordner heißen?");
@@ -218,16 +204,12 @@ public class FolderView{
     }
 
     private void getDeletePopUp(Folder folder) {
-        Stage stage = new Stage();
-        stage.setResizable(false);
-        stage.initModality(Modality.WINDOW_MODAL);
         VBox vBox = new VBox();
         vBox.setSpacing(10);
         vBox.setPrefWidth(300);
         vBox.setPadding(new Insets(20));
         vBox.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(vBox);
-        stage.setScene(scene);
+        Stage stage = getPopUpStage(vBox);
         stage.setTitle("Ordner Löschen");
 
         Label label = new Label("Ordner \"" + folder.getName().getValue() + "\" wirklich löschen?");
@@ -265,7 +247,7 @@ public class FolderView{
         return imageView;
     }
 
-    private Stage getPopUpStage(Parent root) { //TODO use in other PopUp's
+    private Stage getPopUpStage(Parent root) {
         Stage stage = new Stage();
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setResizable(false);
