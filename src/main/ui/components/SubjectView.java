@@ -89,7 +89,6 @@ public class SubjectView {
      * @param subject required {@link Subject}
      */
     public void addSubjectTab(Subject subject){
-        Output.write("Add Subject: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
         Tab tab = new Tab(subject.getName().getValue());
         tab.setId(String.valueOf(subject.getID()));
         tab.setUserData(subject.getBackgroundPicturePath());
@@ -119,7 +118,6 @@ public class SubjectView {
     public void changeBackgroundFromSubjectTab(Subject subject) {
         for (Tab tab : this.root.getTabs()) {
             if (tab.getId().equals(String.valueOf(subject.getID()))) {
-                Output.write("Changing Subject Background from: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
                 tab.setUserData(subject.getBackgroundPicturePath());
                 return;
             }
@@ -133,7 +131,6 @@ public class SubjectView {
     public void renameSubjectTab(Subject subject, String newName){
         for (Tab tab : this.root.getTabs()) {
             if (tab.getId().equals(String.valueOf(subject.getID()))) {
-                Output.write("Renaming Subject to: " + newName + " (ID: " + subject.getID() + ")");
                 tab.setText(newName);
                 return;
             }
@@ -147,7 +144,6 @@ public class SubjectView {
     public void deleteSubjectTab(Subject subject){
         for (Tab tab : this.root.getTabs()) {
             if (tab.getId().equals(String.valueOf(subject.getID()))) {
-                Output.write("Delete Subject: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
                 this.root.getTabs().remove(tab);
                 return;
             }
@@ -189,18 +185,11 @@ public class SubjectView {
             root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
             root.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+                Output.write("Changing Subject to: " + root.getTabs().get(newValue.intValue()).getText());
                 selectedSubjectID.setValue(Integer.parseInt(root.getTabs().get(newValue.intValue()).getId()));
                 if (oldValue.intValue() != -1 && !(oldValue.intValue() >= root.getTabs().size())) {
                     root.getTabs().get(oldValue.intValue()).setContent(null);
-                    String content_ = "";
-                    for (int i = 0; i < 10; i++) {
-                        content_ += "Das ist der Text in dem Fach: " + root.getTabs().get(newValue.intValue()).getText() + "\n" +
-                                "Der vorherige Text war aus: " + root.getTabs().get(oldValue.intValue()).getText() + "\n\n";
-                    }
-                    root.getTabs().get(newValue.intValue()).setContent(new Label(content_));
                     changeCurrentBackground((String) root.getTabs().get(newValue.intValue()).getUserData());
-                    System.out.println("From: " + root.getTabs().get(oldValue.intValue()).getText() + " (" + oldValue + ") " +
-                            "to: " + root.getTabs().get(newValue.intValue()).getText() + " (" + newValue + ")");
                 }
             });
         }

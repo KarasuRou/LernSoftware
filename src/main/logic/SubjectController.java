@@ -33,6 +33,7 @@ public class SubjectController {
                 id = subjectData.createSubject(name, backgroundPicturePath);
             }
             subject.setID(id);
+            Output.write("Add Subject: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
             subjectView.addSubjectTab(subject);
         } catch (Exception e) {
             Output.exceptionWrite(e, "Failed to addSubject");
@@ -52,6 +53,7 @@ public class SubjectController {
             if (!subjectData.updateSubjectName(newName, subject.getID())) {
                 throw new SQLException();
             }
+            Output.write("Renaming Subject to: " + newName + " (ID: " + subject.getID() + ")");
             subjectView.renameSubjectTab(subject, newName);
             subject.setName(newName);
         } catch (Exception e) {
@@ -80,6 +82,7 @@ public class SubjectController {
                 throw new SQLException();
             }
             subject.setBackgroundPicturePath(backgroundPath);
+            Output.write("Changing Subject Background from: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
             subjectView.changeBackgroundFromSubjectTab(subject);
         } catch (Exception e) {
             Output.exceptionWrite(e, "Failed to changeSubjectBackground");
@@ -95,6 +98,7 @@ public class SubjectController {
             if (!subjectData.deleteSubject(subject.getID())) {
                 throw new SQLException();
             }
+            Output.write("Delete Subject: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
             subjectView.deleteSubjectTab(subject);
         } catch (Exception e) {
             Output.exceptionWrite(e, "Failed to deleteSubject");
