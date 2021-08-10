@@ -25,7 +25,6 @@ import ui.MainUI;
 import java.awt.*;
 import java.net.URI;
 
-// TODO Sort Private/Public
 public class Help {
 
     private final static Help HELP = new Help();
@@ -39,6 +38,19 @@ public class Help {
     }
 
     private Help() {}
+
+    /**
+     * <p>This Method is the "Constructor" for the Help class.</p>
+     * <p>This is the only way to access the Help.</p>
+     * @return a {@link Help} instance
+     */
+    public static Help getInstance(){
+        return HELP;
+    }
+
+    public Menu getHelp() {
+        return root;
+    }
 
     private void setMenu() {
 
@@ -67,15 +79,10 @@ public class Help {
     }
 
     private void showUpdateMenu() {
-        Stage stage = new Stage();
-        stage.setResizable(false);
-        stage.initModality(Modality.WINDOW_MODAL);
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.setPadding(new Insets(20));
-        Scene scene = new Scene(vBox);
-        MainUI.getInstance().setInitOwner(stage);
-        stage.setScene(scene);
+        Stage stage = getPopUpStage(vBox);
         stage.setTitle("Update verfügbar");
 
 
@@ -120,17 +127,12 @@ public class Help {
     }
 
     private void showUberMenu() {
-        Stage stage = new Stage();
-        stage.setResizable(false);
-        stage.initModality(Modality.WINDOW_MODAL);
         VBox vBox = new VBox();
         vBox.setSpacing(10);
         vBox.setPrefWidth(400);
         vBox.setPadding(new Insets(20));
-        Scene scene = new Scene(vBox);
-        stage.setScene(scene);
+        Stage stage = getPopUpStage(vBox);
         stage.setTitle("Über LernSoftware");
-        MainUI.getInstance().setInitOwner(stage);
 
         Label headerLabel = new Label("LernSoftware");
         headerLabel.setFont(Font.font(headerLabel.getFont().getSize()+2));
@@ -167,21 +169,7 @@ public class Help {
         }
     }
 
-
-    /**
-     * <p>This Method is the "Constructor" for the Help class.</p>
-     * <p>This is the only way to access the Help.</p>
-     * @return a {@link Help} instance
-     */
-    public static Help getInstance(){
-        return HELP;
-    }
-
-    public Menu getHelp() {
-        return root;
-    }
-
-    private Stage getPopUpStage(Parent root) { //TODO use in other PopUp's
+    private Stage getPopUpStage(Parent root) {
         Stage stage = new Stage();
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setResizable(false);
