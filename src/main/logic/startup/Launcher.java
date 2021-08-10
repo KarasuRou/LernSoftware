@@ -18,10 +18,12 @@ public class Launcher extends Application {
         Output.write("Application Starting...", "SYSTEM");
         createShutdownHook();
         try {
+            Output.write("Starting Initiation...", "SYSTEM");
             Database.getInstance().initDBConnection();
             SubjectController.getInstance().init();
             FolderController.getInstance().init();
             QuestionController.getInstance().init();
+            Output.write("Initiation successful!", "SYSTEM");
         } catch (Exception e) {
             Output.exceptionWrite(e);
         }

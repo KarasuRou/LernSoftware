@@ -14,16 +14,16 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import logic.SubjectController;
 import model.Folder;
-import model.Subject;
 import ui.MainUI;
 import ui.components.FolderView;
-import ui.components.SubjectView;
 
 import java.io.File;
 
 public class Add {
 
+    private final SubjectController subjectController = SubjectController.getInstance();
     private final static Add add = new Add();
     private final Menu root = new Menu();
 
@@ -110,13 +110,12 @@ public class Add {
                     nameTextField.setTooltip(tooltip);
                     tooltip.show(stage);
                 } else {
-                    Subject subject = new Subject();
-                    subject.setName(nameTextField.getText());
-                    subject.setID(0); //TODO
+                    String name = nameTextField.getText();
+                    String backgroundPicturePath = null;
                     if (file2[0] != null) {
-                        subject.setBackgroundPicturePath(file2[0].getPath());
+                        backgroundPicturePath = file2[0].getPath();
                     }
-                    SubjectView.getInstance().addSubjectTab(subject);
+                    subjectController.addSubject(name, backgroundPicturePath);
                     stage.close();
                 }
             });

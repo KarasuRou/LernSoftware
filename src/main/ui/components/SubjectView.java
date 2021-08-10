@@ -18,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import logic.SubjectController;
 import logic.miscellaneous.Output;
 import model.Subject;
 import ui.MainUI;
@@ -26,47 +27,13 @@ import java.io.File;
 
 public class SubjectView {
 
+    private boolean initiated = false;
     private final static SubjectView subjectView = new SubjectView();
     private final TabPane root = new TabPane();
     private final Property<Number> selectedSubject = new SimpleIntegerProperty();
     private final Property<Number> width = new SimpleDoubleProperty();
     private final Property<Number> height = new SimpleDoubleProperty();
-    private final QuestionView questionView = QuestionView.getInstance(); // For question content
-
-    static {
-        subjectView.selectedSubject.bind(subjectView.root.getSelectionModel().selectedIndexProperty());
-
-        Subject subject = new Subject();
-        subject.setName("Deutsch");
-        subject.setID(0);
-        Subject subject1 = new Subject();
-        subject1.setName("Englisch");
-        subject1.setID(1);
-        Subject subject2 = new Subject();
-        subject2.setName("Mathematik");
-        subject2.setID(2);
-        subjectView.addSubjectTab(subject);
-        subjectView.addSubjectTab(subject1);
-        subjectView.addSubjectTab(subject2);
-
-
-        subjectView.root.getTabs().get(0).setContent(subjectView.questionView.getQuestionView());
-        subjectView.root.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            subjectView.root.getTabs().get(oldValue.intValue()).setContent(null);
-            String content_ = "";
-            for (int i = 0; i < 10; i++) {
-                content_ +="Das ist der Text in dem Fach: " + subjectView.root.getTabs().get(newValue.intValue()).getText() + "\n" +
-                        "Der vorherige Text war aus: " + subjectView.root.getTabs().get(oldValue.intValue()).getText() + "\n\n";
-            }
-            subjectView.root.getTabs().get(newValue.intValue()).setContent(new Label(content_));
-            subjectView.changeCurrentBackground((String) subjectView.root.getTabs().get(newValue.intValue()).getUserData());
-            System.out.println("From: " +subjectView.root.getTabs().get(oldValue.intValue()).getText() + " (" + oldValue + ") " +
-                    "to: " +subjectView.root.getTabs().get(newValue.intValue()).getText() + " (" + newValue + ")");
-        });
-        subjectView.root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        subjectView.root.heightProperty().addListener((observable, oldValue, newValue) -> {
-        });
-    }
+    private final SubjectController controller = SubjectController.getInstance();
 
     private SubjectView(){}
 
@@ -126,11 +93,10 @@ public class SubjectView {
         tab.setId(String.valueOf(subject.getID()));
         tab.setUserData(subject.getBackgroundPicturePath());
 //        if (subject.getBackgroundPicturePath() != null && !subject.getBackgroundPicturePath().equals("")) {
-//            changeBackground(subject.getBackgroundPicturePath()); // TODO setSubject()
+//            changeBackground(subject.getBackgroundPicturePath()); // TODO setSubject() - live update from the background
 //        }
         tab.setContextMenu(getTabContextMenu(subject));
         this.root.getTabs().add(tab);
-        System.out.println(this.root.getTabs().indexOf(tab));
     }
 
     /**
@@ -163,11 +129,11 @@ public class SubjectView {
      * <p>Renames the Subject Tab.</p>
      * @param subject required {@link Subject}
      */
-    public void renameSubjectTab(Subject subject){
+    public void renameSubjectTab(Subject subject, String newName){
         for (Tab tab : this.root.getTabs()) {
             if (tab.getId().equals(String.valueOf(subject.getID()))) {
-                Output.write("Renaming Subject to: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
-                tab.setText(subject.getName().getValue());
+                Output.write("Renaming Subject to: " + newName + " (ID: " + subject.getID() + ")");
+                tab.setText(newName);
                 return;
             }
         }
@@ -203,6 +169,33 @@ public class SubjectView {
         return this.root;
     }
 
+    /**
+     * <p>This method will Initiate the class.</p>
+     * <p>It is required to call this method, to properly use the Application.</p>
+     */
+    public void init() {
+        if (!initiated) {
+            initiated = true;
+            selectedSubject.bind(root.getSelectionModel().selectedIndexProperty());
+            root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+            root.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+                if (oldValue.intValue() != -1 && !(oldValue.intValue() >= root.getTabs().size())) {
+                    root.getTabs().get(oldValue.intValue()).setContent(null);
+                    String content_ = "";
+                    for (int i = 0; i < 10; i++) {
+                        content_ += "Das ist der Text in dem Fach: " + root.getTabs().get(newValue.intValue()).getText() + "\n" +
+                                "Der vorherige Text war aus: " + root.getTabs().get(oldValue.intValue()).getText() + "\n\n";
+                    }
+                    root.getTabs().get(newValue.intValue()).setContent(new Label(content_));
+                    changeCurrentBackground((String) root.getTabs().get(newValue.intValue()).getUserData());
+                    System.out.println("From: " + root.getTabs().get(oldValue.intValue()).getText() + " (" + oldValue + ") " +
+                            "to: " + root.getTabs().get(newValue.intValue()).getText() + " (" + newValue + ")");
+                }
+            });
+        }
+    }
+
     private ContextMenu getTabContextMenu(Subject subject) {
         ContextMenu contextMenu = new ContextMenu();
 
@@ -225,15 +218,14 @@ public class SubjectView {
         stage.setTitle("Fach(Tab) umbenennen");
 
         Label label = new Label("Wie soll das Fach(Tab) heißen?");
-        TextField textField = new TextField();
+        TextField textField = new TextField(subject.getName().getValue());
 
         HBox hBox = new HBox();
         hBox.setSpacing(10);
         Button renameButton = new Button("Umbenennen");
         renameButton.setOnAction(event -> {
             if (!textField.getText().equals("")) {
-                subject.setName(textField.getText());
-                renameSubjectTab(subject);
+                controller.renameSubject(subject, textField.getText());
                 stage.close();
             } else {
                 textField.setStyle("-fx-border-color: red;");
@@ -271,18 +263,15 @@ public class SubjectView {
         hBox.setAlignment(Pos.CENTER);
         Button deleteBackground = new Button("Entfernen");
         deleteBackground.setOnAction(event -> {
-            subject.setBackgroundPicturePath(null);
-            changeBackgroundFromSubjectTab(subject);
+            controller.changeSubjectBackground(subject, null);
             stage.close();
         });
         Button addNewBackground = new Button("Neuen Hintergrund auswählen");
         addNewBackground.setOnAction(event -> {
-
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
-                subject.setBackgroundPicturePath(file.getPath());
-                changeBackgroundFromSubjectTab(subject);
+                controller.changeSubjectBackground(subject, file.getPath());
                 stage.close();
             }
         });
@@ -307,7 +296,7 @@ public class SubjectView {
 
         Button deleteButton = new Button("Löschen");
         deleteButton.setOnAction(event -> {
-            deleteSubjectTab(subject);
+            controller.deleteSubject(subject);
             stage.close();
         });
         Button cancelButton = new Button("Abbrechen");
