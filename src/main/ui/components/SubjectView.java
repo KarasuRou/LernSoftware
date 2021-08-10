@@ -31,6 +31,7 @@ public class SubjectView {
     private final static SubjectView subjectView = new SubjectView();
     private final TabPane root = new TabPane();
     private final Property<Number> selectedSubject = new SimpleIntegerProperty();
+    private final Property<Number> selectedSubjectID = new SimpleIntegerProperty();
     private final Property<Number> width = new SimpleDoubleProperty();
     private final Property<Number> height = new SimpleDoubleProperty();
     private final SubjectController controller = SubjectController.getInstance();
@@ -162,6 +163,14 @@ public class SubjectView {
     }
 
     /**
+     * <p>The given {@code property} will be bound to selectedSubject property.</p>
+     * @param property extern Property
+     */
+    public void bindExternProperty_ID(Property<Number> property) {
+        property.bind(selectedSubjectID);
+    }
+
+    /**
      * <p>This will return view of the SubjectView class.</p>
      * @return the {@link SubjectView} {@link Node}.
      */
@@ -180,6 +189,7 @@ public class SubjectView {
             root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
             root.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+                selectedSubjectID.setValue(Integer.parseInt(root.getTabs().get(newValue.intValue()).getId()));
                 if (oldValue.intValue() != -1 && !(oldValue.intValue() >= root.getTabs().size())) {
                     root.getTabs().get(oldValue.intValue()).setContent(null);
                     String content_ = "";

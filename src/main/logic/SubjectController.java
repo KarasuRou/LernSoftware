@@ -133,7 +133,7 @@ public class SubjectController {
                 subject.setID(resultSet.getInt(1));
                 subject.setName(resultSet.getString(2));
                 subject.setBackgroundPicturePath(resultSet.getString(3));
-                SubjectView.getInstance().addSubjectTab(subject);
+                subjectView.addSubjectTab(subject);
             }
         } catch (SQLException e) {
             Output.exceptionWrite(e);
