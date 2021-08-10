@@ -22,7 +22,6 @@ import ui.components.SubjectView;
 
 import java.io.File;
 
-// TODO Sort Private/Public
 public class Add {
 
     private final static Add add = new Add();
@@ -35,8 +34,20 @@ public class Add {
 
     private Add() {}
 
-    private void setMenu() {
+    /**
+     * <p>This Method is the "Constructor" for the Add class.</p>
+     * <p>This is the only way to access the Add.</p>
+     * @return a {@link Add} instance
+     */
+    public static Add getInstance() {
+        return add;
+    }
 
+    public Menu getAdd() {
+        return root;
+    }
+
+    private void setMenu() {
         MenuItem subjectAdd = getSubjectAddMenuItem();
         MenuItem folderAdd = getFolderAddMenuItem();
         MenuItem questionAdd = getQuestionAddMenuItem();
@@ -52,20 +63,12 @@ public class Add {
 
     private EventHandler<ActionEvent> showSubjectAddMenu() {
         return event -> {
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.initModality(Modality.WINDOW_MODAL);
-            MainUI.getInstance().setInitOwner(stage);
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.CENTER);
             vBox.setPadding(new Insets(20));
             vBox.setSpacing(5);
-
-            Scene scene = new Scene(vBox);
+            Stage stage = getPopUpStage(vBox);
             stage.setTitle("Fach hinzufügen");
-            MainUI.getInstance().setInitOwner(stage);
-            stage.setScene(scene);
-
 
             Label label = new Label("Wie soll das Fach(Tab) heißen?");
             HBox subjectInfoBox = new HBox();
@@ -140,18 +143,13 @@ public class Add {
 
     private EventHandler<ActionEvent> showFolderAddMenu() {
         return event -> {
-            Stage stage = new Stage();
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.CENTER);
             vBox.setPadding(new Insets(20));
             vBox.setSpacing(5);
 
-            Scene scene = new Scene(vBox);
+            Stage stage = getPopUpStage(vBox);
             stage.setTitle("Ordner hinzufügen");
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.initModality(Modality.WINDOW_MODAL);
-            MainUI.getInstance().setInitOwner(stage);
 
 
             Label label = new Label("Wie soll der Ordner heißen?");
@@ -205,20 +203,7 @@ public class Add {
         };
     }
 
-    /**
-     * <p>This Method is the "Constructor" for the Add class.</p>
-     * <p>This is the only way to access the Add.</p>
-     * @return a {@link Add} instance
-     */
-    public static Add getInstance() {
-        return add;
-    }
-
-    public Menu getAdd() {
-        return root;
-    }
-
-    private Stage getPopUpStage(Parent root) { //TODO use in other PopUp's
+    private Stage getPopUpStage(Parent root) {
         Stage stage = new Stage();
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setResizable(false);
