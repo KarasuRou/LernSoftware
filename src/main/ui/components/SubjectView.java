@@ -167,6 +167,14 @@ public class SubjectView {
     }
 
     /**
+     * <p>This will set the current Content for the Tab.</p>
+     * @param node the needed Node (Content)
+     */
+    public void setContent(Node node) {
+        root.getTabs().get(selectedSubject.getValue().intValue()).setContent(node);
+    }
+
+    /**
      * <p>This will return view of the SubjectView class.</p>
      * @return the {@link SubjectView} {@link Node}.
      */
