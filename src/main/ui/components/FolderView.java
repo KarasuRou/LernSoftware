@@ -20,19 +20,18 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.FolderController;
-import logic.miscellaneous.Output;
 import model.Folder;
 import ui.MainUI;
 
 public class FolderView{
 
-    public final Property<Number> selectedFolder = new SimpleIntegerProperty();
 
     private final static FolderView folderView = new FolderView();
     private final VBox root = new VBox();
     private final Property<Number> width = new SimpleDoubleProperty();
     private final Property<Number> height = new SimpleDoubleProperty();
     private final Property<Number> boundSubject = new SimpleIntegerProperty();
+    private final Property<Number> selectedFolder = new SimpleIntegerProperty();
     private FolderController folderController;
 
 
@@ -77,11 +76,6 @@ public class FolderView{
                 "-fx-border-width: 0.2px 0.2px 0 0;" +
                 "-fx-padding: 4,0,0,0;" +
                 "-fx-spacing: 8;");
-
-//        root.getChildren().addAll(new Label("Deutsch", getFolderImage()),
-//                new Label("Englisch", getFolderImage()),
-//                new Label("Mathematik", getFolderImage()),
-//                new Label("Naturwissenschaften", getFolderImage()));
     }
 
     /**

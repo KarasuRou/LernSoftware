@@ -2,6 +2,7 @@ package logic;
 
 import com.sun.istack.internal.Nullable;
 import data.FolderData;
+import data.QuestionData;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import logic.miscellaneous.Output;
@@ -61,6 +62,7 @@ public class FolderController {
     public void deleteFolder(Folder folder){
         try {
             folderData.deleteFolder(folder.getID());
+            QuestionData.getInstance().deleteALLQuestionsAndTheFolderWithFolderID(folder.getID());
             Output.write("Deleting Folder: " + folder.getName().getValue() + " (ID: " + folder.getID() + ")");
             folderView.deleteFolder(folder);
         } catch (SQLException e) {
