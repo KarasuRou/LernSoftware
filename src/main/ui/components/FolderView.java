@@ -129,6 +129,7 @@ public class FolderView{
      * <p>Clears the folders in the FolderView.</p>
      */
     public void clearFolders() {
+        selectedFolder.setValue(-1);
         root.getChildren().removeAll(root.getChildren());
     }
 
