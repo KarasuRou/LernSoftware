@@ -42,9 +42,10 @@ public class QuestionData {
      * @throws SQLException if the {@code ID} was wrong.
      */
     public ResultSet getQuestionsWithFolderID(int ID) throws SQLException{
-        String sql = "SELECT Q.ID as ID, Qp.type AS type, Qp.value FROM Question_Params AS Qp " +
+        String sql = "SELECT Q.ID as ID, Q.QuestionType, Qp.type AS typ, Qp.value FROM Question_Params AS Qp " +
                 "INNER JOIN Question Q on Q.ID = Qp.f_ID " +
-                "INNER JOIN Folder F on F.ID = Q.f_ID WHERE F.ID = " + ID;
+                "INNER JOIN Folder F on F.ID = Q.f_ID WHERE F.ID = " + ID + " " +
+                "ORDER BY ID";
         Output.write(sql);
         return database.executeSelectQuery(sql);
     }
@@ -196,7 +197,7 @@ public class QuestionData {
      * @throws SQLException if any parameter was wrong.
      */
     public int createQuestion(Question question, int folderID) throws SQLException{
-        String sql = "INSERT INTO Question (f_ID, QuestionType) VALUES (" + folderID + "," + question.getQuestionTyp().toString() + ");";
+        String sql = "INSERT INTO Question (f_ID, QuestionType) VALUES (" + folderID + ",'" + question.getQuestionTyp().toString() + "');";
         PreparedStatement preparedStatement =
                 database.startInsertQuery("INSERT INTO Question (f_ID, QuestionType) VALUES (?,?);");
         preparedStatement.setInt(1, folderID);
@@ -214,7 +215,7 @@ public class QuestionData {
             case MultipleChoiceQuestion:
                 for (int rightPositions : (int[]) question.getAnswer()) {
                     sql = "INSERT INTO Question_Params (f_ID, type, value) VALUES " +
-                            "(" + id + "," + "answer" + "," + rightPositions + ")";
+                            "(" + id + ",'" + "answer" + "'," + rightPositions + ")";
                     Output.write(sql);
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, "answer");
@@ -223,7 +224,7 @@ public class QuestionData {
                 }
                 for (String possibilities : (String[]) question.getQuestionMessage()) {
                     sql = "INSERT INTO Question_Params (f_ID, type, value) VALUES " +
-                            "(" + id + "," + "questionMessage" + "," + possibilities + ")";
+                            "(" + id + ",'" + "questionMessage" + "','" + possibilities + "')";
                     Output.write(sql);
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, "questionMessage");
@@ -258,7 +259,7 @@ public class QuestionData {
                 break;
             case DirectQuestion:
                 sql = "INSERT INTO Question_Params (f_ID, type, value) VALUES " +
-                    "(" + id + ",'" + "questionMessage" + "','" + question.getQuestionMessage() + "')";
+                        "(" + id + ",'" + "questionMessage" + "','" + question.getQuestionMessage() + "')";
                 Output.write(sql);
                 preparedStatement.setInt(1, id);
                 preparedStatement.setString(2, "questionMessage");
