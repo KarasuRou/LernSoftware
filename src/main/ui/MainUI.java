@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logic.miscellaneous.Output;
 import ui.components.FolderView;
 import ui.components.QuestionView;
 import ui.components.SubjectView;
@@ -86,10 +87,10 @@ public class MainUI{
     private void debug(boolean status) {
         if (status) {
             this.primaryStage.widthProperty().addListener((observable, oldValue, newValue) ->
-                System.out.println("Weite: " + newValue)
+                Output.write("Weite: " + newValue)
             );
             this.primaryStage.heightProperty().addListener((observable, oldValue, newValue) ->
-                System.out.println("Höhe: " + newValue)
+                Output.write("Höhe: " + newValue)
             );
         }
     }

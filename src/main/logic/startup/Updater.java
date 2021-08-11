@@ -258,7 +258,6 @@ public class Updater {
         Output.write("Cleaning the update-files...");
 
         File file = new File("LernSoftware.zip");
-        System.out.println(file.getAbsolutePath());
         if(file.delete())
         {
             Output.write(file.getAbsolutePath() + " deleted successfully");

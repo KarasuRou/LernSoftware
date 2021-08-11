@@ -258,7 +258,7 @@ public class Database {
             ResultSet resultSet = executeSelectQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='"+tableName+"';");
             return resultSet.next();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Output.exceptionWrite(e);
         }
         return false;
     }
