@@ -26,7 +26,6 @@ public class QuestionController {
     private final QuestionView questionView = QuestionView.getInstance();
     private final Property<Number> selectedFolder = new SimpleIntegerProperty();
 
-
     private List<Object> questionMessage = new ArrayList<>();
     private List<Object> answer = new ArrayList<>();
     private List<Object> extraParameter = new ArrayList<>();
@@ -137,6 +136,13 @@ public class QuestionController {
         }
     }
 
+    /**
+     * <p>This method will tell you if a folder is currently selected.</p>
+     * @return a boolean if a folder is currently selected.
+     */
+    public boolean folderIsSelected() {
+        return selectedFolder.getValue().intValue() != -1;
+    }
 
     /**
      * <p>This Method is the "Constructor" for the QuestionController class.</p>
@@ -182,15 +188,16 @@ public class QuestionController {
             int questionID = resultSet.getInt(1);
             if (newQuestion(lastQuestionID, questionID)) {
                 if (question != null) {
-                    resetQuestionCache();
 //                    questionView.addQuestion(question);
+                    resetQuestionCache();
                 }
                 question = getQuestion(resultSet);
-            } else {
-                getExtraParams(question, resultSet);
             }
+            getExtraParams(question, resultSet);
             lastQuestionID = questionID;
         }
+//        questionView.addQuestion(question);
+        resetQuestionCache();
     }
 
     private boolean newQuestion(int lastQuestionID, int questionID) {
