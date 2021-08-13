@@ -13,6 +13,7 @@ import model.question.Question;
 import model.question.QuestionTyp;
 import ui.components.FolderView;
 import ui.components.QuestionView;
+import ui.components.SubjectView;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,7 +55,7 @@ public class QuestionController {
             int id = questionData.createQuestion(question, selectedFolder.getValue().intValue());
             question.setID(id);
 
-//            questionView.addQuestion(question);
+            questionView.addQuestion(question);
         } catch (SQLException | QuestionException e) {
             Output.exceptionWrite(e);
         }
@@ -74,7 +75,7 @@ public class QuestionController {
                             answer,
                             question.getQuestionTyp()
                     );
-//            questionView.changeAnswer(question, answer);
+            questionView.changeAnswer(question, answer);
             question.setAnswer(answer);
         } catch (SQLException | IllegalAnswerTypeException e) {
             Output.exceptionWrite(e);
@@ -95,7 +96,7 @@ public class QuestionController {
                             questionMessage,
                             question.getQuestionTyp()
                     );
-//            questionView.changeQuestionMessage(question, questionMessage);
+            questionView.changeQuestionMessage(question, questionMessage);
             question.setQuestionMessage(questionMessage);
         } catch (SQLException | IllegalQuestionMessageTypeException e) {
             Output.exceptionWrite(e);
@@ -116,7 +117,7 @@ public class QuestionController {
                             extraParameter,
                             question.getQuestionTyp()
                     );
-//            questionView.changeExtraParameter(question, extraParameter);
+            questionView.changeExtraParameter(question, extraParameter);
             question.setExtraParameter(extraParameter);
         } catch (SQLException | IllegalExtraParameterException e) {
             Output.exceptionWrite(e);
@@ -130,7 +131,7 @@ public class QuestionController {
     public void removeQuestion(Question question) {
         try {
             questionData.deleteQuestionWithQuestionID(question.getID());
-//            questionView.removeQuestion(question);
+            questionView.removeQuestion(question);
         } catch (SQLException e) {
             Output.exceptionWrite(e);
         }
@@ -161,7 +162,7 @@ public class QuestionController {
      */
     public void init() throws SQLException{
         questionData.init();
-//        questionView.init();
+        questionView.init();
 
         selectedFolder.addListener((observable, oldValue, newValue) -> setUp_Questions(newValue.intValue()));
         FolderView.getInstance().bindExternProperty(selectedFolder);
@@ -172,9 +173,9 @@ public class QuestionController {
             return;
         }
         try {
-//            questionView.clearQuestions();
+            questionView.clearQuestions();
             addQuestions(newId);
-//            SubjectView.getInstance().setContent(questionView.getQuestionView());
+            SubjectView.getInstance().setContent(questionView.getQuestionView());
         } catch (SQLException | QuestionException e) {
             Output.exceptionWrite(e);
         }
@@ -188,7 +189,7 @@ public class QuestionController {
             int questionID = resultSet.getInt(1);
             if (newQuestion(lastQuestionID, questionID)) {
                 if (question != null) {
-//                    questionView.addQuestion(question);
+                    questionView.addQuestion(question);
                     resetQuestionCache();
                 }
                 question = getQuestion(resultSet);
@@ -196,7 +197,7 @@ public class QuestionController {
             getExtraParams(question, resultSet);
             lastQuestionID = questionID;
         }
-//        questionView.addQuestion(question);
+        questionView.addQuestion(question);
         resetQuestionCache();
     }
 

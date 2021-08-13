@@ -1,70 +1,52 @@
 package ui.components;
 
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import model.question.Question;
 
 public class QuestionView {
 
     private final static QuestionView questionView = new QuestionView();
-    private final VBox root = new VBox();
-    private final Property<Number> boundFolder = new SimpleIntegerProperty();
-    private int maxHeight = 0;
-
-    static {
-        FolderView.getInstance().bindExternProperty(questionView.boundFolder);
-
-        Label label = new Label("This is here!");
-
-        questionView.root.getChildren().addAll(
-                label,
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"),
-                new Label("ASDKAKJSDKLASJDLASLDJALSDJLJSDA"));
-    }
+    private final Pane root = new Pane();
+    private final VBox content = new VBox();
+    private final ScrollBar scrollBar = new ScrollBar();
 
     private QuestionView() {}
+
+    // TODO ADD
+    public void addQuestion(Question question) {
+        resizeScrollbar();
+    }
+
+    // TODO ADD
+    public void removeQuestion(Question question) {
+        resizeScrollbar();
+    }
+
+    // TODO ADD
+    public void changeExtraParameter(Question question, Object extraParameter) {
+        resizeScrollbar();
+    }
+
+    // TODO ADD
+    public void changeAnswer(Question question, Object answer) {
+        resizeScrollbar();
+    }
+
+    // TODO ADD
+    public void changeQuestionMessage(Question question, Object questionMessage) {
+        resizeScrollbar();
+    }
+
+    // TODO ADD
+    public void clearQuestions() {
+        content.getChildren().removeAll(content.getChildren());
+        resizeScrollbar();
+    }
 
     /**
      * <p>This Method is the "Constructor" for the QuestionView class.</p>
@@ -81,5 +63,23 @@ public class QuestionView {
      */
     public Node getQuestionView(){
         return this.root;
+    }
+
+    public void init() {
+        scrollBar.setMin(0);
+        root.widthProperty().addListener((observable, oldValue, newValue) -> {
+            scrollBar.setPrefWidth(newValue.doubleValue() * 0.025);
+            scrollBar.setLayoutX(newValue.doubleValue() * 0.975);
+        });
+        root.heightProperty().addListener((observable, oldValue, newValue) -> scrollBar.setPrefHeight(newValue.doubleValue()));
+        scrollBar.setOrientation(Orientation.VERTICAL);
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setStyle("-fx-padding: 0,0,0,20;");
+        root.getChildren().addAll(content, scrollBar);
+    }
+
+    private void resizeScrollbar() {
+        scrollBar.setMax(content.getHeight());
+        scrollBar.valueProperty().addListener((observable, oldValue, newValue) -> content.setLayoutX(-newValue.doubleValue()));
     }
 }
