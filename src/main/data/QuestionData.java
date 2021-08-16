@@ -173,8 +173,12 @@ public class QuestionData {
         PreparedStatement preparedStatement = database.startUpdateQuery(sql);
         switch (questionTyp) {
             case UNSET:
-            case MultipleChoiceQuestion:
             case DirectQuestion:
+                break;
+            case MultipleChoiceQuestion:
+                sql = sql.replace("?", (String) extraParameter);
+                preparedStatement.setString(1, (String) extraParameter);
+                preparedStatement.addBatch();
                 break;
             case WordsQuestion:
                 sql = sql.replace("?",String.valueOf((double) extraParameter));
@@ -231,6 +235,13 @@ public class QuestionData {
                     preparedStatement.setString(3, possibilities);
                     preparedStatement.addBatch();
                 }
+                sql = "INSERT INTO Question_Params (f_ID, type, value) VALUES " +
+                        "(" + id + ",'" + "extraParameter" + "','" + question.getExtraParameter() + "')";
+                Output.write(sql);
+                preparedStatement.setInt(1, id);
+                preparedStatement.setString(2, "extraParameter");
+                preparedStatement.setString(3, (String) question.getExtraParameter());
+                preparedStatement.addBatch();
                 break;
             case WordsQuestion:
                 sql = "INSERT INTO Question_Params (f_ID, type, value) VALUES " +
