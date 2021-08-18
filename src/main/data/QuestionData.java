@@ -217,13 +217,13 @@ public class QuestionData {
                 deleteQuestionWithQuestionID(id);
                 return -1;
             case MultipleChoiceQuestion:
-                for (int rightPositions : (int[]) question.getAnswer()) {
+                for (boolean rightPositions : (boolean[]) question.getAnswer()) {
                     sql = "INSERT INTO Question_Params (f_ID, type, value) VALUES " +
                             "(" + id + ",'" + "answer" + "'," + rightPositions + ")";
                     Output.write(sql);
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, "answer");
-                    preparedStatement.setInt(3, rightPositions);
+                    preparedStatement.setBoolean(3, rightPositions);
                     preparedStatement.addBatch();
                 }
                 for (String possibilities : (String[]) question.getQuestionMessage()) {

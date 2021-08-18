@@ -90,7 +90,7 @@ public class Question {
         {
             this.answer = answer;
         }
-        else if(answer.getClass().getSimpleName().equals("int[]") &&
+        else if(answer.getClass().getSimpleName().equals("boolean[]") &&
                 questionTyp == QuestionTyp.MultipleChoiceQuestion)
         {
             this.answer = answer;
