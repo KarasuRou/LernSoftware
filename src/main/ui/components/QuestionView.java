@@ -22,8 +22,13 @@ public class QuestionView {
         resizeScrollbar();
     }
 
-    // TODO ADD
     public void removeQuestion(Question question) {
+        for (Node node : content.getChildren()) {
+            if (node.getId().equals(String.valueOf(question.getID()))) {
+                content.getChildren().remove(node);
+                return;
+            }
+        }
         resizeScrollbar();
     }
 
@@ -42,7 +47,6 @@ public class QuestionView {
         resizeScrollbar();
     }
 
-    // TODO ADD
     public void clearQuestions() {
         content.getChildren().removeAll(content.getChildren());
         resizeScrollbar();
