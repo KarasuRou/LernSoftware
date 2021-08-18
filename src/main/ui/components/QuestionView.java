@@ -6,14 +6,17 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.QuestionController;
 import model.question.Question;
+import model.question.QuestionTyp;
 import ui.MainUI;
 
 public class QuestionView {
@@ -33,6 +36,7 @@ public class QuestionView {
     public void addQuestion(Question question) {
         VBox questionBox = new VBox();
         questionBox.setId(String.valueOf(question.getID()));
+        questionBox.getChildren().add(getQuestionHeader(question));
         switch (question.getQuestionTyp()) {
             case DirectQuestion:
                 addDirectQuestion(question, questionBox);
@@ -201,6 +205,26 @@ public class QuestionView {
 
     }
 
+    private Node getQuestionHeader(Question question) {
+        HBox hBox = new HBox();
+
+        String questionMessage;
+        if (question.getQuestionTyp() == QuestionTyp.MultipleChoiceQuestion) {
+            questionMessage = question.getExtraParameter().toString();
+        } else {
+            questionMessage = question.getQuestionMessage().toString();
+        }
+        Label label = new Label("Frage: \"" + questionMessage + "\"");
+        label.setContextMenu(getContextMenu(question));
+
+        hBox.getChildren().add(label);
+        return hBox;
+    }
+
+    private Node getQuestionFooter(Question question) {
+        return null;
+    }
+
     private ContextMenu getContextMenu(Question question) {
         ContextMenu contextMenu = new ContextMenu();
 
@@ -211,7 +235,7 @@ public class QuestionView {
         MenuItem deleteQuestion = new MenuItem("Frage löschen");
         deleteQuestion.setOnAction(event -> getDeletePopUp(question));
 
-        contextMenu.getItems().addAll(changeQuestionMessage, changeAnswer);
+        contextMenu.getItems().addAll(changeQuestionMessage, changeAnswer, deleteQuestion);
         return contextMenu;
     }
 
@@ -219,6 +243,8 @@ public class QuestionView {
         VBox vBox = new VBox();
         Stage stage = getPopUpStage(vBox);
         stage.setTitle("Fragen Frage ändern");
+
+//        controller.changeQuestionMessageQuestion(question, "");
 
         stage.show();
     }
@@ -228,6 +254,9 @@ public class QuestionView {
         Stage stage = getPopUpStage(vBox);
         stage.setTitle("Fragen Antwort ändern");
 
+//        controller.changeAnswerQuestion(question, "");
+//        controller.changeExtraParameterQuestion(question, "");
+
         stage.show();
     }
 
@@ -235,6 +264,8 @@ public class QuestionView {
         VBox vBox = new VBox();
         Stage stage = getPopUpStage(vBox);
         stage.setTitle("Frage löschen");
+
+//        controller.removeQuestion(question);
 
         stage.show();
     }
