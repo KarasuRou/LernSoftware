@@ -112,7 +112,7 @@ public class Add {
 
             createButton.setOnAction(event1 -> {
                 if (nameTextField.getText().equals("")) {
-                    getTextFieldError(nameTextField,"Bitte einen Namen vergeben!", stage);
+                    getNodeError(nameTextField,"Bitte einen Namen vergeben!", stage);
                 } else {
                     String name = nameTextField.getText();
                     String backgroundPicturePath = null;
@@ -202,9 +202,10 @@ public class Add {
             vBox.setAlignment(Pos.CENTER);
             vBox.setPadding(new Insets(20));
             vBox.setSpacing(15);
+            vBox.setPrefWidth(460);
+            vBox.setPrefHeight(400);
             Stage stage = getPopUpStage(vBox);
             stage.setTitle("Frage hinzufügen");
-            stage.setResizable(true); //TODO delete this line later
 
             VBox choiceBox = new VBox();
             choiceBox.setSpacing(10);
@@ -298,12 +299,12 @@ public class Add {
             }
         });
         createQuestionButton.setOnAction(event -> {
-            clearTextFieldError(answerTextField);
-            clearTextFieldError(questionMessageTextField);
+            clearNodeError(answerTextField);
+            clearNodeError(questionMessageTextField);
             if (questionMessageTextField.getText().equals("")) {
-                getTextFieldError(questionMessageTextField, "Bitte eine Frage angeben!", stage);
+                getNodeError(questionMessageTextField, "Bitte eine Frage angeben!", stage);
             } else if (answerTextField.getText().equals("")) {
-                getTextFieldError(answerTextField, "Bitte eine Antwort angeben!", stage);
+                getNodeError(answerTextField, "Bitte eine Antwort angeben!", stage);
             } else {
                 questionController.addQuestion(QuestionTyp.DirectQuestion, questionMessageTextField.getText(), answerTextField.getText(), null);
                 stage.close();
@@ -315,8 +316,8 @@ public class Add {
         vBox.getChildren().add(gridPane);
 
         observable.addListener((observable1, oldValue, newValue) -> {
-            clearTextFieldError(answerTextField);
-            clearTextFieldError(questionMessageTextField);
+            clearNodeError(answerTextField);
+            clearNodeError(questionMessageTextField);
         });
     }
 
@@ -373,15 +374,15 @@ public class Add {
             }
         });
         createQuestionButton.setOnAction(event -> {
-            clearTextFieldError(answerTextField);
-            clearTextFieldError(questionMessageTextField);
-            clearTextFieldError(extraParameterTextField);
+            clearNodeError(answerTextField);
+            clearNodeError(questionMessageTextField);
+            clearNodeError(extraParameterTextField);
             if (questionMessageTextField.getText().equals("")) {
-                getTextFieldError(questionMessageTextField, "Bitte eine Frage angeben!", stage);
+                getNodeError(questionMessageTextField, "Bitte eine Frage angeben!", stage);
             } else if (answerTextField.getText().equals("")) {
-                getTextFieldError(answerTextField, "Bite eine Antwort angeben!", stage);
+                getNodeError(answerTextField, "Bite eine Antwort angeben!", stage);
             } else if (extraParameterTextField.getText().equals("")) {
-                getTextFieldError(extraParameterTextField, "Bitte eine Genauigkeit angeben!", stage);
+                getNodeError(extraParameterTextField, "Bitte eine Genauigkeit angeben!", stage);
             } else {
                 questionController
                         .addQuestion(
@@ -398,15 +399,20 @@ public class Add {
         vBox.getChildren().add(gridPane);
 
         observableValue.addListener((observable1, oldValue, newValue) -> {
-            clearTextFieldError(answerTextField);
-            clearTextFieldError(questionMessageTextField);
-            clearTextFieldError(extraParameterTextField);
+            clearNodeError(answerTextField);
+            clearNodeError(questionMessageTextField);
+            clearNodeError(extraParameterTextField);
         });
     }
 
-    //TODO
     private void getMultipleChoiceQuestion(VBox vBox, Stage stage, ObservableValue<? extends Toggle> observable) {
-
+        HBox extraParameterBox = new HBox();
+        extraParameterBox.setSpacing(5);
+        Label extraParameterQuestionLabel = new Label("Wie lautet die Frage?");
+        TextField extraParameterQuestionTextField = new TextField();
+        extraParameterQuestionTextField.requestFocus();
+        extraParameterBox.getChildren().addAll(extraParameterQuestionLabel, extraParameterQuestionTextField);
+        vBox.getChildren().add(extraParameterBox);
 
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(5);
@@ -415,31 +421,156 @@ public class Add {
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.getChildren().addAll(createQuestionButton, cancelButton);
 
-        createQuestionButton.setOnAction(event -> {
+        TextField[] textFields = new TextField[5];
+        CheckBox[] checkBoxes = new CheckBox[5];
 
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            HBox hBox = new HBox();
+
+            checkBoxes[i] = new CheckBox();
+            checkBoxes[i].selectedProperty().addListener((observable1, oldValue, newValue) ->{
+                if (newValue) {
+                    for (CheckBox checkBox : checkBoxes) {
+                        clearNodeError(checkBox);
+                    }
+                }
+            });
+            textFields[i] = new TextField();
+            textFields[i].setOnKeyPressed(event -> {
+                if (event.getCode().equals(KeyCode.ENTER)) {
+                    createQuestionButton.fire();
+                }
+            });
+            textFields[i].textProperty().addListener((observable1, oldValue, newValue) -> {
+                if (finalI != 4 && !newValue.equals("")) {
+                    textFields[finalI + 1].setDisable(false);
+                    checkBoxes[finalI + 1].setDisable(false);
+                } else {
+                    textFields[finalI + 1].setDisable(true);
+                    checkBoxes[finalI + 1].setDisable(true);
+                }
+            });
+            if (i != 0) {
+                textFields[i].setDisable(true);
+                checkBoxes[i].setDisable(true);
+            }
+
+            hBox.getChildren().addAll(new Label("Möglichkeit " + (i + 1) + ":"), checkBoxes[i], textFields[i]);
+            vBox.getChildren().add(hBox);
+
+        }
+
+        extraParameterQuestionTextField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                createQuestionButton.fire();
+            }
+        });
+        createQuestionButton.setOnAction(event -> {
+            clearNodeError(extraParameterQuestionTextField);
+            for (int i = 0; i < 5; i++) {
+                clearNodeError(textFields[i]);
+                clearNodeError(checkBoxes[i]);
+            }
+
+            boolean questionCanBeCreated = true;
+            if (extraParameterQuestionTextField.getText().equals("")) {
+                getNodeError(extraParameterQuestionTextField, "Bitte gib eine Frage ein!", stage);
+                extraParameterQuestionTextField.requestFocus();
+                questionCanBeCreated = false;
+            } else {
+                boolean nothingChecked = true;
+                for (CheckBox checkBox : checkBoxes) {
+                    if (checkBox.isSelected()) {
+                        nothingChecked = false;
+                    }
+                }
+                if (nothingChecked) {
+                    for (CheckBox checkBox : checkBoxes) {
+                        getNodeError(checkBox, "Mindestens eine CheckBox abhaken!", stage);
+                        questionCanBeCreated = false;
+                        break;
+                    }
+                } else {
+                    for (int i = 0; i < 5; i++) {
+                        if (checkBoxes[i].isSelected() && textFields[i].getText().equals("")) {
+                            getNodeError(textFields[i], "Bitte gib eine Antwort ein!\r\nOder entfern den Haken..", stage);
+                            textFields[i].requestFocus();
+                            questionCanBeCreated = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (questionCanBeCreated) {
+                boolean[] answers = {false,false,false,false,false};
+                String[] questionMessages = {"","","","",""};
+                for (int i = 0; i < 5; i++) {
+                    if (!textFields[i].isDisabled()) {
+                        if (i != 4 && !textFields[i + 1].isDisabled()) {
+                            questionMessages[i] = textFields[i].getText();
+                            answers[i] = checkBoxes[i].isSelected();
+                        }
+                    }
+                }
+                questionController
+                        .addQuestion(
+                                QuestionTyp.MultipleChoiceQuestion,
+                                questionMessages,
+                                answers,
+                                extraParameterQuestionTextField.getText()
+                );
+                stage.close();
+            }
         });
         cancelButton.setOnAction(event -> stage.close());
 
-//        vBox.getChildren().add(); //TODO
+        vBox.setPadding(new Insets(10));
+        vBox.setSpacing(10);
         observable.addListener((observable1, oldValue, newValue) ->{
-//            clearTextFieldError(); //TODO
+            clearNodeError(extraParameterQuestionTextField);
+            for (CheckBox checkBox : checkBoxes) {
+                clearNodeError(checkBox);
+            }
+            for (TextField textField : textFields) {
+                clearNodeError(textField);
+            }
         });
+        vBox.getChildren().add(buttonBox);
     }
 
-    private void getTextFieldError(TextField textField, String text, Stage stage) {
-        textField.setStyle("-fx-border-color: red;");
-        Tooltip tooltip = new Tooltip();
-        tooltip.setText(text);
-        textField.setTooltip(tooltip);
-        tooltip.show(stage);
+    private void getNodeError(TextField textField, String text, Stage stage) {
+        if (!textField.isDisabled()) {
+            textField.setStyle("-fx-border-color: red;");
+            Tooltip tooltip = new Tooltip();
+            tooltip.setText(text);
+            textField.setTooltip(tooltip);
+            tooltip.show(stage);
+        }
+    }
+    private void getNodeError(CheckBox checkBox, String text, Stage stage) {
+        if (!checkBox.isDisabled()) {
+            checkBox.setStyle("-fx-border-color: red;");
+            Tooltip tooltip = new Tooltip();
+            tooltip.setText(text);
+            checkBox.setTooltip(tooltip);
+            tooltip.show(stage);
+        }
     }
 
-    private void clearTextFieldError(TextField textField) {
+    private void clearNodeError(TextField textField) {
         textField.setStyle("");
         if (textField.getTooltip() != null && textField.getTooltip().isShowing()) {
             textField.getTooltip().hide();
         }
         textField.setTooltip(null);
+    }
+    private void clearNodeError(CheckBox checkBox) {
+        checkBox.setStyle("");
+        if (checkBox.getTooltip() != null && checkBox.getTooltip().isShowing()) {
+            checkBox.getTooltip().hide();
+        }
+        checkBox.setTooltip(null);
     }
 
     private Stage getPopUpStage(Parent root) {
