@@ -105,7 +105,7 @@ public class QuestionData {
             case UNSET:
                 return false;
             case MultipleChoiceQuestion:
-                for (int rightPostion : (int[]) answerParameter) {
+                for (int rightPostion : (int[]) answerParameter) { //TODO! -> old and newValue
                     sql = "UPDATE Question_Params Set value = ? WHERE type = 'answer' AND f_ID = " + ID;
                     sql = sql.replace("?", String.valueOf(rightPostion));
                     preparedStatement.setInt(1, rightPostion);
@@ -140,7 +140,7 @@ public class QuestionData {
             case UNSET:
                 return false;
             case MultipleChoiceQuestion:
-                for (String choicePossibility : (String[]) questionMessage) {
+                for (String choicePossibility : (String[]) questionMessage) {//TODO! -> old and newValue
                     sql = "UPDATE Question_Params Set value = ? WHERE type = 'questionMessage' AND f_ID = " + ID;
                     sql = sql.replace("?",String.valueOf(choicePossibility));
                     preparedStatement.setString(1, choicePossibility);
