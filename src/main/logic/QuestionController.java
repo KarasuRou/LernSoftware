@@ -246,30 +246,51 @@ public class QuestionController {
     }
 
     private void getQuestionMessage(Question question, ResultSet resultSet) throws SQLException, IllegalQuestionMessageTypeException {
-        questionMessage.add(resultSet.getObject(4));
-        if (questionMessage.size() > 1) {
-            question.setQuestionMessage(questionMessage.toArray());
-        } else {
-            question.setQuestionMessage(questionMessage.get(0));
+        switch (question.getQuestionTyp()) {
+            case WordsQuestion:
+            case DirectQuestion:
+                questionMessage.add(resultSet.getString(4));
+                question.setQuestionMessage(questionMessage.get(0));
+                break;
+            case MultipleChoiceQuestion:
+                questionMessage.add(resultSet.getString(4));
+                String[] strings = new String[questionMessage.size()];
+                for (int i = 0; i < questionMessage.size(); i++) {
+                    strings[i] = String.valueOf(questionMessage.get(i));
+                }
+                question.setQuestionMessage(strings);
+                break;
         }
     }
 
     private void getAnswer(Question question, ResultSet resultSet) throws SQLException, IllegalAnswerTypeException {
-        answer.add(resultSet.getObject(4));
-        if (answer.size() > 1) {
-            question.setAnswer(answer.toArray());
-        } else {
-            question.setAnswer(answer.get(0));
+        switch (question.getQuestionTyp()) {
+            case WordsQuestion:
+            case DirectQuestion:
+                answer.add(resultSet.getString(4));
+                question.setAnswer(answer.get(0));
+                break;
+            case MultipleChoiceQuestion:
+                answer.add(resultSet.getBoolean(4));
+                boolean[] booleans = new boolean[answer.size()];
+                for (int i = 0; i < answer.size(); i++) {
+                    booleans[i] = Boolean.parseBoolean(String.valueOf(answer.get(i)));
+                }
+                question.setAnswer(booleans);
+                break;
         }
     }
 
     private void getExtraParameter(Question question, ResultSet resultSet) throws SQLException, IllegalExtraParameterException {
-        extraParameter.add(resultSet.getObject(4));
-        if (extraParameter.size() > 1) {
-            question.setExtraParameter(extraParameter.toArray());
-        } else {
-            question.setExtraParameter(extraParameter.get(0));
+        switch (question.getQuestionTyp()) {
+            case WordsQuestion:
+                extraParameter.add(resultSet.getDouble(4));
+                break;
+            case MultipleChoiceQuestion:
+                extraParameter.add(resultSet.getString(4));
+                break;
         }
+        question.setExtraParameter(extraParameter.get(0));
     }
 
     private void resetQuestionCache() {

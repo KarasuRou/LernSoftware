@@ -90,14 +90,14 @@ public class Question {
         {
             this.answer = answer;
         }
-        else if(answer.getClass().getSimpleName().equals("boolean[]") &&
+        else if (answer.getClass().getSimpleName().equals("boolean[]") &&
                 questionTyp == QuestionTyp.MultipleChoiceQuestion)
         {
             this.answer = answer;
         }
         else {
             throw new IllegalAnswerTypeException("Wrong \"QuestionTyp\" in combination with \"Answer-typ\".\r\n" +
-                    "Answer-typ: \""+ answer.getClass().getSimpleName() +"\" QuestionTyp: \"" + this.questionTyp.toString() + "\"");
+                    "Answer-typ: \"" + answer.getClass().getSimpleName() + "\" QuestionTyp: \"" + this.questionTyp.toString() + "\"");
         }
     }
 
