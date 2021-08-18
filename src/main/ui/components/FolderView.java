@@ -32,7 +32,7 @@ public class FolderView{
     private final Property<Number> height = new SimpleDoubleProperty();
     private final Property<Number> boundSubject = new SimpleIntegerProperty();
     private final Property<Number> selectedFolder = new SimpleIntegerProperty();
-    private FolderController folderController;
+    private final FolderController controller = FolderController.getInstance();
 
 
     private FolderView(){}
@@ -141,14 +141,14 @@ public class FolderView{
         property.bind(selectedFolder);
     }
 
-    public void init() {folderController = FolderController.getInstance();}
+    public void init() {}
 
     private EventHandler<MouseEvent> getEventHandler(Label label) {
         return event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 selectedFolder.setValue(Integer.parseInt(label.getId()));
                 highlightSelectedFolder();
-//                QuestionController.getInstance().updateCurrentContext();
+//                QuestionController.getInstance().updateCurrentContext(); // TODO do i really need this?
             }
         };
     }
@@ -183,7 +183,7 @@ public class FolderView{
         hBox.getChildren().addAll(renameButton, cancelButton);
 
         renameButton.setOnAction(event -> {
-            folderController.renameFolder(folder, textField.getText());
+            controller.renameFolder(folder, textField.getText());
             stage.close();
         });
 
@@ -213,7 +213,7 @@ public class FolderView{
         hBox.setAlignment(Pos.CENTER);
         Button deleteButton = new Button("Löschen");
         deleteButton.setOnAction(event -> {
-            folderController.deleteFolder(folder);
+            controller.deleteFolder(folder);
             stage.close();
         });
         Button cancelButton = new Button("Abbrechen");
