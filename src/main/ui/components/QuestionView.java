@@ -3,25 +3,53 @@ package ui.components;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import logic.QuestionController;
 import model.question.Question;
+import ui.MainUI;
 
 public class QuestionView {
 
     private final static QuestionView questionView = new QuestionView();
+    private final QuestionController controller = QuestionController.getInstance();
     private final Pane root = new Pane();
     private final VBox content = new VBox();
     private final ScrollBar scrollBar = new ScrollBar();
 
     private QuestionView() {}
 
-    // TODO ADD
+    /**
+     * @param question
+     */
     public void addQuestion(Question question) {
+        VBox questionBox = new VBox();
+        questionBox.setId(String.valueOf(question.getID()));
+        switch (question.getQuestionTyp()) {
+            case DirectQuestion:
+                addDirectQuestion(question, questionBox);
+                break;
+            case WordsQuestion:
+                addWordsQuestion(question, questionBox);
+                break;
+            case MultipleChoiceQuestion:
+                addMultipleChoiceQuestion(question, questionBox);
+                break;
+        }
+        content.getChildren().add(questionBox);
         resizeScrollbar();
     }
 
+    /**
+     * @param question
+     */
     public void removeQuestion(Question question) {
         for (Node node : content.getChildren()) {
             if (node.getId().equals(String.valueOf(question.getID()))) {
@@ -32,21 +60,63 @@ public class QuestionView {
         resizeScrollbar();
     }
 
-    // TODO ADD
+    /**
+     * @param question
+     * @param extraParameter
+     */
     public void changeExtraParameter(Question question, Object extraParameter) {
+        switch (question.getQuestionTyp()) {
+            case WordsQuestion:
+                changeWordsQuestionExtraParameter(question, extraParameter);
+                break;
+            case MultipleChoiceQuestion:
+                changeMultipleChoiceQuestionExtraParameter(question, extraParameter);
+                break;
+        }
         resizeScrollbar();
     }
 
-    // TODO ADD
+    /**
+     * @param question
+     * @param answer
+     */
     public void changeAnswer(Question question, Object answer) {
+        switch (question.getQuestionTyp()) {
+            case WordsQuestion:
+                changeWordsQuestionAnswer(question, answer);
+                break;
+            case DirectQuestion:
+                changeDirectQuestionAnswer(question, answer);
+                break;
+            case MultipleChoiceQuestion:
+                changeMultipleChoiceQuestionAnswer(question, answer);
+                break;
+        }
         resizeScrollbar();
     }
 
-    // TODO ADD
+    /**
+     * @param question
+     * @param questionMessage
+     */
     public void changeQuestionMessage(Question question, Object questionMessage) {
+        switch (question.getQuestionTyp()) {
+            case WordsQuestion:
+                changeWordsQuestionQuestionMessage(question, questionMessage);
+                break;
+            case DirectQuestion:
+                changeDirectQuestionQuestionMessage(question, questionMessage);
+                break;
+            case MultipleChoiceQuestion:
+                changeMultipleChoiceQuestionQuestionMessage(question, questionMessage);
+                break;
+        }
         resizeScrollbar();
     }
 
+    /**
+     *
+     */
     public void clearQuestions() {
         content.getChildren().removeAll(content.getChildren());
         resizeScrollbar();
@@ -69,6 +139,9 @@ public class QuestionView {
         return this.root;
     }
 
+    /**
+     *
+     */
     public void init() {
         scrollBar.setMin(0);
         root.widthProperty().addListener((observable, oldValue, newValue) -> {
@@ -80,6 +153,76 @@ public class QuestionView {
         content.setAlignment(Pos.CENTER_LEFT);
         content.setStyle("-fx-padding: 0,0,0,20;");
         root.getChildren().addAll(content, scrollBar);
+    }
+
+    private void addDirectQuestion(Question question, VBox questionBox) {
+
+    }
+
+    private void addWordsQuestion(Question question, VBox questionBox) {
+
+    }
+
+    private void addMultipleChoiceQuestion(Question question, VBox questionBox) {
+
+    }
+
+    private void changeWordsQuestionExtraParameter(Question question, Object extraParameter) {
+    }
+
+    private void changeMultipleChoiceQuestionExtraParameter(Question question, Object extraParameter) {
+    }
+
+    private void changeMultipleChoiceQuestionAnswer(Question question, Object answer) {
+    }
+
+    private void changeDirectQuestionAnswer(Question question, Object answer) {
+    }
+
+    private void changeWordsQuestionAnswer(Question question, Object answer) {
+    }
+
+    private void changeMultipleChoiceQuestionQuestionMessage(Question question, Object questionMessage) {
+    }
+
+    private void changeDirectQuestionQuestionMessage(Question question, Object questionMessage) {
+    }
+
+    private void changeWordsQuestionQuestionMessage(Question question, Object questionMessage) {
+    }
+
+    private ContextMenu getContextMenu(Question question) {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem changeQuestionMessage = new MenuItem("Frage ändern");
+        changeQuestionMessage.setOnAction(event -> getQuestionMessagePopUp(question));
+        MenuItem changeAnswer = new MenuItem("Antworten ändern");
+        changeAnswer.setOnAction(event -> getAnswerPopUp(question));
+        MenuItem deleteQuestion = new MenuItem("Frage löschen");
+        deleteQuestion.setOnAction(event -> getDeletePopUp(question));
+
+        contextMenu.getItems().addAll(changeQuestionMessage, changeAnswer);
+        return contextMenu;
+    }
+
+    private void getQuestionMessagePopUp(Question question) {
+
+    }
+
+    private void getAnswerPopUp(Question question) {
+    }
+
+    private void getDeletePopUp(Question question) {
+    }
+
+    private Stage getPopUpStage(Parent root) {
+        Stage stage = new Stage();
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setResizable(false);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        MainUI.getInstance().setInitOwner(stage);
+        return stage;
     }
 
     private void resizeScrollbar() {
