@@ -27,7 +27,8 @@ public class QuestionView {
     private QuestionView() {}
 
     /**
-     * @param question
+     * <p>Adds a new Question to the View.</p>
+     * @param question current {@link Question}
      */
     public void addQuestion(Question question) {
         VBox questionBox = new VBox();
@@ -48,7 +49,8 @@ public class QuestionView {
     }
 
     /**
-     * @param question
+     * <p>Removes a Question from the View.</p>
+     * @param question current {@link Question}
      */
     public void removeQuestion(Question question) {
         for (Node node : content.getChildren()) {
@@ -61,8 +63,9 @@ public class QuestionView {
     }
 
     /**
-     * @param question
-     * @param extraParameter
+     * <p>Changes the extraParameter from the given Question.</p>
+     * @param question current {@link Question}
+     * @param extraParameter new extraParameter
      */
     public void changeExtraParameter(Question question, Object extraParameter) {
         switch (question.getQuestionTyp()) {
@@ -77,8 +80,9 @@ public class QuestionView {
     }
 
     /**
-     * @param question
-     * @param answer
+     * <p>Changes the answer from the given Question.</p>
+     * @param question current {@link Question}
+     * @param answer new Answer
      */
     public void changeAnswer(Question question, Object answer) {
         switch (question.getQuestionTyp()) {
@@ -96,8 +100,9 @@ public class QuestionView {
     }
 
     /**
-     * @param question
-     * @param questionMessage
+     * <p>Changes the questionMessage from the given Question.</p>
+     * @param question current {@link Question}
+     * @param questionMessage new questionMessage
      */
     public void changeQuestionMessage(Question question, Object questionMessage) {
         switch (question.getQuestionTyp()) {
@@ -115,7 +120,7 @@ public class QuestionView {
     }
 
     /**
-     *
+     * <p>This will clear the QuestionView.</p>
      */
     public void clearQuestions() {
         content.getChildren().removeAll(content.getChildren());
@@ -139,9 +144,6 @@ public class QuestionView {
         return this.root;
     }
 
-    /**
-     *
-     */
     public void init() {
         scrollBar.setMin(0);
         root.widthProperty().addListener((observable, oldValue, newValue) -> {
@@ -168,27 +170,35 @@ public class QuestionView {
     }
 
     private void changeWordsQuestionExtraParameter(Question question, Object extraParameter) {
+
     }
 
     private void changeMultipleChoiceQuestionExtraParameter(Question question, Object extraParameter) {
+
     }
 
     private void changeMultipleChoiceQuestionAnswer(Question question, Object answer) {
+
     }
 
     private void changeDirectQuestionAnswer(Question question, Object answer) {
+
     }
 
     private void changeWordsQuestionAnswer(Question question, Object answer) {
+
     }
 
     private void changeMultipleChoiceQuestionQuestionMessage(Question question, Object questionMessage) {
+
     }
 
     private void changeDirectQuestionQuestionMessage(Question question, Object questionMessage) {
+
     }
 
     private void changeWordsQuestionQuestionMessage(Question question, Object questionMessage) {
+
     }
 
     private ContextMenu getContextMenu(Question question) {
@@ -206,13 +216,27 @@ public class QuestionView {
     }
 
     private void getQuestionMessagePopUp(Question question) {
+        VBox vBox = new VBox();
+        Stage stage = getPopUpStage(vBox);
+        stage.setTitle("Fragen Frage ändern");
 
+        stage.show();
     }
 
     private void getAnswerPopUp(Question question) {
+        VBox vBox = new VBox();
+        Stage stage = getPopUpStage(vBox);
+        stage.setTitle("Fragen Antwort ändern");
+
+        stage.show();
     }
 
     private void getDeletePopUp(Question question) {
+        VBox vBox = new VBox();
+        Stage stage = getPopUpStage(vBox);
+        stage.setTitle("Frage löschen");
+
+        stage.show();
     }
 
     private Stage getPopUpStage(Parent root) {
