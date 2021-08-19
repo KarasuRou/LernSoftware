@@ -22,7 +22,7 @@ import ui.MainUI;
 public class QuestionView {
 
     private final static QuestionView questionView = new QuestionView();
-    private final QuestionController controller = QuestionController.getInstance();
+    private QuestionController controller;
     private final Pane root = new Pane();
     private final VBox content = new VBox();
     private final ScrollBar scrollBar = new ScrollBar();
@@ -149,6 +149,7 @@ public class QuestionView {
     }
 
     public void init() {
+        controller = QuestionController.getInstance();
         scrollBar.setMin(0);
         root.widthProperty().addListener((observable, oldValue, newValue) -> {
             scrollBar.setPrefWidth(newValue.doubleValue() * 0.025);
