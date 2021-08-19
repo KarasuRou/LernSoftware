@@ -1,14 +1,13 @@
 package ui.components;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollBar;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -242,11 +241,58 @@ public class QuestionView {
 
     private void getQuestionMessagePopUp(Question question) {
         VBox vBox = new VBox();
+        vBox.setSpacing(10);
+        vBox.setPadding(new Insets(20));
         Stage stage = getPopUpStage(vBox);
-        stage.setTitle("Fragen Frage ändern");
+        stage.setTitle("Fragestellung ändern");
 
-//        controller.changeQuestionMessageQuestion(question, "");
+        Label label = new Label("Wie soll die Fragestellung jetzt lauten?");
+        TextField textField = new TextField();
 
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(10);
+        Button changeQuestionButton = new Button("Fragestellung ändern");
+        Button cancelQuestionButton = new Button("Abbrechen");
+        cancelQuestionButton.setOnAction(event -> stage.close());
+        buttonBox.getChildren().addAll(changeQuestionButton, cancelQuestionButton);
+
+        if (question.getQuestionTyp() == QuestionTyp.DirectQuestion || question.getQuestionTyp() == QuestionTyp.WordsQuestion) {
+            textField.setText(question.getQuestionMessage().toString());
+            changeQuestionButton.setOnAction(event -> {
+                clearNodeError(textField);
+                if (textField.getText().equals("") || textField.getText().equals(question.getQuestionMessage())) {
+                    getNodeError(textField, "Bitte einen (anderen) Wert eingeben!", stage);
+                }
+                else {
+                    controller
+                            .changeQuestionMessageQuestion(
+                                    question,
+                                    textField.getText()
+                            );
+                    stage.close();
+                }
+            });
+        }
+        else if (question.getQuestionTyp() == QuestionTyp.MultipleChoiceQuestion) {
+            textField.setText(question.getExtraParameter().toString());
+            changeQuestionButton.setOnAction(event -> {
+                clearNodeError(textField);
+                if (textField.getText().equals("") || textField.getText().equals(question.getExtraParameter())) {
+                    getNodeError(textField, "Bitte einen (anderen) Wert eingeben!", stage);
+                } else {
+                    controller
+                            .changeExtraParameterQuestion(question, textField.getText());
+                    stage.close();
+                }
+            });
+        }
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                changeQuestionButton.fire();
+            }
+        });
+
+        vBox.getChildren().addAll(label, textField, buttonBox);
         stage.show();
     }
 
@@ -279,6 +325,24 @@ public class QuestionView {
         stage.setScene(scene);
         MainUI.getInstance().setInitOwner(stage);
         return stage;
+    }
+
+    private void getNodeError(TextField textField, String text, Stage stage) {
+        if (!textField.isDisabled()) {
+            textField.setStyle("-fx-border-color: red;");
+            Tooltip tooltip = new Tooltip();
+            tooltip.setText(text);
+            textField.setTooltip(tooltip);
+            tooltip.show(stage);
+        }
+    }
+
+    private void clearNodeError(TextField textField) {
+        textField.setStyle("");
+        if (textField.getTooltip() != null && textField.getTooltip().isShowing()) {
+            textField.getTooltip().hide();
+        }
+        textField.setTooltip(null);
     }
 
     private void resizeScrollbar() {

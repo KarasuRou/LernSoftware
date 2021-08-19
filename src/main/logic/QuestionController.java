@@ -55,6 +55,7 @@ public class QuestionController {
             int id = questionData.createQuestion(question, selectedFolder.getValue().intValue());
             question.setID(id);
 
+            Output.write("Add Question: " + question.getQuestionTyp().toString() + " (ID: " + question.getID() + ")");
             questionView.addQuestion(question);
         } catch (SQLException | QuestionException e) {
             Output.exceptionWrite(e);
@@ -75,6 +76,8 @@ public class QuestionController {
                             answer,
                             question.getQuestionTyp()
                     );
+
+            Output.write("Changing answer from Question: " + question.getQuestionTyp() + " (ID: " + question.getID() + ")");
             questionView.changeAnswer(question, answer);
             question.setAnswer(answer);
         } catch (SQLException | IllegalAnswerTypeException e) {
@@ -96,6 +99,8 @@ public class QuestionController {
                             questionMessage,
                             question.getQuestionTyp()
                     );
+
+            Output.write("Changing questionMessage from Question: " + question.getQuestionTyp() + " (ID: " + question.getID() + ")");
             questionView.changeQuestionMessage(question, questionMessage);
             question.setQuestionMessage(questionMessage);
         } catch (SQLException | IllegalQuestionMessageTypeException e) {
@@ -117,6 +122,8 @@ public class QuestionController {
                             extraParameter,
                             question.getQuestionTyp()
                     );
+
+            Output.write("Changing extraParameter from Question: " + question.getQuestionTyp() + " (ID: " + question.getID() + ")");
             questionView.changeExtraParameter(question, extraParameter);
             question.setExtraParameter(extraParameter);
         } catch (SQLException | IllegalExtraParameterException e) {
@@ -131,6 +138,8 @@ public class QuestionController {
     public void removeQuestion(Question question) {
         try {
             questionData.deleteQuestionWithQuestionID(question.getID());
+
+            Output.write("Deleting Question: " + question.getQuestionTyp() + " (ID: " + question.getID() + ")");
             questionView.removeQuestion(question);
         } catch (SQLException e) {
             Output.exceptionWrite(e);
@@ -182,22 +191,24 @@ public class QuestionController {
     }
 
     private void addQuestions(int id) throws SQLException, QuestionException {
-        Question question = null;
-        ResultSet resultSet = questionData.getQuestionsWithFolderID(id);
-        int lastQuestionID = -1;
-        while (resultSet.next()) {
-            int questionID = resultSet.getInt(1);
-            if (newQuestion(lastQuestionID, questionID)) {
-                if (question != null) {
-                    questionView.addQuestion(question);
-                    resetQuestionCache();
+        if (questionData.getQuestionsCountWithFolderID(id) >= 1) {
+            Question question = null;
+            ResultSet resultSet = questionData.getQuestionsWithFolderID(id);
+            int lastQuestionID = -1;
+            while (resultSet.next()) {
+                int questionID = resultSet.getInt(1);
+                if (newQuestion(lastQuestionID, questionID)) {
+                    if (question != null) {
+                        questionView.addQuestion(question);
+                        resetQuestionCache();
+                    }
+                    question = getQuestion(resultSet);
                 }
-                question = getQuestion(resultSet);
+                getExtraParams(question, resultSet);
+                lastQuestionID = questionID;
             }
-            getExtraParams(question, resultSet);
-            lastQuestionID = questionID;
+            questionView.addQuestion(question);
         }
-        questionView.addQuestion(question);
         resetQuestionCache();
     }
 
