@@ -89,7 +89,7 @@ public class Database {
      * {@code database.executeInsertQuery();}<br>
      * </p>
      * @param sql should be something like:<br>{@code "INSERT INTO books VALUES (?, ?, ?, ?, ?);"}
-     * @return a PreparedStatement, which should be used to Insert new Data to the a Table.
+     * @return a PreparedStatement, which should be used to Insert new Data to the Table.
      * @throws SQLException if the sql query was faulty the Exception gets thrown
      */
     public PreparedStatement startInsertQuery(String sql) throws SQLException {
