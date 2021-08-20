@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.QuestionController;
@@ -309,11 +310,36 @@ public class QuestionView {
 
     private void getDeletePopUp(Question question) {
         VBox vBox = new VBox();
+        vBox.setSpacing(10);
+        vBox.setPadding(new Insets(20));
+        vBox.setAlignment(Pos.CENTER);
+
         Stage stage = getPopUpStage(vBox);
         stage.setTitle("Frage löschen");
 
-//        controller.removeQuestion(question);
+        Label label = new Label("Frage: \"$PLACEHOLDER$\", \r\nwirklich löschen?");
+        label.setTextAlignment(TextAlignment.CENTER);
 
+        if (question.getQuestionTyp() == QuestionTyp.WordsQuestion || question.getQuestionTyp() == QuestionTyp.DirectQuestion) {
+            label.setText(label.getText().replace("$PLACEHOLDER$",question.getQuestionMessage().toString()));
+        } else if (question.getQuestionTyp() == QuestionTyp.MultipleChoiceQuestion) {
+            label.setText(label.getText().replace("$PLACEHOLDER$",question.getExtraParameter().toString()));
+        }
+
+        HBox buttonBox = new HBox();
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setSpacing(10);
+        Button changeQuestionButton = new Button("Frage löschen");
+        changeQuestionButton.setOnAction(event -> {
+            controller.removeQuestion(question);
+            stage.close();
+        });
+        Button cancelQuestionButton = new Button("Abbrechen");
+        cancelQuestionButton.setOnAction(event -> stage.close());
+
+        buttonBox.getChildren().addAll(changeQuestionButton, cancelQuestionButton);
+
+        vBox.getChildren().addAll(label, buttonBox);
         stage.show();
     }
 
