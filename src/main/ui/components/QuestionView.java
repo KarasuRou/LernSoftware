@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -299,13 +300,173 @@ public class QuestionView {
 
     private void getAnswerPopUp(Question question) {
         VBox vBox = new VBox();
-        Stage stage = getPopUpStage(vBox);
-        stage.setTitle("Fragen Antwort ändern");
+        vBox.setSpacing(10);
+        vBox.setPadding(new Insets(20));
 
-//        controller.changeAnswerQuestion(question, "");
-//        controller.changeExtraParameterQuestion(question, "");
+        Stage stage = getPopUpStage(vBox);
+        stage.setTitle("Antwort ändern");
+
+        Label label = new Label("Wie soll die Antwort jetzt lauten?");
+        vBox.getChildren().addAll(getQuestionHeader(question), label);
+        if (question.getQuestionTyp() == QuestionTyp.WordsQuestion || question.getQuestionTyp() == QuestionTyp.DirectQuestion) {
+            getAnswerPopUpWordsAndDirect(question, vBox, stage);
+        } else if (question.getQuestionTyp() == QuestionTyp.MultipleChoiceQuestion) {
+            getAnswerPopUpMultiple(question, vBox, stage);
+        }
 
         stage.show();
+    }
+    private void getAnswerPopUpMultiple(Question question, VBox vBox, Stage stage) {
+
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(5);
+        Button changeAnswerButton = new Button("Antwort(en) ändern");
+        Button cancelButton = new Button("Abbrechen");
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(changeAnswerButton, cancelButton);
+
+        CheckBox[] checkBoxes = new CheckBox[5];
+        TextField[] textFields = new TextField[5];
+        boolean[] booleans = (boolean[]) question.getAnswer();
+        String[] strings = (String[]) question.getQuestionMessage();
+
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+
+            HBox hBox = new HBox();
+            hBox.setSpacing(5);
+            checkBoxes[i] = new CheckBox();
+            checkBoxes[i].setSelected(booleans[i]);
+            checkBoxes[i].selectedProperty().addListener((observable1, oldValue, newValue) ->{
+                if (newValue) {
+                    for (CheckBox checkBox : checkBoxes) {
+                        clearNodeError(checkBox);
+                    }
+                }
+            });
+
+            textFields[i] = new TextField();
+            textFields[i].setText(strings[i]);
+            textFields[i].setOnKeyPressed(event -> {
+                if (event.getCode().equals(KeyCode.ENTER)) {
+                    changeAnswerButton.fire();
+                }
+            });
+            textFields[i].textProperty().addListener((observable1, oldValue, newValue) -> {
+                if (finalI == 0 && !newValue.equals("")) {
+                    textFields[finalI + 1].setDisable(false);
+                    checkBoxes[finalI + 1].setDisable(false);
+                } else if (finalI != 4 && !newValue.equals("")) {
+                    textFields[finalI + 1].setDisable(false);
+                    checkBoxes[finalI + 1].setDisable(false);
+                } else {
+                    textFields[finalI + 1].setDisable(true);
+                    checkBoxes[finalI + 1].setDisable(true);
+                }
+            });
+            if (i != 0 && !checkBoxes[i - 1].isSelected() && textFields[i - 1].getText().equals("") &&
+                    !checkBoxes[i].isSelected() && textFields[i].getText().equals("")) {
+                checkBoxes[i].setDisable(true);
+                textFields[i].setDisable(true);
+            }
+
+            hBox.getChildren().addAll(new Label("Möglichkeit " + (i + 1) + ":"), checkBoxes[i], textFields[i]);
+            vBox.getChildren().add(hBox);
+        }
+
+        vBox.getChildren().add(buttonBox);
+
+        changeAnswerButton.setOnAction(event -> {
+            for (int i = 0; i < 5; i++) {
+                clearNodeError(textFields[i]);
+                clearNodeError(checkBoxes[i]);
+            }
+
+            boolean answerCanBeChanged = true;
+            boolean nothingChecked = true;
+            for (CheckBox checkBox : checkBoxes) {
+                if (checkBox.isSelected()) {
+                    nothingChecked = false;
+                }
+            }
+            if (nothingChecked) {
+                for (CheckBox checkBox : checkBoxes) {
+                    getNodeError(checkBox, "Mindestens eine CheckBox abhaken!", stage);
+                    answerCanBeChanged = false;
+                    break;
+                }
+            } else {
+                for (int i = 0; i < 5; i++) {
+                    if (checkBoxes[i].isSelected() && textFields[i].getText().equals("")) {
+                        getNodeError(textFields[i], "Bitte gib eine Antwort ein!\r\nOder entfern den Haken..", stage);
+                        textFields[i].requestFocus();
+                        answerCanBeChanged = false;
+                        break;
+                    }
+                }
+            }
+
+            if (answerCanBeChanged) {
+                boolean[] currentAnswers = {false,false,false,false,false};
+                String[] questionMessages = {"","","","",""};
+                for (int i = 0; i < 5; i++) {
+                    if (!textFields[i].isDisabled()) {
+                        if (i != 4 && !textFields[i + 1].isDisabled()) {
+                            questionMessages[i] = textFields[i].getText();
+                            currentAnswers[i] = checkBoxes[i].isSelected();
+                        }
+                    }
+                }
+                if (!currentAnswers.equals(question.getAnswer())) {
+                    controller.changeAnswerQuestion(question, currentAnswers);
+                }
+                if (!questionMessages.equals(question.getQuestionMessage())) {
+                    controller.changeQuestionMessageQuestion(question, questionMessages);
+                }
+
+                stage.close();
+            }
+        });
+        cancelButton.setOnAction(event -> stage.close());
+    }
+
+    private void getAnswerPopUpWordsAndDirect(Question question, VBox vBox, Stage stage) {
+        TextField textField = new TextField(question.getAnswer().toString());
+
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(5);
+        Button changeAnswerButton = new Button("Antwort ändern");
+        Button cancelButton = new Button("Abbrechen");
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(changeAnswerButton, cancelButton);
+
+        if (question.getQuestionTyp() == QuestionTyp.WordsQuestion) {
+            textField.textProperty().addListener((observable, oldValue, newValue) ->{
+                if (newValue.contains(" ")) {
+                    textField.setText(newValue.replace(" ", ""));
+                }
+            });
+        }
+
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                changeAnswerButton.fire();
+            }
+        });
+        changeAnswerButton.setOnAction(event -> {
+            clearNodeError(textField);
+            if (textField.getText().equals(question.getAnswer().toString()) ||
+                    textField.getText().equals("")) {
+                getNodeError(textField, "Bitte einen (anderen) Wert eingeben!", stage);
+            } else {
+                controller.changeAnswerQuestion(question, textField.getText());
+                stage.close();
+            }
+        });
+        cancelButton.setOnAction(event -> stage.close());
+
+
+        vBox.getChildren().addAll(textField, buttonBox);
     }
 
     private void getDeletePopUp(Question question) {
@@ -362,6 +523,15 @@ public class QuestionView {
             tooltip.show(stage);
         }
     }
+    private void getNodeError(CheckBox checkBox, String text, Stage stage) {
+        if (!checkBox.isDisabled()) {
+            checkBox.setStyle("-fx-border-color: red;");
+            Tooltip tooltip = new Tooltip();
+            tooltip.setText(text);
+            checkBox.setTooltip(tooltip);
+            tooltip.show(stage);
+        }
+    }
 
     private void clearNodeError(TextField textField) {
         textField.setStyle("");
@@ -369,6 +539,13 @@ public class QuestionView {
             textField.getTooltip().hide();
         }
         textField.setTooltip(null);
+    }
+    private void clearNodeError(CheckBox checkBox) {
+        checkBox.setStyle("");
+        if (checkBox.getTooltip() != null && checkBox.getTooltip().isShowing()) {
+            checkBox.getTooltip().hide();
+        }
+        checkBox.setTooltip(null);
     }
 
     private void resizeScrollbar() {
