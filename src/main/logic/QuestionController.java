@@ -148,6 +148,40 @@ public class QuestionController {
         }
     }
 
+    public boolean checkIfAnswerIsCorrect(Question question, Object answer) {
+        String outputString = "Answered-Question (ID: " + question.getID() + " Typ: " + question.getQuestionTyp() + ") is ";
+        switch (question.getQuestionTyp()) {
+            case WordsQuestion:
+            case DirectQuestion:
+                if (question.getAnswer().toString().equals(answer)) {
+                    Output.write(outputString + "correct");
+                    return true;
+                } else {
+                    Output.write(outputString + "wrong");
+                    return false;
+                }
+            case MultipleChoiceQuestion:
+                boolean isCorrect = true;
+                boolean[] answers = (boolean[]) answer;
+                boolean[] correctAnswers = (boolean[]) question.getAnswer();
+                for (int i = 0; i < 5; i++) {
+                    if (answers[i] != correctAnswers[i]) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+                if (isCorrect) {
+                    Output.write(outputString + "correct");
+                } else {
+                    Output.write(outputString + "wrong");
+                }
+                return isCorrect;
+            default:
+                Output.errorWrite(outputString + "DEFAULT ANSWER");
+                return false;
+        }
+    }
+
     /**
      * <p>This method will tell you if a folder is currently selected.</p>
      * @return a boolean if a folder is currently selected.

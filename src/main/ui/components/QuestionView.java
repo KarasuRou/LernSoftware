@@ -1,5 +1,9 @@
 package ui.components;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -38,6 +42,7 @@ public class QuestionView {
      */
     public void addQuestion(Question question) {
         VBox questionBox = new VBox();
+        questionBox.setSpacing(2);
         questionBox.setId(String.valueOf(question.getID()));
         questionBox.getChildren().add(getQuestionHeader(question));
         switch (question.getQuestionTyp()) {
@@ -162,20 +167,92 @@ public class QuestionView {
         scrollBar.setOrientation(Orientation.VERTICAL);
         content.setAlignment(Pos.CENTER_LEFT);
         content.setStyle("-fx-padding: 20 0 0 20;" +
-                "-fx-spacing: 10;");
+                "-fx-spacing: 30;");
         root.getChildren().addAll(content, scrollBar);
     }
 
     private void addDirectQuestion(Question question, VBox questionBox) {
+        HBox hBox = new HBox();
+        hBox.setSpacing(5);
+        TextField textField = new TextField();
+        Label statusLabel = new Label();
+        hBox.getChildren().addAll(new Label("Antwort: "), textField, statusLabel);
+        Property<Boolean> answered = new SimpleBooleanProperty(false);
 
+        EventHandler<ActionEvent> checkEvent = event -> {
+                if (!answered.getValue()) {
+                    String answer = textField.getText();
+                    if (controller.checkIfAnswerIsCorrect(question, answer)) {
+                        textField.setStyle("-fx-text-fill: green;");
+                        textField.setEditable(false);
+                        statusLabel.setStyle("-fx-text-fill: green;");
+                        statusLabel.setText("Richtig!");
+                    } else {
+                        textField.setStyle("-fx-text-fill: red;");
+                        textField.setEditable(false);
+                        textField.setText(question.getAnswer().toString());
+                        statusLabel.setStyle("-fx-text-fill: red;");
+                        statusLabel.setText("Falsch!");
+                    }
+                }
+                answerQuestion(answered);
+        };
+
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                checkEvent.handle(new ActionEvent());
+            }
+        });
+
+        HBox buttonBox = (HBox) getQuestionFooter(
+                checkEvent,
+                showEvent -> {
+                    if (!answered.getValue()) {
+                        textField.setEditable(false);
+                        textField.setText(question.getAnswer().toString());
+                        answerQuestion(answered);
+                        statusLabel.setText("Musterlösung angezeigt!");
+                    }
+                }
+        );
+
+        questionBox.getChildren().addAll(hBox, buttonBox);
+    }
+
+    private void answerQuestion(Property<Boolean> answered) {
+        answered.setValue(true);
     }
 
     private void addWordsQuestion(Question question, VBox questionBox) {
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(new Label("Antwort: "));
 
+        HBox buttonBox = (HBox) getQuestionFooter(
+                event -> {
+
+                },
+                event -> {
+
+                }
+        );
+
+        questionBox.getChildren().addAll(hBox, buttonBox);
     }
 
     private void addMultipleChoiceQuestion(Question question, VBox questionBox) {
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(new Label("Antwort: "));
 
+        HBox buttonBox = (HBox) getQuestionFooter(
+                event -> {
+
+                },
+                event -> {
+
+                }
+        );
+
+        questionBox.getChildren().addAll(hBox, buttonBox);
     }
 
     private void changeWordsQuestionExtraParameter(Question question, Object extraParameter) {
@@ -213,6 +290,7 @@ public class QuestionView {
     private Node getQuestionHeader(Question question) {
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(0, 0, 2.5, 0));
+        hBox.setSpacing(20);
 
         String questionMessage;
         if (question.getQuestionTyp() == QuestionTyp.MultipleChoiceQuestion) {
@@ -237,7 +315,7 @@ public class QuestionView {
                 break;
         }
         label2.setTextFill(Paint.valueOf("red"));
-        label2.setFont(Font.font(Font.getDefault().getFamily(), Font.getDefault().getSize() * 0.5));
+        label2.setFont(Font.font(Font.getDefault().getFamily(), Font.getDefault().getSize() * 0.75));
         hBox.getChildren().addAll(label, label2);
         label2.setOpacity(0);
 
@@ -246,8 +324,15 @@ public class QuestionView {
         return hBox;
     }
 
-    private Node getQuestionFooter(Question question) {
-        return null;
+    private Node getQuestionFooter(EventHandler<ActionEvent> answerQuestionButtonEvent, EventHandler<ActionEvent> showRightAnswerButtonEvent) {
+        HBox hBox = new HBox();
+        hBox.setSpacing(10);
+        Button answerQuestionButton = new Button("Antwort überprüfen");
+        answerQuestionButton.setOnAction(answerQuestionButtonEvent);
+        Button showRightAnswerButton = new Button("Musterlösung anzeigen");
+        showRightAnswerButton.setOnAction(showRightAnswerButtonEvent);
+        hBox.getChildren().addAll(answerQuestionButton, showRightAnswerButton);
+        return hBox;
     }
 
     private ContextMenu getContextMenu(Question question) {
