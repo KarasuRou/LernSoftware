@@ -447,8 +447,10 @@ public class Add {
                     textFields[finalI + 1].setDisable(false);
                     checkBoxes[finalI + 1].setDisable(false);
                 } else {
-                    textFields[finalI + 1].setDisable(true);
-                    checkBoxes[finalI + 1].setDisable(true);
+                    if (finalI != 4) {
+                        textFields[finalI + 1].setDisable(true);
+                        checkBoxes[finalI + 1].setDisable(true);
+                    }
                 }
             });
             if (i != 0) {
