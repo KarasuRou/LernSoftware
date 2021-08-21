@@ -1,5 +1,6 @@
 package data;
 
+import com.sun.istack.internal.Nullable;
 import logic.miscellaneous.Output;
 import model.Folder;
 import model.question.Question;
@@ -93,30 +94,39 @@ public class QuestionData {
     /**
      * <p>Update the answerParameter from a Question.</p>
      * @param ID is the {@link Question} ID
-     * @param answerParameter is the answerParameter, accordingly to the questionTyp.
+     * @param newAnswerParameter is the answerParameter, accordingly to the questionTyp.
      * @param questionTyp is the already set questionTyp.
      * @return a boolean that shows if the update was successful.
      * @throws SQLException if any parameter was wrong.
      */
-    public boolean updateAnswerParameterWithQuestionID(int ID, Object answerParameter, QuestionTyp questionTyp) throws SQLException {
-        String sql = "UPDATE Question_Params Set value = ? WHERE type = 'answer' AND f_ID = " + ID;
-        PreparedStatement preparedStatement = database.startUpdateQuery(sql);
+    public boolean updateAnswerParameterWithQuestionID(int ID, Object newAnswerParameter, @Nullable Object oldAnswerParameter, QuestionTyp questionTyp) throws SQLException {
+        String sql = "UPDATE Question_Params Set value = ? WHERE type LIKE 'answer' AND f_ID = " + ID;
+        PreparedStatement preparedStatement;
         switch (questionTyp) {
             case UNSET:
                 return false;
             case MultipleChoiceQuestion:
-                for (int rightPostion : (int[]) answerParameter) { //TODO! -> old and newValue
-                    sql = "UPDATE Question_Params Set value = ? WHERE type = 'answer' AND f_ID = " + ID;
-                    sql = sql.replace("?", String.valueOf(rightPostion));
-                    preparedStatement.setInt(1, rightPostion);
-                    preparedStatement.addBatch();
-                    Output.write(sql);
+                sql = "UPDATE Question_Params Set value = ? WHERE type LIKE 'answer' AND f_ID = " + ID + " AND ID = ?";
+                preparedStatement = database.startUpdateQuery(sql);
+                boolean[] oldBooleans = (boolean[]) oldAnswerParameter;
+                boolean[] newBooleans = (boolean[]) newAnswerParameter;
+                int[] ids = getExtraParamsIDs(ID, "answer");
+                for (int i = 0; i < 5; i++) {
+                    if (oldBooleans[i] != newBooleans[i]) {
+                        sql = "UPDATE Question_Params Set value = ? WHERE type LIKE 'answer' AND f_ID = " + ID + " AND ID = " + ids[i];
+                        sql = sql.replace("?", String.valueOf(newBooleans[i]));
+                        preparedStatement.setBoolean(1, newBooleans[i]);
+                        preparedStatement.setInt(2, ids[i]);
+                        preparedStatement.addBatch();
+                        Output.write(sql);
+                    }
                 }
                 break;
             case DirectQuestion:
             case WordsQuestion:
-                sql = sql.replace("?",(String) answerParameter);
-                preparedStatement.setString(1, (String) answerParameter);
+                preparedStatement = database.startUpdateQuery(sql);
+                sql = sql.replace("?", (String) newAnswerParameter);
+                preparedStatement.setString(1, (String) newAnswerParameter);
                 preparedStatement.addBatch();
                 Output.write(sql);
                 break;
@@ -128,30 +138,39 @@ public class QuestionData {
     /**
      * <p>Update the questionMessage from a Question.</p>
      * @param ID is the {@link Question} ID
-     * @param questionMessage is the questionMessage, accordingly to the questionTyp
+     * @param newQuestionMessage is the questionMessage, accordingly to the questionTyp
      * @param questionTyp is the already set questionTyp
      * @return a boolean that shows if the update was successful.
      * @throws SQLException if any parameter was wrong.
      */
-    public boolean updateQuestionMessageParameterWithQuestionID(int ID, Object questionMessage, QuestionTyp questionTyp) throws SQLException {
-        String sql = "UPDATE Question_Params Set value = ? WHERE type = 'questionMessage' AND f_ID = " + ID;
-        PreparedStatement preparedStatement = database.startUpdateQuery(sql);
+    public boolean updateQuestionMessageParameterWithQuestionID(int ID, Object newQuestionMessage, @Nullable Object oldAnswerParameter, QuestionTyp questionTyp) throws SQLException {
+        String sql = "UPDATE Question_Params Set value = ? WHERE type LIKE 'questionMessage' AND f_ID = " + ID;
+        PreparedStatement preparedStatement;
         switch (questionTyp) {
             case UNSET:
                 return false;
             case MultipleChoiceQuestion:
-                for (String choicePossibility : (String[]) questionMessage) {//TODO! -> old and newValue
-                    sql = "UPDATE Question_Params Set value = ? WHERE type = 'questionMessage' AND f_ID = " + ID;
-                    sql = sql.replace("?",String.valueOf(choicePossibility));
-                    preparedStatement.setString(1, choicePossibility);
-                    preparedStatement.addBatch();
-                    Output.write(sql);
+                sql = "UPDATE Question_Params Set value = ? WHERE type LIKE 'questionMessage' AND f_ID = " + ID + " AND ID = ?";
+                preparedStatement = database.startUpdateQuery(sql);
+                String[] newStrings = (String[]) newQuestionMessage;
+                String[] oldStrings = (String[]) oldAnswerParameter;
+                int[] ids = getExtraParamsIDs(ID, "questionMessage");
+                for (int i = 0; i < 5; i++) {
+                    if (!newStrings[i].equals(oldStrings[i])) {
+                        sql = "UPDATE Question_Params Set value = ? WHERE type LIKE 'questionMessage' AND f_ID = " + ID + " AND ID = " + ids[i];
+                        sql = sql.replace("?", newStrings[i]);
+                        preparedStatement.setString(1, newStrings[i]);
+                        preparedStatement.setInt(2, ids[i]);
+                        preparedStatement.addBatch();
+                        Output.write(sql);
+                    }
                 }
                 break;
             case DirectQuestion:
             case WordsQuestion:
-                sql = sql.replace("?",(String) questionMessage);
-                preparedStatement.setString(1, (String) questionMessage);
+                preparedStatement = database.startUpdateQuery(sql);
+                sql = sql.replace("?",(String) newQuestionMessage);
+                preparedStatement.setString(1, (String) newQuestionMessage);
                 preparedStatement.addBatch();
                 Output.write(sql);
                 break;
@@ -169,7 +188,7 @@ public class QuestionData {
      * @throws SQLException if any parameter was wrong.
      */
     public boolean updateExtraParameterParameterWithQuestionID(int ID, Object extraParameter, QuestionTyp questionTyp) throws SQLException {
-        String sql = "UPDATE Question_Params Set value = ? WHERE type = 'extraParameter' AND f_ID = " + ID;
+        String sql = "UPDATE Question_Params Set value = ? WHERE type LIKE 'extraParameter' AND f_ID = " + ID;
         PreparedStatement preparedStatement = database.startUpdateQuery(sql);
         switch (questionTyp) {
             case UNSET:
@@ -299,6 +318,19 @@ public class QuestionData {
             default:
                 return true;
         }
+    }
+
+    private int[] getExtraParamsIDs(int id, String questionTyp) throws SQLException {
+        int[] ids = new int[5];
+        ResultSet resultSet = database
+                .executeSelectQuery(
+                        "SELECT ID FROM Question_Params WHERE f_ID = " + id + " " +
+                                "AND type LIKE '" + questionTyp + "'");
+        for (int i = 0; i < 5; i++) {
+            resultSet.next();
+            ids[i] = resultSet.getInt(1);
+        }
+        return ids;
     }
 
     private void createTableIfNotExists() throws SQLException {

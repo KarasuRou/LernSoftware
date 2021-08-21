@@ -74,6 +74,7 @@ public class QuestionController {
                     .updateAnswerParameterWithQuestionID(
                             question.getID(),
                             answer,
+                            question.getAnswer(),
                             question.getQuestionTyp()
                     );
 
@@ -97,6 +98,7 @@ public class QuestionController {
                     .updateQuestionMessageParameterWithQuestionID(
                             question.getID(),
                             questionMessage,
+                            question.getQuestionMessage(),
                             question.getQuestionTyp()
                     );
 
@@ -191,22 +193,22 @@ public class QuestionController {
     }
 
     private void addQuestions(int id) throws SQLException, QuestionException {
-        if (questionData.getQuestionsCountWithFolderID(id) >= 1) {
-            Question question = null;
-            ResultSet resultSet = questionData.getQuestionsWithFolderID(id);
-            int lastQuestionID = -1;
-            while (resultSet.next()) {
-                int questionID = resultSet.getInt(1);
-                if (newQuestion(lastQuestionID, questionID)) {
-                    if (question != null) {
-                        questionView.addQuestion(question);
-                        resetQuestionCache();
-                    }
-                    question = getQuestion(resultSet);
+        Question question = null;
+        ResultSet resultSet = questionData.getQuestionsWithFolderID(id);
+        int lastQuestionID = -1;
+        while (resultSet.next()) {
+            int questionID = resultSet.getInt(1);
+            if (newQuestion(lastQuestionID, questionID)) {
+                if (question != null) {
+                    questionView.addQuestion(question);
+                    resetQuestionCache();
                 }
-                getExtraParams(question, resultSet);
-                lastQuestionID = questionID;
+                question = getQuestion(resultSet);
             }
+            getExtraParams(question, resultSet);
+            lastQuestionID = questionID;
+        }
+        if (question != null) {
             questionView.addQuestion(question);
         }
         resetQuestionCache();
