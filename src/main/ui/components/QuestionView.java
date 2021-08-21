@@ -11,7 +11,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -210,6 +212,7 @@ public class QuestionView {
 
     private Node getQuestionHeader(Question question) {
         HBox hBox = new HBox();
+        hBox.setPadding(new Insets(0, 0, 2.5, 0));
 
         String questionMessage;
         if (question.getQuestionTyp() == QuestionTyp.MultipleChoiceQuestion) {
@@ -218,9 +221,28 @@ public class QuestionView {
             questionMessage = question.getQuestionMessage().toString();
         }
         Label label = new Label("Frage: \"" + questionMessage + "\"");
+        label.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.SEMI_BOLD, Font.getDefault().getSize() + 1));
         label.setContextMenu(getContextMenu(question));
 
-        hBox.getChildren().add(label);
+        Label label2 = new Label();
+        switch (question.getQuestionTyp()) {
+            case WordsQuestion:
+                label2.setText("Einwort Frage");
+                break;
+            case DirectQuestion:
+                label2.setText("Normale Frage");
+                break;
+            case MultipleChoiceQuestion:
+                label2.setText("MultipleChoice Frage");
+                break;
+        }
+        label2.setTextFill(Paint.valueOf("red"));
+        label2.setFont(Font.font(Font.getDefault().getFamily(), Font.getDefault().getSize() * 0.5));
+        hBox.getChildren().addAll(label, label2);
+        label2.setOpacity(0);
+
+        label.setOnMouseEntered(event -> label2.setOpacity(0.5));
+        label.setOnMouseExited(event -> label2.setOpacity(0));
         return hBox;
     }
 
