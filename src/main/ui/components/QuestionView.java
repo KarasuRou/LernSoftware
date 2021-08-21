@@ -159,7 +159,8 @@ public class QuestionView {
         root.heightProperty().addListener((observable, oldValue, newValue) -> scrollBar.setPrefHeight(newValue.doubleValue()));
         scrollBar.setOrientation(Orientation.VERTICAL);
         content.setAlignment(Pos.CENTER_LEFT);
-        content.setStyle("-fx-padding: 0,0,0,20;");
+        content.setStyle("-fx-padding: 20 0 0 20;" +
+                "-fx-spacing: 10;");
         root.getChildren().addAll(content, scrollBar);
     }
 
