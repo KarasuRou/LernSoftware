@@ -657,7 +657,6 @@ public class QuestionView {
     }
 
     private void resizeScrollbar() {
-        scrollBar.setMax(content.getHeight());
-        scrollBar.valueProperty().addListener((observable, oldValue, newValue) -> content.setLayoutX(-newValue.doubleValue()));
+        scrollBar.valueProperty().addListener((observable, oldValue, newValue) -> content.setLayoutY(-newValue.doubleValue()));
     }
 }
