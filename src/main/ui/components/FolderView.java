@@ -32,7 +32,7 @@ public class FolderView{
     private final Property<Number> height = new SimpleDoubleProperty();
     private final Property<Number> boundSubject = new SimpleIntegerProperty();
     private final Property<Number> selectedFolder = new SimpleIntegerProperty();
-    private final FolderController controller = FolderController.getInstance();
+    private FolderController controller;
 
 
     private FolderView(){}
@@ -141,7 +141,9 @@ public class FolderView{
         property.bind(selectedFolder);
     }
 
-    public void init() {}
+    public void init() {
+        controller = FolderController.getInstance();
+    }
 
     private EventHandler<MouseEvent> getEventHandler(Label label) {
         return event -> {

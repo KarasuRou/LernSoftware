@@ -34,7 +34,7 @@ public class SubjectView {
     private final Property<Number> selectedSubjectID = new SimpleIntegerProperty();
     private final Property<Number> width = new SimpleDoubleProperty();
     private final Property<Number> height = new SimpleDoubleProperty();
-    private final SubjectController controller = SubjectController.getInstance();
+    private SubjectController controller;
 
     private SubjectView(){}
 
@@ -189,6 +189,7 @@ public class SubjectView {
     public void init() {
         if (!initiated) {
             initiated = true;
+            controller = SubjectController.getInstance();
             selectedSubject.bind(root.getSelectionModel().selectedIndexProperty());
             root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
