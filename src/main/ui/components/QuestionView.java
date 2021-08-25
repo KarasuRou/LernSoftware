@@ -685,7 +685,6 @@ public class QuestionView {
     }
     private void resizeScrollbar(Number newValue) {
         double canBeMoved = completeContentHeight.getValue().doubleValue() - (visibleContentHeight.getValue().doubleValue() * 0.9 - 40);
-        System.out.println(canBeMoved + ","+ -(canBeMoved * (newValue.doubleValue() / 100)));
         content.setLayoutY(-(canBeMoved * (newValue.doubleValue() / 100)));
     }
 }
