@@ -1,7 +1,10 @@
 package ui.components;
 
+import com.sun.istack.internal.Nullable;
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -33,6 +36,8 @@ public class QuestionView {
     private final Pane root = new Pane();
     private final VBox content = new VBox();
     private final ScrollBar scrollBar = new ScrollBar();
+    private final Property<Number> visibleContentHeight = new SimpleDoubleProperty();
+    private final Property<Number> completeContentHeight = new SimpleDoubleProperty();
 
     private QuestionView() {}
 
@@ -57,7 +62,6 @@ public class QuestionView {
                 break;
         }
         content.getChildren().add(questionBox);
-        resizeScrollbar();
     }
 
     /**
@@ -71,7 +75,6 @@ public class QuestionView {
                 return;
             }
         }
-        resizeScrollbar();
     }
 
     /**
@@ -88,7 +91,6 @@ public class QuestionView {
                 changeMultipleChoiceQuestionExtraParameter(question, extraParameter);
                 break;
         }
-        resizeScrollbar();
     }
 
     /**
@@ -108,7 +110,6 @@ public class QuestionView {
                 changeMultipleChoiceQuestionAnswer(question, answer);
                 break;
         }
-        resizeScrollbar();
     }
 
     /**
@@ -128,7 +129,6 @@ public class QuestionView {
                 changeMultipleChoiceQuestionQuestionMessage(question, questionMessage);
                 break;
         }
-        resizeScrollbar();
     }
 
     /**
@@ -136,7 +136,6 @@ public class QuestionView {
      */
     public void clearQuestions() {
         content.getChildren().removeAll(content.getChildren());
-        resizeScrollbar();
     }
 
     /**
@@ -156,6 +155,19 @@ public class QuestionView {
         return this.root;
     }
 
+    /**
+     * <p>This method will bind the scene width/height into this class.</p>
+     * @param width current scene widthProperty
+     * @param height current scene heightProperty
+     */
+    public void transferSizeProperty(ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
+        visibleContentHeight.bind(height);
+    }
+
+    /**
+     * <p>This method will Initiate the class.</p>
+     * <p>It is required to call this method, to properly use the Application.</p>
+     */
     public void init() {
         controller = QuestionController.getInstance();
         scrollBar.setMin(0);
@@ -169,6 +181,13 @@ public class QuestionView {
         content.setStyle("-fx-padding: 20 0 0 20;" +
                 "-fx-spacing: 30;");
         root.getChildren().addAll(content, scrollBar);
+
+
+        completeContentHeight.bind(content.heightProperty());
+        completeContentHeight.addListener((observable, oldValue, newValue) -> resizeScrollbar());
+        visibleContentHeight.addListener((observable, oldValue, newValue) -> resizeScrollbar());
+
+        scrollBar.valueProperty().addListener((observable, oldValue, newValue) -> resizeScrollbar(newValue));
     }
 
     private void addDirectQuestion(Question question, VBox questionBox) {
@@ -657,6 +676,16 @@ public class QuestionView {
     }
 
     private void resizeScrollbar() {
-        scrollBar.valueProperty().addListener((observable, oldValue, newValue) -> content.setLayoutY(-newValue.doubleValue()));
+        if (visibleContentHeight.getValue().doubleValue() * 0.9 - 40 < completeContentHeight.getValue().doubleValue()) {
+            scrollBar.setVisible(true);
+            resizeScrollbar(scrollBar.getValue());
+        } else {
+            scrollBar.setVisible(false);
+        }
+    }
+    private void resizeScrollbar(Number newValue) {
+        double canBeMoved = completeContentHeight.getValue().doubleValue() - (visibleContentHeight.getValue().doubleValue() * 0.9 - 40);
+        System.out.println(canBeMoved + ","+ -(canBeMoved * (newValue.doubleValue() / 100)));
+        content.setLayoutY(-(canBeMoved * (newValue.doubleValue() / 100)));
     }
 }

@@ -54,6 +54,7 @@ public class MainUI{
         topMenu.transferSizeProperty(CURRENT_WIDTH, CURRENT_HEIGHT);
         folderView.transferSizeProperty(CURRENT_WIDTH, CURRENT_HEIGHT);
         subjectView.transferSizeProperty(CURRENT_WIDTH, CURRENT_HEIGHT);
+        questionView.transferSizeProperty(CURRENT_WIDTH, CURRENT_HEIGHT);
         setUpGUI();
 
     }
