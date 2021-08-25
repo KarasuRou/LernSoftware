@@ -485,7 +485,7 @@ public class QuestionView {
                 } else if (finalI != 4 && !newValue.equals("")) {
                     textFields[finalI + 1].setDisable(false);
                     checkBoxes[finalI + 1].setDisable(false);
-                } else {
+                } else if (finalI != 4) {
                     textFields[finalI + 1].setDisable(true);
                     checkBoxes[finalI + 1].setDisable(true);
                 }
@@ -537,7 +537,7 @@ public class QuestionView {
                 String[] questionMessages = {"","","","",""};
                 for (int i = 0; i < 5; i++) {
                     if (!textFields[i].isDisabled()) {
-                        if (i != 4 && !textFields[i + 1].isDisabled()) {
+                        if (i == 4 || !textFields[i + 1].isDisabled()) {
                             questionMessages[i] = textFields[i].getText();
                             currentAnswers[i] = checkBoxes[i].isSelected();
                         }
