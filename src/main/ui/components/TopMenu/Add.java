@@ -509,7 +509,7 @@ public class Add {
                 String[] questionMessages = {"","","","",""};
                 for (int i = 0; i < 5; i++) {
                     if (!textFields[i].isDisabled()) {
-                        if (i != 4 && !textFields[i + 1].isDisabled()) {
+                        if (i == 4 || !textFields[i + 1].isDisabled()) {
                             questionMessages[i] = textFields[i].getText();
                             answers[i] = checkBoxes[i].isSelected();
                         }
