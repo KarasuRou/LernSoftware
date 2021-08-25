@@ -237,20 +237,41 @@ public class QuestionView {
         questionBox.getChildren().addAll(hBox, buttonBox);
     }
 
-    private void answerQuestion(Property<Boolean> answered) {
-        answered.setValue(true);
-    }
-
     private void addWordsQuestion(Question question, VBox questionBox) {
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(new Label("Antwort: "));
+        Label statusLabel = new Label();
+        TextField textField = new TextField();
+        Property<Boolean> answered = new SimpleBooleanProperty(false);
+        hBox.getChildren().addAll(new Label("Antwort: "), textField, statusLabel);
+
+        EventHandler<ActionEvent> checkEvent = event -> {
+            if (!answered.getValue()) {
+                String answer = textField.getText();
+                if (controller.checkIfAnswerIsCorrect(question, answer)) {
+                    textField.setStyle("-fx-text-fill: green;");
+                    textField.setEditable(false);
+                    statusLabel.setStyle("-fx-text-fill: green;");
+                    statusLabel.setText("Richtig!");
+                } else {
+                    textField.setStyle("-fx-text-fill: red;");
+                    textField.setEditable(false);
+                    textField.setText(question.getAnswer().toString());
+                    statusLabel.setStyle("-fx-text-fill: red;");
+                    statusLabel.setText("Falsch!");
+                }
+            }
+            answerQuestion(answered);
+        };
 
         HBox buttonBox = (HBox) getQuestionFooter(
+                checkEvent,
                 event -> {
-
-                },
-                event -> {
-
+                    if (!answered.getValue()) {
+                        textField.setEditable(false);
+                        textField.setText(question.getAnswer().toString());
+                        answerQuestion(answered);
+                        statusLabel.setText("Musterlösung angezeigt!");
+                    }
                 }
         );
 
@@ -271,6 +292,10 @@ public class QuestionView {
         );
 
         questionBox.getChildren().addAll(hBox, buttonBox);
+    }
+
+    private void answerQuestion(Property<Boolean> answered) {
+        answered.setValue(true);
     }
 
     private void changeWordsQuestionExtraParameter(Question question, Object extraParameter) {
