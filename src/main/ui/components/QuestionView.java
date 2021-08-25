@@ -1,6 +1,5 @@
 package ui.components;
 
-import com.sun.istack.internal.Nullable;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
