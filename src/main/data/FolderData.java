@@ -65,7 +65,7 @@ public class FolderData {
      * @throws SQLException if the ID was wrong.
      */
     public boolean updateFolderName(int ID, String name) throws SQLException{
-        String sql = "UPDATE Folder SET Name = " + name + " WHERE ID = " + ID;
+        String sql = "UPDATE Folder SET Name = '" + name + "' WHERE ID = " + ID;
         database.startUpdateQuery(sql).addBatch();
         Output.write(sql);
         return database.executeUpdateQuery() == 1;
@@ -80,7 +80,7 @@ public class FolderData {
      * @throws SQLException if the Database had an error.
      */
     public int createFolder(int ID, String name) throws SQLException {
-        String sql = "INSERT INTO Folder (f_ID, Name) VALUES (" + ID + "," + name + ")";
+        String sql = "INSERT INTO Folder (f_ID, Name) VALUES (" + ID + ",'" + name + "')";
         database.startInsertQuery(sql).addBatch();
         Output.write(sql);
         return database.executeInsertQuery();

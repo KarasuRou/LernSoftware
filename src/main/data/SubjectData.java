@@ -40,7 +40,7 @@ public class SubjectData {
      * @throws SQLException if the ID was wrong.
      */
     public boolean updateSubjectName(String name, int ID) throws SQLException{
-        String sql = "UPDATE Subject SET Name = " + name + " WHERE ID = " + ID;
+        String sql = "UPDATE Subject SET Name = '" + name + "' WHERE ID = " + ID;
         database.startUpdateQuery(sql).addBatch();
         Output.write(sql);
         return database.executeUpdateQuery() == 1;
@@ -91,7 +91,7 @@ public class SubjectData {
      * @throws SQLException if the Database had an error.
      */
     public int createSubject(String name, String picturePath) throws SQLException{
-        String sql = "INSERT INTO Subject (Name, PicturePath) VALUES (" + name + "," + picturePath + ")";
+        String sql = "INSERT INTO Subject (Name, PicturePath) VALUES ('" + name + "','" + picturePath + "')";
         database.startInsertQuery(sql).addBatch();
         Output.write(sql);
         return database.executeInsertQuery();
@@ -106,7 +106,7 @@ public class SubjectData {
      * @throws SQLException if the Database had an error.
      */
     public int createSubject(String name) throws SQLException{
-        String sql = "INSERT INTO Subject (Name) VALUES (" + name + ")";
+        String sql = "INSERT INTO Subject (Name) VALUES ('" + name + "')";
         database.startInsertQuery(sql).addBatch();
         Output.write(sql);
         return database.executeInsertQuery();

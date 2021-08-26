@@ -1,11 +1,11 @@
 package logic.startup;
 
 import data.Database;
-import data.FolderData;
-import data.QuestionData;
-import data.SubjectData;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import logic.FolderController;
+import logic.QuestionController;
+import logic.SubjectController;
 import logic.miscellaneous.Output;
 import ui.MainUI;
 
@@ -18,10 +18,12 @@ public class Launcher extends Application {
         Output.write("Application Starting...", "SYSTEM");
         createShutdownHook();
         try {
+            Output.write("Starting Initiation...", "SYSTEM");
             Database.getInstance().initDBConnection();
-            SubjectData.getInstance().init();
-            FolderData.getInstance().init();
-            QuestionData.getInstance().init();
+            SubjectController.getInstance().init();
+            FolderController.getInstance().init();
+            QuestionController.getInstance().init();
+            Output.write("Initiation successful!", "SYSTEM");
         } catch (Exception e) {
             Output.exceptionWrite(e);
         }

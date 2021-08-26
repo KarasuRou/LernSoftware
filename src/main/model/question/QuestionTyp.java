@@ -7,8 +7,9 @@ package model.question;
 public enum QuestionTyp {
     /**
      * <h2>MultipleChoiceQuestion Expect:</h2>
-     * <p><b>Answer-typ:</b> {@code int[]} -> position(s) in the question Array</p>
+     * <p><b>Answer-typ:</b> {@code boolean[]} -> if position in Question-typ array should be true or false. (CheckBox)</p>
      * <p><b>Question-typ:</b> {@code String[]}</p>
+     * <p><b>Extra parameter:</b> String - Question content</p>
      */
     MultipleChoiceQuestion,
 

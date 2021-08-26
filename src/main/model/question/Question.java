@@ -90,14 +90,14 @@ public class Question {
         {
             this.answer = answer;
         }
-        else if(answer.getClass().getSimpleName().equals("int[]") &&
+        else if (answer.getClass().getSimpleName().equals("boolean[]") &&
                 questionTyp == QuestionTyp.MultipleChoiceQuestion)
         {
             this.answer = answer;
         }
         else {
             throw new IllegalAnswerTypeException("Wrong \"QuestionTyp\" in combination with \"Answer-typ\".\r\n" +
-                    "Answer-typ: \""+ answer.getClass().getSimpleName() +"\" QuestionTyp: \"" + this.questionTyp.toString() + "\"");
+                    "Answer-typ: \"" + answer.getClass().getSimpleName() + "\" QuestionTyp: \"" + this.questionTyp.toString() + "\"");
         }
     }
 
@@ -107,6 +107,8 @@ public class Question {
      *     <li>{@linkplain QuestionTyp#WordsQuestion}
      *     <br/>percentage accuracy ({@code double})
      *     <br/>default: 90%</i></li>
+     *     <li>{@linkplain QuestionTyp#MultipleChoiceQuestion}
+     *     <br/>question content ({@code String})</li>
      * </ul>
      * @throws IllegalExtraParameterException if the extraParameter has the wrong typ
      */
@@ -114,8 +116,10 @@ public class Question {
         if (extraParameter.getClass().getSimpleName().equals("Double") &&
                 questionTyp == QuestionTyp.WordsQuestion) {
             this.extraParameter = extraParameter;
-        }
-        else{
+        } else if (extraParameter.getClass().getSimpleName().equals("String") &&
+                questionTyp == QuestionTyp.MultipleChoiceQuestion) {
+            this.extraParameter = extraParameter;
+        } else {
             throw new IllegalExtraParameterException("The extra parameter: \"" + extraParameter.getClass().getSimpleName()
                     + "\" is not needed in: \"" + this.questionTyp.toString() + "\"");
         }
@@ -129,14 +133,14 @@ public class Question {
     }
 
     /**
-     * @return int[] or String
+     * @return boolean[] or String
      */
     public Object getAnswer() {
         return this.answer;
     }
 
     /**
-     * @return double
+     * @return double or String
      */
     public Object getExtraParameter() {
         return this.extraParameter;

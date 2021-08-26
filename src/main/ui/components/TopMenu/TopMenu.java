@@ -1,15 +1,12 @@
-package ui.components;
+package ui.components.TopMenu;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent;
+import logic.miscellaneous.Output;
 
 public class TopMenu {
 
@@ -19,9 +16,10 @@ public class TopMenu {
     private final Property<Number> height = new SimpleDoubleProperty();
 
     static {
-        Menu menu = new Menu("Test Menu");
-        menu.getItems().addAll(new MenuItem("Test Item"), new MenuItem("More Test Item's"));
-        topMenu.root.getMenus().addAll(menu);
+        topMenu.root.getMenus().addAll(
+                Add.getInstance().getAdd(),
+                Help.getInstance().getHelp());
+//        topMenu.debug();
     }
     private TopMenu(){}
 
@@ -53,19 +51,19 @@ public class TopMenu {
         this.width.addListener((observable, oldValue, newValue) -> this.root.setPrefWidth((Double) newValue));
 
         this.root.setMinHeight(36);
-        setMenuAction();
     }
 
 
-    private void setMenuAction() {
-        root.getMenus().get(0).setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.print("Menu Pressed: \"" + root.getMenus().get(0).getText());
+    private void debug() {
+        for (int i = 0; i < root.getMenus().size(); i++) {
+            int finalI = i;
+            root.getMenus().get(i).setOnAction(event -> {
                 MenuItem menuItem = (MenuItem) event.getTarget();
-                System.out.println("\"  Item Pressed: \"" + menuItem.getText() + "\"");
-            }
-        });
+                String output = "Item: \"" + menuItem.getText() + "\" (Index: " + menuItem.getParentMenu().getItems().indexOf(menuItem) + ")" +
+                        "  pressed in Menu: \"" + root.getMenus().get(finalI).getText() + "\" (Index: " + finalI + ")";
+                Output.write(output);
+            });
+        }
     }
     /**
      * <p>This will return view of the TopMenu class.</p>
