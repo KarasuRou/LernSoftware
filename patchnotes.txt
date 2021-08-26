@@ -1,1 +1,8 @@
-Alpha version
+Beta-Version
+
+TO-DO's bis zur finalen Version:
+- Live reloading bei geänderten Fragen hinzufügen
+- Bilder sollen im Programmordner abgespeichert werden
+- Das Aussehen wird vereinheitlicht
+- Es sollen Backups erstellt werden können
+- Die Überprüfung der Ergebnisse soll noch verbessert werden
