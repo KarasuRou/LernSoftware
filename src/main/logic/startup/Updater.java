@@ -25,7 +25,7 @@ public class Updater {
         try {
             updater.checkUpdateAvailability();
             updater.loadPatchNotes();
-            updater.debugOutput();
+//            updater.debugOutput();
         } catch (UpdaterException | IOException e) {
             Output.exceptionWrite(e);
         }
