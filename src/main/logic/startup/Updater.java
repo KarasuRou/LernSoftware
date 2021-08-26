@@ -5,6 +5,7 @@ import model.error.updater.*;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
@@ -130,7 +131,7 @@ public class Updater {
         }
         input.close();
 
-        Scanner scanner = new Scanner(oldPatchNotesFile);
+        Scanner scanner = new Scanner(oldPatchNotesFile, "windows-1252");
         while (scanner.hasNext()){
             this.oldPatchNotes += scanner.nextLine()+"\r\n";
         }
