@@ -118,6 +118,9 @@ public class SubjectView {
         for (Tab tab : this.root.getTabs()) {
             if (tab.getId().equals(String.valueOf(subject.getID()))) {
                 tab.setUserData(subject.getBackgroundPicturePath());
+                if (Integer.parseInt(tab.getId()) == selectedSubjectID.getValue().intValue()) {
+                    changeCurrentBackground((String) tab.getUserData());
+                }
                 return;
             }
         }
