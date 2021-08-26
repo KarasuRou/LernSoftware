@@ -1,8 +1,8 @@
 Beta-Version
 
 TO-DO's bis zur finalen Version:
-- Live reloading bei geÃ¤nderten Fragen hinzufÃ¼gen
+- Live reloading bei geänderten Fragen hinzufügen
 - Bilder sollen im Programmordner abgespeichert werden
 - Das Aussehen wird vereinheitlicht
-- Es sollen Backups erstellt werden kÃ¶nnen
-- Die ÃœberprÃ¼fung der Ergebnisse soll noch verbessert werden
+- Es sollen Backups erstellt werden können
+- Die Überprüfung der Ergebnisse soll noch verbessert werden
