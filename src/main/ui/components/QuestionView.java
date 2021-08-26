@@ -135,6 +135,7 @@ public class QuestionView {
      */
     public void clearQuestions() {
         content.getChildren().removeAll(content.getChildren());
+        scrollBar.setValue(0);
     }
 
     /**
@@ -239,8 +240,14 @@ public class QuestionView {
 
     private void addWordsQuestion(Question question, VBox questionBox) {
         HBox hBox = new HBox();
+        hBox.setSpacing(5);
         Label statusLabel = new Label();
         TextField textField = new TextField();
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.contains(" ")) {
+                textField.setText(newValue.replace(" ", ""));
+            }
+        });
         Property<Boolean> answered = new SimpleBooleanProperty(false);
         hBox.getChildren().addAll(new Label("Antwort: "), textField, statusLabel);
 
