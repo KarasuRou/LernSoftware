@@ -24,10 +24,8 @@ public class Updater {
     static {
         try {
             updater.checkUpdateAvailability();
-            if (updater.available) {
-                updater.loadPatchNotes();
-            }
-//        updater.debugOutput();
+            updater.loadPatchNotes();
+            updater.debugOutput();
         } catch (UpdaterException | IOException e) {
             Output.exceptionWrite(e);
         }
@@ -128,13 +126,13 @@ public class Updater {
         String inputLine;
 
         while ((inputLine = input.readLine()) != null) {
-            this.newPatchNotes += inputLine;
+            this.newPatchNotes += inputLine+"\r\n";
         }
         input.close();
 
         Scanner scanner = new Scanner(oldPatchNotesFile);
         while (scanner.hasNext()){
-            this.oldPatchNotes += scanner.nextLine();
+            this.oldPatchNotes += scanner.nextLine()+"\r\n";
         }
         scanner.close();
 
