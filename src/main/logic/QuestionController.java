@@ -148,6 +148,12 @@ public class QuestionController {
         }
     }
 
+    /**
+     * <p>This Method will check if the given Answer is equals the deposited answer.</p>
+     * @param question the given Question
+     * @param answer the current answer
+     * @return a boolean if the answer was correct
+     */
     public boolean checkIfAnswerIsCorrect(Question question, Object answer) {
         String outputString = "Answered-Question (ID: " + question.getID() + " Typ: " + question.getQuestionTyp() + ") is ";
         switch (question.getQuestionTyp()) {
