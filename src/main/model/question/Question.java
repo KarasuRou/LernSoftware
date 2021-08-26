@@ -133,14 +133,14 @@ public class Question {
     }
 
     /**
-     * @return int[] or String
+     * @return boolean[] or String
      */
     public Object getAnswer() {
         return this.answer;
     }
 
     /**
-     * @return double
+     * @return double or String
      */
     public Object getExtraParameter() {
         return this.extraParameter;
