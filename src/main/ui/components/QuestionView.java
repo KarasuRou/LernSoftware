@@ -171,6 +171,7 @@ public class QuestionView {
     public void init() {
         controller = QuestionController.getInstance();
         scrollBar.setMin(0);
+        scrollBar.setMax(100);
         root.widthProperty().addListener((observable, oldValue, newValue) -> {
             scrollBar.setPrefWidth(newValue.doubleValue() * 0.025);
             scrollBar.setLayoutX(newValue.doubleValue() * 0.975);
@@ -188,6 +189,22 @@ public class QuestionView {
         visibleContentHeight.addListener((observable, oldValue, newValue) -> resizeScrollbar());
 
         scrollBar.valueProperty().addListener((observable, oldValue, newValue) -> resizeScrollbar(newValue));
+
+        SubjectView.getInstance().setScrollEvent(event -> {
+            if (event.getDeltaY() < 0) {
+                if (scrollBar.getValue() + 4 > 100) {
+                    scrollBar.setValue(100);
+                } else {
+                    scrollBar.setValue(scrollBar.getValue() + 4);
+                }
+            } else {
+                if (scrollBar.getValue() - 4 < 0) {
+                    scrollBar.setValue(0);
+                } else {
+                    scrollBar.setValue(scrollBar.getValue() - 4);
+                }
+            }
+        });
     }
 
     private void addDirectQuestion(Question question, VBox questionBox) {
@@ -286,19 +303,89 @@ public class QuestionView {
     }
 
     private void addMultipleChoiceQuestion(Question question, VBox questionBox) {
+        questionBox.setSpacing(5);
+        VBox vBox = new VBox();
+        vBox.setSpacing(5);
+        vBox.setPadding(new Insets(0, 0, 0, 10));
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(new Label("Antwort: "));
+        Label statusLabel = new Label();
+        hBox.getChildren().addAll(new Label("Antwortmöglichkeiten: "), statusLabel);
+        vBox.getChildren().add(hBox);
+        CheckBox[] checkBoxes = new CheckBox[5];
+        Label[] labels = new Label[5];
+
+        Property<Boolean> answered = new SimpleBooleanProperty(false);
+
+        for (int i = 0; i < 5; i++) {
+            String currentText = ((String[]) question.getQuestionMessage())[i];
+            if (!currentText.equals("")) {
+                HBox possibleAnswers = new HBox();
+                possibleAnswers.setSpacing(5);
+                checkBoxes[i] = new CheckBox();
+                labels[i] = new Label(currentText);
+                possibleAnswers.getChildren().addAll(checkBoxes[i], labels[i]);
+                vBox.getChildren().add(possibleAnswers);
+            }
+        }
+
+        EventHandler<ActionEvent> checkAnswerEvent = event -> {
+            if (!answered.getValue()) {
+                answerQuestion(answered);
+                boolean[] currentAnswers = new boolean[5];
+
+                for (int i = 0; i < 5; i++) {
+                    if (checkBoxes[i] != null) {
+                        currentAnswers[i] = checkBoxes[i].isSelected();
+                    } else {
+                        currentAnswers[i] = false;
+                    }
+                }
+                if (controller.checkIfAnswerIsCorrect(question, currentAnswers)) {
+                    for (CheckBox checkBox : checkBoxes) {
+                        if (checkBox != null) {
+                            checkBox.setDisable(true);
+                        }
+                    }
+                    statusLabel.setStyle("-fx-text-fill: green;");
+                    statusLabel.setText("Richtig!");
+                } else {
+                    int i = 0;
+                    for (CheckBox checkBox : checkBoxes) {
+                        if (checkBox != null) {
+                            boolean rightAnswer = ((boolean[]) question.getAnswer())[i++];
+                            if (checkBox.isSelected() != rightAnswer) {
+                                checkBox.setSelected(rightAnswer);
+                                checkBox.setDisable(true);
+                                checkBox.setStyle("-fx-border-style: solid;" +
+                                        "-fx-border-color: red;");
+                            } else {
+                                checkBox.setDisable(true);
+                            }
+                        }
+                        statusLabel.setStyle("-fx-text-fill: red;");
+                        statusLabel.setText("Falsch!");
+                    }
+                }
+            }
+        };
 
         HBox buttonBox = (HBox) getQuestionFooter(
-                event -> {
-
-                },
-                event -> {
-
+                checkAnswerEvent,
+                showRightAnswersEvent -> {
+                    if (!answered.getValue()) {
+                        for (int i = 0; i < 5; i++) {
+                            if (checkBoxes[i] != null) {
+                                checkBoxes[i].setSelected(((boolean[]) question.getAnswer())[i]);
+                                checkBoxes[i].setDisable(true);
+                                answerQuestion(answered);
+                                statusLabel.setText("Musterlösung angezeigt!");
+                            }
+                        }
+                    }
                 }
         );
 
-        questionBox.getChildren().addAll(hBox, buttonBox);
+        questionBox.getChildren().addAll(vBox, buttonBox);
     }
 
     private void answerQuestion(Property<Boolean> answered) {
