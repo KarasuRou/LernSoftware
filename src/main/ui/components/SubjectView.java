@@ -94,9 +94,6 @@ public class SubjectView {
         Tab tab = new Tab(subject.getName().getValue());
         tab.setId(String.valueOf(subject.getID()));
         tab.setUserData(subject.getBackgroundPicturePath());
-//        if (subject.getBackgroundPicturePath() != null && !subject.getBackgroundPicturePath().equals("")) {
-//            changeBackground(subject.getBackgroundPicturePath()); // TODO setSubject() - live update from the background
-//        }
         tab.setContextMenu(getTabContextMenu(subject));
         this.root.getTabs().add(tab);
     }
@@ -206,9 +203,9 @@ public class SubjectView {
             root.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
                 Output.write("Changing Subject to: " + root.getTabs().get(newValue.intValue()).getText());
                 selectedSubjectID.setValue(Integer.parseInt(root.getTabs().get(newValue.intValue()).getId()));
+                changeCurrentBackground((String) root.getTabs().get(newValue.intValue()).getUserData());
                 if (oldValue.intValue() != -1 && !(oldValue.intValue() >= root.getTabs().size())) {
                     root.getTabs().get(oldValue.intValue()).setContent(null);
-                    changeCurrentBackground((String) root.getTabs().get(newValue.intValue()).getUserData());
                 }
             });
         }
