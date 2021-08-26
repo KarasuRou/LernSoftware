@@ -5,6 +5,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -14,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -164,6 +166,14 @@ public class SubjectView {
      */
     public void bindExternProperty_ID(Property<Number> property) {
         property.bind(selectedSubjectID);
+    }
+
+    /**
+     * <p>This method will set an {@link ScrollEvent} for the TabPane.</p>
+     * @param event given Event
+     */
+    public void setScrollEvent(EventHandler<ScrollEvent> event) {
+        root.setOnScroll(event);
     }
 
     /**
