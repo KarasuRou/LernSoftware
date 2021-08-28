@@ -150,7 +150,6 @@ public class FolderView{
             if (event.getButton() == MouseButton.PRIMARY) {
                 selectedFolder.setValue(Integer.parseInt(label.getId()));
                 highlightSelectedFolder();
-//                QuestionController.getInstance().updateCurrentContext(); // TODO do i really need this?
             }
         };
     }

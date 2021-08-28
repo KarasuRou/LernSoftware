@@ -31,6 +31,7 @@ public class SubjectController {
                 id = subjectData.createSubject(name);
             } else {
                 id = subjectData.createSubject(name, backgroundPicturePath);
+                subject.setBackgroundPicturePath(backgroundPicturePath);
             }
             subject.setID(id);
             Output.write("Add Subject: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
