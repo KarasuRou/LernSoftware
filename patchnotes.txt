@@ -1,5 +1,7 @@
 Beta-Version
 
+HOTFIX: Menüpunkt "Fach hinzufügen" - Das hinzugefügte Hintergrundbild wurde nicht live übernommen
+
 TO-DO's bis zur finalen Version:
 - Live reloading bei geänderten Fragen hinzufügen
 - Bilder sollen im Programmordner abgespeichert werden
