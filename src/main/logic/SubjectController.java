@@ -22,7 +22,7 @@ public class SubjectController {
      * @param name new Subject name
      * @param backgroundPicturePath the backgroundPicturePath (can be null if unset)
      */
-    public void addSubject(String name, @Nullable String backgroundPicturePath) {
+    public void addSubject(String name, @Nullable String backgroundPicturePath) {//TODO Save Pictures in Application Directory
         try {
             int id;
             Subject subject = new Subject();
