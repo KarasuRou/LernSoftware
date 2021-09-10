@@ -5,7 +5,6 @@ import model.error.updater.*;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
