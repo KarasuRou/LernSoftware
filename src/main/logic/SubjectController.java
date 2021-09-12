@@ -2,6 +2,7 @@ package logic;
 
 import com.sun.istack.internal.Nullable;
 import data.SubjectData;
+import logic.miscellaneous.FileSaver;
 import logic.miscellaneous.Output;
 import model.Subject;
 import ui.components.SubjectView;
@@ -31,7 +32,9 @@ public class SubjectController {
                 id = subjectData.createSubject(name);
             } else {
                 id = subjectData.createSubject(name, backgroundPicturePath);
-                subject.setBackgroundPicturePath(backgroundPicturePath);
+                FileSaver fileSaver = new FileSaver(id);
+                String newBackgroundPicturePath = fileSaver.savePictureLocally(backgroundPicturePath);
+                subject.setBackgroundPicturePath(newBackgroundPicturePath);
             }
             subject.setID(id);
             Output.write("Add Subject: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
