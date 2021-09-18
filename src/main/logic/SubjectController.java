@@ -23,7 +23,7 @@ public class SubjectController {
      * @param name new Subject name
      * @param backgroundPicturePath the backgroundPicturePath (can be null if unset)
      */
-    public void addSubject(String name, @Nullable String backgroundPicturePath) {//TODO Save Pictures in Application Directory
+    public void addSubject(String name, @Nullable String backgroundPicturePath) {
         try {
             int id;
             Subject subject = new Subject();
@@ -31,9 +31,9 @@ public class SubjectController {
             if (backgroundPicturePath == null) {
                 id = subjectData.createSubject(name);
             } else {
-                id = subjectData.createSubject(name, backgroundPicturePath);
-                FileSaver fileSaver = new FileSaver(id);
-                String newBackgroundPicturePath = fileSaver.savePictureLocally(backgroundPicturePath);
+                id = subjectData.createSubject(name,backgroundPicturePath);
+                String newBackgroundPicturePath = copyBackgroundPictureFileLocally(id, name, backgroundPicturePath);
+                subjectData.updateSubjectPicturePath(newBackgroundPicturePath, id);
                 subject.setBackgroundPicturePath(newBackgroundPicturePath);
             }
             subject.setID(id);
@@ -78,14 +78,14 @@ public class SubjectController {
             return;
         }
         try {
-            String current = null;
+            String newBackgroundPicturePath = null;
             if (backgroundPath != null) {
-                current = "'" + backgroundPath + "'";
+                newBackgroundPicturePath = copyBackgroundPictureFileLocally(subject.getID(), subject.getName().getValue(), backgroundPath);
             }
-            if (!subjectData.updateSubjectPicturePath(current, subject.getID())) {
+            if (!subjectData.updateSubjectPicturePath(newBackgroundPicturePath, subject.getID())) {
                 throw new SQLException();
             }
-            subject.setBackgroundPicturePath(backgroundPath);
+            subject.setBackgroundPicturePath(newBackgroundPicturePath);
             Output.write("Changing Subject Background from: " + subject.getName().getValue() + " (ID: " + subject.getID() + ")");
             subjectView.changeBackgroundFromSubjectTab(subject);
         } catch (Exception e) {
@@ -129,6 +129,13 @@ public class SubjectController {
         subjectView.init();
 
         firstSetUp_Subjects();
+    }
+
+    private String copyBackgroundPictureFileLocally(int id, String name, String externalFilePath) throws Exception {
+        FileSaver fileSaver = new FileSaver();
+        fileSaver.setDirectory("pictures");
+        fileSaver.setFileName(id + name);
+        return fileSaver.copyFileFromExternFile(externalFilePath);
     }
 
     private void firstSetUp_Subjects() {
