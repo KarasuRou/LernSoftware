@@ -6,20 +6,20 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
 //TODO Create Menu "File"
-public class File {
+public class File_UnderMenu {
 
-    private final static File file = new File();
+    private final static File_UnderMenu File_UnderMenu = new File_UnderMenu();
     private final Menu root = new Menu();
 
     static {
-        file.root.setText("Datei");
-        file.setMenu();
+        File_UnderMenu.root.setText("Datei");
+        File_UnderMenu.setMenu();
     }
 
-    private File(){}
+    private File_UnderMenu(){}
 
-    public static File getInstance() {
-        return file;
+    public static File_UnderMenu getInstance() {
+        return File_UnderMenu;
     }
 
     public Menu getFile() {
