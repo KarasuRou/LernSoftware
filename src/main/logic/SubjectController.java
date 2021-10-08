@@ -135,7 +135,7 @@ public class SubjectController {
         FileSaver fileSaver = new FileSaver();
         fileSaver.setDirectory("pictures");
         fileSaver.setFileName(id + name);
-        return fileSaver.copyFileFromExternFile(externalFilePath);
+        return fileSaver.copyFileFromOtherFile(externalFilePath, true);
     }
 
     private void firstSetUp_Subjects() {

@@ -40,10 +40,11 @@ public class FileSaver {
 
     /**
      * @param externalFilePath path to the source file
+     * @param deleteIfLocallyExists true/false if the old file should be deleted, if it was locally
      * @return the new path
      * @throws Exception if no fileName ist set. (Or anything else)
      */
-    public String copyFileFromExternFile(String externalFilePath) throws Exception {
+    public String copyFileFromOtherFile(String externalFilePath, boolean deleteIfLocallyExists) throws Exception {
         String filePath = Launcher.APPLICATION_PATH;
         if (directory != null) {
             filePath = filePath + Launcher.FILE_SEPARATOR + directory;
@@ -59,7 +60,9 @@ public class FileSaver {
 
         copyFile(source, destination);
 
-        deleteOldFileIfLocally(externalFilePath);
+        if (deleteIfLocallyExists) {
+            deleteOldFileIfLocally(externalFilePath);
+        }
 
         return filePath;
     }
