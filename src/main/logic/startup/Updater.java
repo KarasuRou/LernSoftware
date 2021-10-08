@@ -5,7 +5,6 @@ import model.error.updater.*;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
@@ -25,7 +24,20 @@ public class Updater {
     static {
         try {
             updater.checkUpdateAvailability();
-            updater.loadPatchNotes();
+        } catch (UpdaterException e) {
+            Output.exceptionWrite(e);
+        } catch (IOException e) {
+            if (e.getMessage().equals("Rouven-ra-ro.de")) {
+                Output.errorWrite("Es konnte keine Serververbindung aufgebaut werden... Keine Internetverbindung?");
+            } else {
+                Output.exceptionWrite(e);
+            }
+        }
+        try {
+            updater.loadLocalPatchNotes();
+            if (updater.isAvailable()) {
+                updater.loadOnlinePatchNotes();
+            }
 //            updater.debugOutput();
         } catch (UpdaterException | IOException e) {
             Output.exceptionWrite(e);
@@ -87,14 +99,7 @@ public class Updater {
 
     private void checkUpdateAvailability() throws UpdaterException, IOException {
         File oldVersionFile = new File("version.txt");
-        BufferedReader input = new BufferedReader(
-                new InputStreamReader(
-                        new URL(newVersionURLString+"version.txt").openStream()));
-        String inputLine, newVersion="", oldVersion="";
-        while ((inputLine = input.readLine()) != null) {
-            newVersion += inputLine;
-        }
-        input.close();
+        String inputLine, oldVersion = "";
 
         Scanner scanner = new Scanner(oldVersionFile);
         while (scanner.hasNext()){
@@ -105,11 +110,24 @@ public class Updater {
         if (oldVersion.equals("")) {
             throw new ConfigurationException("Old Version can not be read! Configuration problem?");
         }
+        this.oldVersion = Double.parseDouble(oldVersion);
+
+
+        BufferedReader input = new BufferedReader(
+                new InputStreamReader(
+                        new URL(newVersionURLString+"version.txt").openStream()));
+        String newVersion = "";
+
+        while ((inputLine = input.readLine()) != null) {
+            newVersion += inputLine;
+        }
+        input.close();
         if (newVersion.equals("")) {
             throw new ConfigurationException("New Version can not be read! Configuration problem?");
         }
         this.newVersion = Double.parseDouble(newVersion);
-        this.oldVersion = Double.parseDouble(oldVersion);
+
+
         if (this.newVersion > this.oldVersion) {
             available = true;
             Output.write("UPDATE AVAILABLE!");
@@ -118,9 +136,24 @@ public class Updater {
         }
     }
 
-    private void loadPatchNotes() throws UpdaterException, IOException{
-        Output.write("Loading patchnotes...");
+    private void loadLocalPatchNotes() throws UpdaterException, IOException{
+        Output.write("Loading Local-Patchnotes...");
         File oldPatchNotesFile = new File("patchnotes.txt");
+
+        Scanner scanner = new Scanner(oldPatchNotesFile, "windows-1252");
+        while (scanner.hasNext()){
+            this.oldPatchNotes += scanner.nextLine()+"\r\n";
+        }
+        scanner.close();
+
+        if (this.oldPatchNotes.equals("")) {
+            throw new ConfigurationException("Saved Patchnotes are not available! Configuration Problem?");
+        }
+        Output.write("Local-Patchnotes loaded!");
+    }
+
+    private void loadOnlinePatchNotes() throws UpdaterException, IOException{
+        Output.write("Loading Online-Patchnotes...");
         BufferedReader input = new BufferedReader(
                 new InputStreamReader(
                         new URL(newVersionURLString + this.newVersion + "/patchnotes.txt").openStream()));
@@ -130,20 +163,10 @@ public class Updater {
             this.newPatchNotes += inputLine+"\r\n";
         }
         input.close();
-
-        Scanner scanner = new Scanner(oldPatchNotesFile, "windows-1252");
-        while (scanner.hasNext()){
-            this.oldPatchNotes += scanner.nextLine()+"\r\n";
-        }
-        scanner.close();
-
         if (this.newPatchNotes.equals("")) {
             throw new ConfigurationException("No Patchnotes are available! Configuration Problem?");
         }
-        if (this.oldPatchNotes.equals("")) {
-            throw new ConfigurationException("Saved Patchnotes are not available! Configuration Problem?");
-        }
-        Output.write("Patchnotes loaded!");
+        Output.write("Online-Patchnotes loaded!");
     }
 
     private boolean loadZip(){

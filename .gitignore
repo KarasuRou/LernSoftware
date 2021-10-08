@@ -1,3 +1,5 @@
 /out/**
 /logs/**
 Storage.db
+/pictures/**
+/Backup/**

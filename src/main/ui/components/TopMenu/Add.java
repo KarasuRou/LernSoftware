@@ -405,6 +405,7 @@ public class Add {
         });
     }
 
+    //TODO check better for no content and deactivation
     private void getMultipleChoiceQuestion(VBox vBox, Stage stage, ObservableValue<? extends Toggle> observable) {
         HBox extraParameterBox = new HBox();
         extraParameterBox.setSpacing(5);
