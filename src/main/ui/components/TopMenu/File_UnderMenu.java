@@ -102,7 +102,7 @@ public class File_UnderMenu {
             );
             fileChooser.setInitialDirectory(getInitialDirectory());
             File file = MainUI.getInstance().showFileChooserOpenDialog(fileChooser);
-            if (file != null) {
+            if (file != null && file.getName().contains(".db")) {
                 try {
                     replaceCurrentDatabaseWithBackup(file);
                 } catch (Exception e) {
