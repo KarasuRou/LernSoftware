@@ -3,9 +3,9 @@ Beta-Version
 FIX: Patchnotes wurden nicht richtig geladen, wenn keine Internetverbindung vorhanden war
 DONE:
 - Bilder sollen im Programmordner abgespeichert werden
+- Es sollen Backups erstellt werden können
 
 TO-DO's bis zur finalen Version:
 - Live reloading bei geänderten Fragen hinzufügen
 - Das Aussehen wird vereinheitlicht
-- Es sollen Backups erstellt werden können
 - Die Überprüfung der Ergebnisse soll noch verbessert werden
