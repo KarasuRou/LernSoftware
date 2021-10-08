@@ -193,6 +193,9 @@ public class Database {
                 if (connection.isClosed()) {
                     Output.write("Connection to Database closed");
                 }
+                connection = null;
+                preparedStatement = null;
+                statement = null;
             }
         } catch (SQLException e) {
             Output.exceptionWrite(e);

@@ -4,12 +4,16 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logic.miscellaneous.Output;
 import ui.components.FolderView;
 import ui.components.QuestionView;
 import ui.components.SubjectView;
 import ui.components.TopMenu.TopMenu;
+
+import java.io.File;
+import java.util.List;
 
 public class MainUI{
 
@@ -73,6 +77,31 @@ public class MainUI{
     public void start() {
         primaryStage.show();
     }
+
+    /**
+     * @param fileChooser the FileChooser
+     * @return the selected file or null if no file has been selected
+     */
+    public File showFileChooserOpenDialog(FileChooser fileChooser){
+        return fileChooser.showOpenDialog(primaryStage);
+    }
+
+    /**
+     * @param fileChooser the FileChooser
+     * @return the selected file or null if no file has been selected
+     */
+    public File showFileChooserSaveDialog(FileChooser fileChooser){
+        return fileChooser.showSaveDialog(primaryStage);
+    }
+
+    /**
+     * @param fileChooser the FileChooser
+     * @return the selected files or null if no file has been selected
+     */
+    public List<File> showFileChooserOpenMultipleDialog(FileChooser fileChooser) {
+        return fileChooser.showOpenMultipleDialog(primaryStage);
+    }
+
     private void setUpGUI(){
         HBox hBox = new HBox();
         hBox.getChildren().addAll(
