@@ -81,13 +81,13 @@ public class QuestionView {
      * @param question current {@link Question}
      * @param extraParameter new extraParameter
      */
-    public void changeExtraParameter(Question question, Object extraParameter) {
+    public void changeExtraParameter(Question question, Object extraParameter) { // TODO
         switch (question.getQuestionTyp()) {
             case WordsQuestion:
-                changeWordsQuestionExtraParameter(question, extraParameter);
+//                changeWordsQuestionExtraParameter(question, extraParameter);
                 break;
             case MultipleChoiceQuestion:
-                changeMultipleChoiceQuestionExtraParameter(question, extraParameter);
+//                changeMultipleChoiceQuestionExtraParameter(question, extraParameter);
                 break;
         }
     }
@@ -97,16 +97,16 @@ public class QuestionView {
      * @param question current {@link Question}
      * @param answer new Answer
      */
-    public void changeAnswer(Question question, Object answer) {
+    public void changeAnswer(Question question, Object answer) { // TODO
         switch (question.getQuestionTyp()) {
             case WordsQuestion:
-                changeWordsQuestionAnswer(question, answer);
+//                changeWordsQuestionAnswer(question, answer);
                 break;
             case DirectQuestion:
-                changeDirectQuestionAnswer(question, answer);
+//                changeDirectQuestionAnswer(question, answer);
                 break;
             case MultipleChoiceQuestion:
-                changeMultipleChoiceQuestionAnswer(question, answer);
+//                changeMultipleChoiceQuestionAnswer(question, answer);
                 break;
         }
     }
@@ -119,14 +119,35 @@ public class QuestionView {
     public void changeQuestionMessage(Question question, Object questionMessage) {
         switch (question.getQuestionTyp()) {
             case WordsQuestion:
-                changeWordsQuestionQuestionMessage(question, questionMessage);
-                break;
             case DirectQuestion:
-                changeDirectQuestionQuestionMessage(question, questionMessage);
+                changeWordsQuestionMessage_AND_changeDirektQuestionMessage(question, questionMessage);
                 break;
             case MultipleChoiceQuestion:
-                changeMultipleChoiceQuestionQuestionMessage(question, questionMessage);
+                changeMultipleChoiceQuestionMessage(question, questionMessage);
                 break;
+        }
+    }
+
+    private void changeWordsQuestionMessage_AND_changeDirektQuestionMessage(Question question, Object questionMessage) {
+        for (Node questionBox : content.getChildren()) { // questionHeader -> Label ("Frage: "\"questionMessage\")
+            if (question.getID() == Integer.parseInt(questionBox.getId())) {
+                ((Label) ((HBox) ((VBox) questionBox).getChildren().get(0)).getChildren().get(0)).setText("Frage: \"" + questionMessage + "\"");
+            }
+        }
+    }
+
+    private void changeMultipleChoiceQuestionMessage(Question question, Object questionMessage) {
+        for (Node questionBox : content.getChildren()) { // questionBox -> VBox (1) -> HBox (1-5) -> Label (1)
+            if (question.getID() == Integer.parseInt(questionBox.getId())) { //FINDER
+                String[] questionMessages = ((String[]) questionMessage);
+                int answerSize = ((VBox)((VBox) questionBox).getChildren().get(1)).getChildren().size();
+                for (int i = 1; i < answerSize; i++) {
+                    Label label = (Label)((HBox)((VBox)((VBox) questionBox).getChildren().get(1)).getChildren().get(i)).getChildren().get(1);
+                    if (!label.getText().equals(questionMessages[i - 1])) {
+                        label.setText(questionMessages[i - 1]);
+                    }
+                }
+            }
         }
     }
 
@@ -302,7 +323,7 @@ public class QuestionView {
         questionBox.getChildren().addAll(hBox, buttonBox);
     }
 
-    private void addMultipleChoiceQuestion(Question question, VBox questionBox) {
+    private void addMultipleChoiceQuestion(Question question, VBox questionBox) { //FINDER
         questionBox.setSpacing(5);
         VBox vBox = new VBox();
         vBox.setSpacing(5);
@@ -390,38 +411,6 @@ public class QuestionView {
 
     private void answerQuestion(Property<Boolean> answered) {
         answered.setValue(true);
-    }
-
-    private void changeWordsQuestionExtraParameter(Question question, Object extraParameter) {
-
-    }
-
-    private void changeMultipleChoiceQuestionExtraParameter(Question question, Object extraParameter) {
-
-    }
-
-    private void changeMultipleChoiceQuestionAnswer(Question question, Object answer) {
-
-    }
-
-    private void changeDirectQuestionAnswer(Question question, Object answer) {
-
-    }
-
-    private void changeWordsQuestionAnswer(Question question, Object answer) {
-
-    }
-
-    private void changeMultipleChoiceQuestionQuestionMessage(Question question, Object questionMessage) {
-
-    }
-
-    private void changeDirectQuestionQuestionMessage(Question question, Object questionMessage) {
-
-    }
-
-    private void changeWordsQuestionQuestionMessage(Question question, Object questionMessage) {
-
     }
 
     private Node getQuestionHeader(Question question) {
