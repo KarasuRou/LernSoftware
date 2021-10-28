@@ -81,14 +81,22 @@ public class QuestionView {
      * @param question current {@link Question}
      * @param extraParameter new extraParameter
      */
-    public void changeExtraParameter(Question question, Object extraParameter) { // TODO
+    public void changeExtraParameter(Question question, Object extraParameter) {
         switch (question.getQuestionTyp()) {
             case WordsQuestion:
-//                changeWordsQuestionExtraParameter(question, extraParameter);
+            case DirectQuestion:
                 break;
             case MultipleChoiceQuestion:
-//                changeMultipleChoiceQuestionExtraParameter(question, extraParameter);
+                changeMultipleChoiceQuestionExtraParameter(question, extraParameter);
                 break;
+        }
+    }
+
+    private void changeMultipleChoiceQuestionExtraParameter(Question question, Object extraParameter) {
+        for (Node questionBox : content.getChildren()) { // questionHeader -> Label ("Frage: "\"extraParameter\")
+            if (question.getID() == Integer.parseInt(questionBox.getId())) {
+                ((Label) ((HBox) ((VBox) questionBox).getChildren().get(0)).getChildren().get(0)).setText("Frage: \"" + extraParameter + "\"");
+            }
         }
     }
 
@@ -97,16 +105,11 @@ public class QuestionView {
      * @param question current {@link Question}
      * @param answer new Answer
      */
-    public void changeAnswer(Question question, Object answer) { // TODO
-        switch (question.getQuestionTyp()) {
+    public void changeAnswer(Question question, Object answer) {
+        switch (question.getQuestionTyp()) { // Nothing to-do here
             case WordsQuestion:
-//                changeWordsQuestionAnswer(question, answer);
-                break;
             case DirectQuestion:
-//                changeDirectQuestionAnswer(question, answer);
-                break;
             case MultipleChoiceQuestion:
-//                changeMultipleChoiceQuestionAnswer(question, answer);
                 break;
         }
     }
@@ -120,7 +123,7 @@ public class QuestionView {
         switch (question.getQuestionTyp()) {
             case WordsQuestion:
             case DirectQuestion:
-                changeWordsQuestionMessage_AND_changeDirektQuestionMessage(question, questionMessage);
+                changeWordsQuestionMessage_AND_changeDirektQuestionMessage(question, questionMessage); // TODO Add/Remove CheckBox/Label ?
                 break;
             case MultipleChoiceQuestion:
                 changeMultipleChoiceQuestionMessage(question, questionMessage);
@@ -138,7 +141,7 @@ public class QuestionView {
 
     private void changeMultipleChoiceQuestionMessage(Question question, Object questionMessage) {
         for (Node questionBox : content.getChildren()) { // questionBox -> VBox (1) -> HBox (1-5) -> Label (1)
-            if (question.getID() == Integer.parseInt(questionBox.getId())) { //FINDER
+            if (question.getID() == Integer.parseInt(questionBox.getId())) {
                 String[] questionMessages = ((String[]) questionMessage);
                 int answerSize = ((VBox)((VBox) questionBox).getChildren().get(1)).getChildren().size();
                 for (int i = 1; i < answerSize; i++) {
