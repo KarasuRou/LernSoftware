@@ -1,3 +1,3 @@
 # LernSoftware
 
-English version
+German Version
