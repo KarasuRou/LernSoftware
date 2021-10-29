@@ -326,7 +326,7 @@ public class QuestionView {
         questionBox.getChildren().addAll(hBox, buttonBox);
     }
 
-    private void addMultipleChoiceQuestion(Question question, VBox questionBox) { //FINDER
+    private void addMultipleChoiceQuestion(Question question, VBox questionBox) {
         questionBox.setSpacing(5);
         VBox vBox = new VBox();
         vBox.setSpacing(5);
