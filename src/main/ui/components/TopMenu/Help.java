@@ -129,7 +129,6 @@ public class Help {
     private void showUberMenu() {
         VBox vBox = new VBox();
         vBox.setSpacing(10);
-        vBox.setPrefWidth(400);
         vBox.setPadding(new Insets(20));
         Stage stage = getPopUpStage(vBox);
         stage.setTitle("Über LernSoftware");
