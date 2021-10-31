@@ -30,11 +30,8 @@ public class QuestionData {
      * <p>This method will initiate the {@link QuestionData} class.</p>
      * <p><b>NOTE:</b></p>
      * <p>Should always be called before using the {@link QuestionData} class!</p>
-     * @throws SQLException if the initiation has a problem.
      */
-    public void init() throws SQLException{
-        createTableIfNotExists();
-    }
+    public void init(){}
 
     /**
      * <p>Returns a ResultSet that contains an array of {@link Question}(s).</p>
@@ -331,50 +328,5 @@ public class QuestionData {
             ids[i] = resultSet.getInt(1);
         }
         return ids;
-    }
-
-    private void createTableIfNotExists() throws SQLException {
-        createQuestionTable();
-        createQuestionParamsTable();
-    }
-    private void createQuestionTable() throws SQLException{
-        database.createTableIfNotExists(
-                "Question",
-                new String[]{
-                        "ID INTEGER NOT NULL " +
-                                "CONSTRAINT Question_pk " +
-                                "PRIMARY KEY AUTOINCREMENT, ",
-                        "f_ID INTEGER NOT NULL " +
-                                "CONSTRAINT Question__Folder_fk " +
-                                "REFERENCES Folder " +
-                                "ON UPDATE CASCADE ON DELETE CASCADE, ",
-                        "QuestionType TEXT NOT NULL check(" +
-                                "QuestionType = \"" + QuestionTyp.UNSET + "\" " +
-                                "OR QuestionType = \"" + QuestionTyp.DirectQuestion + "\" " +
-                                "OR QuestionType = \"" + QuestionTyp.WordsQuestion + "\" "+
-                                "OR QuestionType = \"" + QuestionTyp.MultipleChoiceQuestion +"\")"
-                }
-        );
-    }
-    private void createQuestionParamsTable() throws SQLException{
-        database.createTableIfNotExists(
-                "Question_Params",
-                new String[]{
-                        "ID INTEGER NOT NULL " +
-                                "CONSTRAINT Question_Params_pk " +
-                                "PRIMARY KEY AUTOINCREMENT, ",
-                        "f_ID INTEGER NOT NULL " +
-                                "CONSTRAINT Question_Params__Question_fk " +
-                                "REFERENCES Question " +
-                                "ON UPDATE CASCADE ON DELETE CASCADE, ",
-                        "type Text NOT NULL " +
-                                "check(" +
-                                "type = \"questionMessage\" " +
-                                "OR type = \"answer\" " +
-                                "OR type = \"extraParameter\"" +
-                                "), ",
-                        "value NOT NULL"
-                }
-        );
     }
 }
