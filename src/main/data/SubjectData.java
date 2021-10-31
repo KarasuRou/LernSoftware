@@ -26,11 +26,8 @@ public class SubjectData {
      * <p>This method will initiate the {@link SubjectData} class.</p>
      * <p><b>NOTE:</b></p>
      * <p>Should always be called before using the {@link SubjectData} class!</p>
-     * @throws SQLException if the initiation has a problem.
      */
-    public void init() throws SQLException{
-        createTableIfNotExists();
-    }
+    public void init(){}
 
     /**
      * <p>This method will update and store the Subject-name.</p>
@@ -123,19 +120,5 @@ public class SubjectData {
         database.startDeleteQuery(sql).addBatch();
         Output.write(sql);
         return database.executeDeleteQuery() == 1;
-    }
-
-    private void createTableIfNotExists() throws SQLException {
-        database.createTableIfNotExists(
-            "Subject",
-            new String[]{
-                "ID INTEGER NOT NULL " +
-                    "CONSTRAINT Subject_pk " +
-                        "PRIMARY KEY autoincrement, ",
-                    "Name TEXT NOT NULL, ",
-                    "PicturePath TEXT"
-            }
-        );
-        database.createUniqueIndexIfNotExists("Subject_Name_uindex", "Subject", "Name");
     }
 }
