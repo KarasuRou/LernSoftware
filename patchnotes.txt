@@ -2,6 +2,7 @@ Beta-Version
 
 Feature:
 - Live reloading bei geänderten Fragen hinzufügen
+- Datenbankmigration hinzugefügt (bessere Wartung möglich)
 
 Bekannte Probleme:
 - MultipleChoiceQuestions werden nach dem Bearbeiten nur bedingt aktualisiert.
