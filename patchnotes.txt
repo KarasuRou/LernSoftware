@@ -1,13 +1,16 @@
 Beta-Version
 
 Feature:
-- Live reloading bei geänderten Fragen hinzufügen
+- Live reloading bei geänderten Fragen hinzugefügt
 - Datenbankmigration hinzugefügt (bessere Wartung möglich)
 
+Änderungen:
+- Das Aussehen von Popups wurde vereinheitlicht
+
 Bekannte Probleme:
-- MultipleChoiceQuestions werden nach dem Bearbeiten nur bedingt aktualisiert.
-  Außer, wenn man den Ordner neu lädt.
+- MultipleChoiceQuestions werden nach dem Bearbeiten nur bedingt aktualisiert
+  (Außer, wenn man den Ordner neu lädt)
 
 TO-DO's bis zur finalen Version:
-- Das Aussehen wird vereinheitlicht
-- Die Überprüfung der Ergebnisse soll noch verbessert werden
+- Die Überprüfung der Antworten wird noch verbessert
+- Dokumentation/Anleitungen werden auf GitHub/Website hinzugefügt
