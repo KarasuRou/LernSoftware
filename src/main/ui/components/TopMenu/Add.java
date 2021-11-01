@@ -74,7 +74,7 @@ public class Add {
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.CENTER);
             vBox.setPadding(new Insets(20));
-            vBox.setSpacing(5);
+            vBox.setSpacing(10);
             Stage stage = getPopUpStage(vBox);
             stage.setTitle("Fach hinzufügen");
 
@@ -149,7 +149,7 @@ public class Add {
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.CENTER);
             vBox.setPadding(new Insets(20));
-            vBox.setSpacing(5);
+            vBox.setSpacing(10);
 
             Stage stage = getPopUpStage(vBox);
             stage.setTitle("Ordner hinzufügen");
@@ -201,9 +201,9 @@ public class Add {
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.CENTER);
             vBox.setPadding(new Insets(20));
-            vBox.setSpacing(15);
-            vBox.setPrefWidth(460);
-            vBox.setPrefHeight(400);
+            vBox.setSpacing(10);
+            vBox.setPrefWidth(550);
+            vBox.setPrefHeight(440);
             Stage stage = getPopUpStage(vBox);
             stage.setTitle("Frage hinzufügen");
 
@@ -281,7 +281,7 @@ public class Add {
 
         HBox buttonBox = new HBox();
         buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.setSpacing(5);
+        buttonBox.setSpacing(10);
         Button createQuestionButton = new Button("Frage erstellen");
         Button cancelButton = new Button("Abbrechen");
         buttonBox.getChildren().addAll(createQuestionButton, cancelButton);
@@ -346,7 +346,7 @@ public class Add {
         gridPane.add(new Label("%"), 2, 2);
 
         HBox buttonBox = new HBox();
-        buttonBox.setSpacing(5);
+        buttonBox.setSpacing(10);
         buttonBox.setAlignment(Pos.CENTER);
         Button cancelButton = new Button("Abbrechen");
         Button createQuestionButton = new Button("Frage erstellen");
@@ -408,7 +408,7 @@ public class Add {
     //TODO check better for no content and deactivation
     private void getMultipleChoiceQuestion(VBox vBox, Stage stage, ObservableValue<? extends Toggle> observable) {
         HBox extraParameterBox = new HBox();
-        extraParameterBox.setSpacing(5);
+        extraParameterBox.setSpacing(10);
         Label extraParameterQuestionLabel = new Label("Wie lautet die Frage?");
         TextField extraParameterQuestionTextField = new TextField();
         extraParameterQuestionTextField.requestFocus();
@@ -416,7 +416,7 @@ public class Add {
         vBox.getChildren().add(extraParameterBox);
 
         HBox buttonBox = new HBox();
-        buttonBox.setSpacing(5);
+        buttonBox.setSpacing(10);
         Button createQuestionButton = new Button("Frage erstellen");
         Button cancelButton = new Button("Abbrechen");
         buttonBox.setAlignment(Pos.CENTER);
