@@ -85,6 +85,7 @@ public class File_UnderMenu {
 
         Output.write("Reconnection Database...");
         Database.getInstance().initDBConnection();
+        Output.write("Database reconnected!");
     }
 
     private MenuItem getLoadBackupFileMenuItem() {

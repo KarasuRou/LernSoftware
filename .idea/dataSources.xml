@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Storage.db" uuid="c25e6aa6-ac91-414d-9534-afbfd94d8d83">
+    <data-source source="LOCAL" name="Storage.db" uuid="7f797444-ab92-4b16-89b1-b5df68b33580">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\Rouven\Documents\IdeaProjects\Projecs\LernSoftware\Storage.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/Storage.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

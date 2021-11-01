@@ -27,11 +27,8 @@ public class FolderData {
      * <p>This method will initiate the {@link FolderData} class.</p>
      * <p><b>NOTE:</b></p>
      * <p>Should always be called before using the {@link FolderData} class!</p>
-     * @throws SQLException if the initiation has a problem.
      */
-    public void init() throws SQLException{
-        createTableIfNotExists();
-    }
+    public void init(){}
 
     /**
      * <p>Returns a ResultSet that contains an array of {@link Folder}s.</p>
@@ -97,21 +94,5 @@ public class FolderData {
         database.startDeleteQuery(sql).addBatch();
         Output.write(sql);
         return database.executeDeleteQuery() == 1;
-    }
-
-    private void createTableIfNotExists() throws SQLException {
-        database.createTableIfNotExists(
-                "Folder",
-                new String[]{
-                        "ID INTEGER NOT NULL " +
-                            "CONSTRAINT Folder_pk " +
-                                "PRIMARY KEY AUTOINCREMENT, ",
-                        "f_ID INTEGER NOT NULL " +
-                                "CONSTRAINT Folder__Subject_fk " +
-                                "REFERENCES Subject " +
-                                "ON UPDATE CASCADE ON DELETE CASCADE, ",
-                        "Name TEXT NOT NULL"
-                }
-        );
     }
 }
