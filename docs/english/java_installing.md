@@ -24,8 +24,8 @@ WORK IN PROGRESS - CURRENTLY NOT AVAILABLE
 1. Open the official [Java (Oracle) Website](https://www.java.com/en/download) with the browser of your choice
 2. Download java
 3. Open the file (name is approximately: jre-8uXXX-windows.exe)
-4. Install Java normally
-5. If the installation was successful, repeat the [first step](#validate-current-version)
+4. Install Java
+5. If the installation was successful, please repeat the [first step](#validate-current-version)
 
 </details>
 <details>
