@@ -157,7 +157,7 @@ public class QuestionController {
     public boolean checkIfAnswerIsCorrect(Question question, Object answer) {
         String outputString = "Answered-Question (ID: " + question.getID() + " Typ: " + question.getQuestionTyp() + ") is ";
         switch (question.getQuestionTyp()) {
-            case WordsQuestion:
+            case WordsQuestion: //TODO Check accuracy
             case DirectQuestion:
                 if (question.getAnswer().toString().equals(answer)) {
                     Output.write(outputString + "correct");
