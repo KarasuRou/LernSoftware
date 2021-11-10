@@ -18,6 +18,12 @@
       <element id="directory" name="lib">
         <element id="library" level="project" name="lib" />
       </element>
+      <element id="directory" name="migration">
+        <element id="dir-copy" path="$PROJECT_DIR$/migration" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/LICENSE.txt" />
+      <element id="file-copy" path="$PROJECT_DIR$/patchnotes.txt" />
+      <element id="file-copy" path="$PROJECT_DIR$/version.txt" />
     </root>
   </artifact>
 </component>
