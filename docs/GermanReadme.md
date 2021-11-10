@@ -1,3 +1,0 @@
-# LernSoftware
-
-German Version
