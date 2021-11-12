@@ -157,31 +157,12 @@ public class QuestionController {
     public boolean checkIfAnswerIsCorrect(Question question, Object answer) {
         String outputString = "Answered-Question (ID: " + question.getID() + " Typ: " + question.getQuestionTyp() + ") is ";
         switch (question.getQuestionTyp()) {
-            case WordsQuestion: //TODO Check accuracy
+            case WordsQuestion:
+                return checkIfWordsQuestionAnswerIsCorrect(question, answer, outputString);
             case DirectQuestion:
-                if (question.getAnswer().toString().equals(answer)) {
-                    Output.write(outputString + "correct");
-                    return true;
-                } else {
-                    Output.write(outputString + "wrong");
-                    return false;
-                }
+                return checkIfDirectQuestionAnswerIsCorrect(question, answer, outputString);
             case MultipleChoiceQuestion:
-                boolean isCorrect = true;
-                boolean[] answers = (boolean[]) answer;
-                boolean[] correctAnswers = (boolean[]) question.getAnswer();
-                for (int i = 0; i < 5; i++) {
-                    if (answers[i] != correctAnswers[i]) {
-                        isCorrect = false;
-                        break;
-                    }
-                }
-                if (isCorrect) {
-                    Output.write(outputString + "correct");
-                } else {
-                    Output.write(outputString + "wrong");
-                }
-                return isCorrect;
+                return checkIfMultipleChoiceQuestionAnswerIsCorrect(question, answer, outputString);
             default:
                 Output.errorWrite(outputString + "DEFAULT ANSWER");
                 return false;
@@ -344,6 +325,60 @@ public class QuestionController {
                 break;
         }
         question.setExtraParameter(extraParameter.get(0));
+    }
+
+    private boolean checkIfWordsQuestionAnswerIsCorrect(Question question, Object answer, String outputString) {
+        boolean correct = true;
+        int length = ((String)answer).length(), incorrect = 0;
+        try {
+            for (int i = 0; i < ((String) answer).length(); i++) {
+                if (((String) question.getAnswer()).charAt(i) != ((String) answer).charAt(i)) {
+                    incorrect++;
+                }
+            }
+        } catch (Exception e) {
+            Output.exceptionWrite(e);
+            incorrect = -1;
+        }
+
+        if (incorrect == -1 || (((double)(length-incorrect) / length) * 100) < (double) question.getExtraParameter()) {
+            correct = false;
+        }
+
+        if (correct) {
+            Output.write(outputString + "correct (" + incorrect + " incorrect out of " + length + " chars)");
+        } else {
+            Output.write(outputString + "wrong (" + incorrect + " incorrect out of " + length + " chars)");
+        }
+        return correct;
+    }
+
+    private boolean checkIfDirectQuestionAnswerIsCorrect(Question question, Object answer, String outputString) {
+        if (question.getAnswer().toString().equals(answer)) {
+            Output.write(outputString + "correct");
+            return true;
+        } else {
+            Output.write(outputString + "wrong");
+            return false;
+        }
+    }
+
+    private boolean checkIfMultipleChoiceQuestionAnswerIsCorrect(Question question, Object answer, String outputString) {
+        boolean isCorrect = true;
+        boolean[] answers = (boolean[]) answer;
+        boolean[] correctAnswers = (boolean[]) question.getAnswer();
+        for (int i = 0; i < 5; i++) {
+            if (answers[i] != correctAnswers[i]) {
+                isCorrect = false;
+                break;
+            }
+        }
+        if (isCorrect) {
+            Output.write(outputString + "correct");
+        } else {
+            Output.write(outputString + "wrong");
+        }
+        return isCorrect;
     }
 
     private void resetQuestionCache() {
