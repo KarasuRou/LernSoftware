@@ -328,7 +328,6 @@ public class QuestionController {
     }
 
     private boolean checkIfWordsQuestionAnswerIsCorrect(Question question, Object answer, String outputString) {
-        boolean correct = true;
         int length = ((String)answer).length(), incorrect = 0;
         try {
             for (int i = 0; i < ((String) answer).length(); i++) {
@@ -342,15 +341,17 @@ public class QuestionController {
         }
 
         if (incorrect == -1 || (((double)(length-incorrect) / length) * 100) < (double) question.getExtraParameter()) {
-            correct = false;
-        }
-
-        if (correct) {
-            Output.write(outputString + "correct (" + incorrect + " incorrect out of " + length + " chars)");
-        } else {
             Output.write(outputString + "wrong (" + incorrect + " incorrect out of " + length + " chars)");
+            return false;
         }
-        return correct;
+        else if (length != ((String) question.getAnswer()).length()) {
+            Output.write(outputString + "wrong (Answer-length:\"" + length + "\" Question-answer-length:\"" + ((String) question.getAnswer()).length()+"\")");
+            return false;
+        }
+        else {
+            Output.write(outputString + "correct (" + incorrect + " incorrect out of " + length + " chars)");
+            return true;
+        }
     }
 
     private boolean checkIfDirectQuestionAnswerIsCorrect(Question question, Object answer, String outputString) {
