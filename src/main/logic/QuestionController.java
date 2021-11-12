@@ -336,7 +336,6 @@ public class QuestionController {
                 }
             }
         } catch (Exception e) {
-            Output.exceptionWrite(e);
             incorrect = -1;
         }
 
