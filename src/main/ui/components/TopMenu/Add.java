@@ -442,7 +442,7 @@ public class Add {
                     createQuestionButton.fire();
                 }
             });
-            textFields[i].textProperty().addListener((observable1, oldValue, newValue) -> { //TODO check better for no content and deactivation
+            textFields[i].textProperty().addListener((observable1, oldValue, newValue) -> {
                 if (finalI != 4 && !newValue.equals("")) {
                     textFields[finalI + 1].setDisable(false);
                     checkBoxes[finalI + 1].setDisable(false);
