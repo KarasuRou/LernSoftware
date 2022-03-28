@@ -81,7 +81,10 @@ public class SubjectController {
             String newBackgroundPicturePath = null;
             if (backgroundPath != null) {
                 newBackgroundPicturePath = copyBackgroundPictureFileLocally(subject.getID(), subject.getName().getValue(), backgroundPath);
+            } else {
+                new FileSaver(subject.getID() + subject.getName().getValue(), "pictures").deleteFile();
             }
+
             if (!subjectData.updateSubjectPicturePath(newBackgroundPicturePath, subject.getID())) {
                 throw new SQLException();
             }
