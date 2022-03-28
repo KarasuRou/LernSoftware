@@ -4,4 +4,5 @@ Verbesserungen:
 - Die Überprüfung der Antworten wurde verbessert
 
 Sonstiges:
+- Log Namen sind nun anders benannt (von: "stdout_day_month_year.log" zu: "year_month_day.log")
 - Dokumentation/Anleitungen wurden auf GitHub hinzugefügt
