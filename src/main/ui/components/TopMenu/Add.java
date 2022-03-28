@@ -405,7 +405,6 @@ public class Add {
         });
     }
 
-    //TODO check better for no content and deactivation
     private void getMultipleChoiceQuestion(VBox vBox, Stage stage, ObservableValue<? extends Toggle> observable) {
         HBox extraParameterBox = new HBox();
         extraParameterBox.setSpacing(10);
@@ -450,6 +449,7 @@ public class Add {
                 } else {
                     if (finalI != 4) {
                         textFields[finalI + 1].setDisable(true);
+                        checkBoxes[finalI + 1].setSelected(false);
                         checkBoxes[finalI + 1].setDisable(true);
                     }
                 }

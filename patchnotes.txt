@@ -1,16 +1,7 @@
-Beta-Version
+Beta-Version - Soon Release-Version
 
-Feature:
-- Dokumentation/Anleitungen werden auf GitHub/Website hinzugefügt
-- Live reloading bei geänderten Fragen hinzugefügt
-- Datenbankmigration hinzugefügt (bessere Wartung möglich)
+Verbesserungen:
+- Die Überprüfung der Antworten wurde verbessert
 
-Änderungen:
-- Das Aussehen von Popups wurde vereinheitlicht
-
-Bekannte Probleme:
-- MultipleChoiceQuestions werden nach dem Bearbeiten nur bedingt aktualisiert
-  (Außer, wenn man den Ordner neu lädt)
-
-TO-DO's bis zur finalen Version:
-- Die Überprüfung der Antworten wird noch verbessert
+Sonstiges:
+- Dokumentation/Anleitungen wurden auf GitHub hinzugefügt
