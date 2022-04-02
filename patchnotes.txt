@@ -9,3 +9,7 @@ Bugfix:
 Improvement:
 - Die Überprüfung der Antworten wurde verbessert
 - Log Namen sind nun anders benannt (von: "stdout_day_month_year.log" zu: "year_month_day.log")
+
+Known issue:
+- MultipleChoiceQuestions werden nach dem Bearbeiten nur bedingt aktualisiert
+  (Außer, wenn man den Ordner neu lädt)
