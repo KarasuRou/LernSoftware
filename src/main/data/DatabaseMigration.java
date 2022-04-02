@@ -138,10 +138,9 @@ public class DatabaseMigration { // id version checksum
             if (file.getName().contains(String.valueOf(migrationFile.getVersion())) || file.getName().contains(String.valueOf(((int) migrationFile.getVersion())))
             ) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sql += line + "\n";
-                }
+                do {
+                    sql += reader.readLine() + "\n";
+                } while (reader.ready());
                 reader.close();
             }
         }

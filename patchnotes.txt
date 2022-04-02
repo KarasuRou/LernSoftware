@@ -1,16 +1,14 @@
-Beta-Version
-
 Feature:
-- Dokumentation/Anleitungen werden auf GitHub/Website hinzugefügt
-- Live reloading bei geänderten Fragen hinzugefügt
-- Datenbankmigration hinzugefügt (bessere Wartung möglich)
+- Wenn nur der Hintergrund gelöscht wird und es dadurch nicht ersetzt wird, wird nun auch die Datei gelöscht
 
-Änderungen:
-- Das Aussehen von Popups wurde vereinheitlicht
+Bugfix:
+- Bug im Log behoben, wo eine falsche ID abgespeichert wurde
 
-Bekannte Probleme:
+Improvement:
+- Die Überprüfung der Antworten wurde verbessert
+- Log Namen sind nun anders benannt (von: "stdout_day_month_year.log" zu: "year_month_day.log")
+- Dokumentation wurde auf GitHub verbessert
+
+Known issue:
 - MultipleChoiceQuestions werden nach dem Bearbeiten nur bedingt aktualisiert
   (Außer, wenn man den Ordner neu lädt)
-
-TO-DO's bis zur finalen Version:
-- Die Überprüfung der Antworten wird noch verbessert

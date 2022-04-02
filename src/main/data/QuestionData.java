@@ -302,7 +302,8 @@ public class QuestionData {
                 preparedStatement.addBatch();
                 break;
         }
-        return database.executeInsertQuery();
+        database.executeInsertQuery();
+        return id;
     }
 
 

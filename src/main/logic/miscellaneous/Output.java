@@ -15,7 +15,7 @@ public class Output {
 
     private static final String PATH = Launcher.APPLICATION_PATH + Launcher.FILE_SEPARATOR + "logs";
     private static final String FILE_PATH = PATH + Launcher.FILE_SEPARATOR +
-            "stdout_" + new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime()) + ".log";
+            new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ".log";
     private static Writer writer;
 
 

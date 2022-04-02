@@ -323,6 +323,12 @@ public class QuestionView {
                 }
         );
 
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                checkEvent.handle(new ActionEvent());
+            }
+        });
+
         questionBox.getChildren().addAll(hBox, buttonBox);
     }
 

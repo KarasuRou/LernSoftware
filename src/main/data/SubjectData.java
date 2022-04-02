@@ -51,7 +51,11 @@ public class SubjectData {
      * @throws SQLException if the ID was wrong.
      */
     public boolean updateSubjectPicturePath(String picturePath, int ID) throws SQLException {
-        String sql = "UPDATE Subject SET PicturePath = '" + picturePath + "' WHERE ID = " + ID;
+        String picture = "'" + picturePath + "'";
+        if (picturePath == null) {
+            picture = "null";
+        }
+        String sql = "UPDATE Subject SET PicturePath = " + picture + " WHERE ID = " + ID;
         database.startUpdateQuery(sql).addBatch();
         Output.write(sql);
         return database.executeUpdateQuery() == 1;

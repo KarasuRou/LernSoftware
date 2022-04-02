@@ -67,6 +67,22 @@ public class FileSaver {
         return filePath;
     }
 
+    /**
+     * Deletes the set file, in the application directory.
+     * @throws Exception if no fileName ist set.
+     */
+    public void deleteFile() throws Exception {
+        String file = Launcher.APPLICATION_PATH;
+        if (directory != null) {
+            file += Launcher.FILE_SEPARATOR + directory;
+        }
+        if (fileName == null) {
+            throw new Exception("Es wurde keine Dateiname angegeben!");
+        }
+        file = file + Launcher.FILE_SEPARATOR + fileName;
+        new File(file).deleteOnExit();
+    }
+
     private void deleteOldFileIfLocally(String filePath) {
         if (filePath.contains(Launcher.APPLICATION_PATH)) {
             new File(filePath).delete();
