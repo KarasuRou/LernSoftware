@@ -9,6 +9,7 @@ Bugfix:
 Improvement:
 - Die Überprüfung der Antworten wurde verbessert
 - Log Namen sind nun anders benannt (von: "stdout_day_month_year.log" zu: "year_month_day.log")
+- Dokumentation wurde auf GitHub verbessert
 
 Known issue:
 - MultipleChoiceQuestions werden nach dem Bearbeiten nur bedingt aktualisiert
