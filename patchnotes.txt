@@ -3,6 +3,7 @@ Beta-Version - Soon Release-Version
 Verbesserungen:
 - Die Überprüfung der Antworten wurde verbessert
 - Wenn der Hintergrund nur gelöscht wird, wird nun auch die Datei gelöscht - vorher wurde es nicht gelöscht
+- Bug im Log behoben, wo eine falsche ID abgespeichert wurde
 
 Sonstiges:
 - Log Namen sind nun anders benannt (von: "stdout_day_month_year.log" zu: "year_month_day.log")
