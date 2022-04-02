@@ -1,5 +1,3 @@
-Beta-Version - Soon Release-Version
-
 Feature:
 - Wenn nur der Hintergrund gelöscht wird und es dadurch nicht ersetzt wird, wird nun auch die Datei gelöscht
 
